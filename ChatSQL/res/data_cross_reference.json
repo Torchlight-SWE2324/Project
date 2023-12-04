@@ -1,0 +1,80 @@
+{
+    "tables": [
+      {
+        "name": "customers",
+        "columns": [
+          {
+            "name": "id",
+            "type": "integer",
+            "references": null,
+            "description": "Unique identifier for the customer"
+          },
+          {
+            "name": "name",
+            "type": "string",
+            "references": null,
+            "description": "Customer's full name"
+          },
+          {
+            "name": "email",
+            "type": "string",
+            "references": null,
+            "description": "Customer's email address"
+          }
+        ]
+      },
+      {
+        "name": "products",
+        "columns": [
+          {
+            "name": "id",
+            "type": "integer",
+            "references": null,
+            "description": "Unique identifier for the product"
+          },
+          {
+            "name": "name",
+            "type": "string",
+            "references": null,
+            "description": "Product name"
+          },
+          {
+            "name": "price",
+            "type": "decimal",
+            "references": null,
+            "description": "Product price"
+          }
+        ]
+      },
+      {
+        "name": "orders",
+        "columns": [
+          {
+            "name": "id",
+            "type": "integer",
+            "references": null,
+            "description": "Unique identifier for the order"
+          },
+          {
+            "name": "customer_id",
+            "type": "integer",
+            "references": "customers",
+            "description": "Foreign key referencing the customer who placed the order"
+          },
+          {
+            "name": "product_id",
+            "type": "integer",
+            "references": "products",
+            "description": "Foreign key referencing the product ordered"
+          },
+          {
+            "name": "quantity",
+            "type": "integer",
+            "references": null,
+            "description": "Quantity of the product ordered"
+          }
+        ]
+      }
+    ]
+  }
+  

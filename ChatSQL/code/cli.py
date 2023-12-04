@@ -6,8 +6,14 @@ def main():
     print("Welcome to the ChatSQL CLI")
     while True:
         inputFile = input("Enter a file to start: ")
-        if not os.path.exists(inputFile):
-            print("The file does not exist.")
+        #if not os.path.exists(inputFile):
+            #print("The file does not exist.")
+        if inputFile == "exit":
+            sys.exit() 
+        elif inputFile == "admin":
+            print("You are now logged in as admin")
+        elif inputFile == "file":
+            print(" this is a file")
         else:
             try:
                 with open(inputFile, "r") as f:
@@ -22,3 +28,9 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+# accedi
+# mail: admin
+# password: admin
+# if data= admin => admin()
+# CSV username, paswd, status
