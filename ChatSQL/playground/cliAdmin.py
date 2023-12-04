@@ -27,11 +27,22 @@ def admin():
                 deleteFile()
             elif choice == "3" or choice == "exit":
                 print("Goodbye 👋")
-                sys.exit()
+                break
             else:
                 print("Invalid choice")
     else:
         print("username or password incorrect")
+
+def getFiels():
+    # Specify the path to the "database" directory
+    database_path = "/Users/giovannifilippini/Desktop/UNI/swe/progetto/1_repos/ChatSQL/ChatSQL/playground/database"
+
+    # Check if the "database" directory exists, if not, create it
+    if not os.path.exists(database_path):
+        os.makedirs(database_path)
+
+    # Return the list of files in the "database" directory
+    return os.listdir(database_path)
 
 def addFile():
     # ask for filename with full path
@@ -54,10 +65,6 @@ def addFile():
         print("file created")
 
 def deleteFile():
-    # ask for filename
-    # check if filename is in the database
-    # if yes, delete the file
-    # if no, print "file does not exist"
     filename = input("Delete file: ")
     # check if filename is in the database and if the file is a JSON file
     if filename in os.listdir("database") and filename.endswith(".json"):

@@ -30,5 +30,3 @@ if is_compliant:
     print("The JSON is compliant with the schema.")
 else:
     print(f"The JSON is not compliant. Error: {error_message}")
-
-
