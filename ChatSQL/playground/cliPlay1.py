@@ -18,12 +18,6 @@ def main():
             sys.exit()
         else:
             print("Invalid choice")
-            
+
 if __name__ == "__main__":
     main()
-
-# accedi
-# mail: admin
-# password: admin
-# if data= admin => admin()
-# CSV username, paswd, status
