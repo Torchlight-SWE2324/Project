@@ -34,8 +34,8 @@ def admin():
         print("username or password incorrect")
 
 def addFile():
-    # ask for filename
-    filename = input("Upload file: ")
+    # ask for filename with full path
+    filename = input("Enter the full path to the file you want to upload: ")
 
     # Specify the path to the "database" directory
     database_path = "/Users/giovannifilippini/Desktop/UNI/swe/progetto/1_repos/ChatSQL/ChatSQL/playground/database"
@@ -44,15 +44,14 @@ def addFile():
     if not os.path.exists(database_path):
         os.makedirs(database_path)
 
-    # Check if filename is in the database and if the file is a JSON file
+    # Check if filename is already in the database and if it is a JSON file
     if filename in os.listdir(database_path) and filename.endswith(".json"):
         print("file already exists")
     else:
-        # Create the file using the absolute path to the file
+        # Create the file using the full path to the file
         with open(os.path.join(database_path, filename), "w") as f:
             f.write("{}")
         print("file created")
-
 
 def deleteFile():
     # ask for filename
