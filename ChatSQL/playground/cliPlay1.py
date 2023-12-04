@@ -1,6 +1,6 @@
 import os
 import sys
-from ChatSQL.playground.cliAdmin import admin
+from cliAdmin import admin
 
 def main():
     print("Welcome to the ChatSQL CLI (PLAYGROUND 🛝)")
@@ -9,17 +9,16 @@ def main():
         print("2. User")
         print("3. Exit")
         choice = input("Your choice: ")
-        if choice == "1":
+        if choice == "1" or choice == "admin":
             admin()
-        elif choice == "2":
+        elif choice == "2" or choice == "user":
             pass
-        elif choice == "3":
+        elif choice == "3" or choice == "exit":
             print("Goodbye 👋")
             sys.exit()
         else:
             print("Invalid choice")
-        
-
+            
 if __name__ == "__main__":
     main()
 
