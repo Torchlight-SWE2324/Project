@@ -35,27 +35,24 @@ def admin():
 
 def addFile():
     # ask for filename
-    # check if filename is in the database
-    # if yes, print "file already exists"
-    # if no, create the file
-    # if file is created, print "file created"
     filename = input("Upload file: ")
-    
-    # Specify the path to the database directory
+
+    # Specify the path to the "database" directory
     database_path = "/Users/giovannifilippini/Desktop/UNI/swe/progetto/1_repos/ChatSQL/ChatSQL/playground/database"
-    
+
     # Check if the "database" directory exists, if not, create it
     if not os.path.exists(database_path):
         os.makedirs(database_path)
 
-    # check if filename is in the database and if the file is a JSON file
+    # Check if filename is in the database and if the file is a JSON file
     if filename in os.listdir(database_path) and filename.endswith(".json"):
         print("file already exists")
     else:
-        # create the file
+        # Create the file using the absolute path to the file
         with open(os.path.join(database_path, filename), "w") as f:
             f.write("{}")
         print("file created")
+
 
 def deleteFile():
     # ask for filename
