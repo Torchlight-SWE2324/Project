@@ -12,10 +12,11 @@ JSON_schema = os.path.join(dirPath, "..", "JSON", "schema.json")
 def admin():
     print("\n\033[1mWelcome to the admin section 👨🏻‍💻\033[0m")
     while True:
+        print("\nWhat do you want to do?")
         print("1. Add file")
         print("2. Delete file")
         print("3. Get files")
-        print("4. Exit")
+        print("4. Exit the admin section")
         choice = input("Your choice: ")
         if choice == "1" or choice == "add":
             addFile()
@@ -24,7 +25,7 @@ def admin():
         elif choice == "3" or choice == "files":
             print(getFiles(database_path))
         elif choice == "4" or choice == "exit":
-            print("Goodbye 👋")
+            print("Leaving admin section. You will be redirected to the main menu.")
             break
         else:
             print("Invalid choice")

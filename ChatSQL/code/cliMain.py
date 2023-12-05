@@ -24,17 +24,17 @@ def adminAuth():
 def main():
     print("\nWelcome to the ChatSQL CLI (\033[1mPLAYGROUND 🛝\033[0m)")
     while True:
-        print("What do you want to do?")
+        print("\nWhat do you want to do?")
         print("1. Admin")
         print("2. Ask")
-        print("3. Exit")
+        print("3. Exit the program")
         choice = input("Your choice: ")
         if choice == "1" or choice == "admin":
             adminAuth()
         elif choice == "2" or choice == "ask":
             pass
         elif choice == "3" or choice == "exit":
-            print("Goodbye 👋")
+            print("Exiting the program. Bye 👋🏻")
             sys.exit()
         else:
             print("Invalid choice")
