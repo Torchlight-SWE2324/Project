@@ -4,10 +4,13 @@ import json
 from schemaValidator import jsonValidator
 
 #Global variables
+
 dirPath = os.path.dirname(os.path.realpath(__file__))
 database_path = os.path.join(dirPath, "database")
 
-JSON_schema = "/Users/giovannifilippini/Desktop/UNI/swe/progetto/1_repos/ChatSQL/ChatSQL/res/schema.json"
+# known issue:
+# the path to the schema is hardcoded, it should be relative to the script
+JSON_schema = "/Users/giovannifilippini/Desktop/UNI/swe/progetto/1_repos/ChatSQL/ChatSQL/JSON/schema.json"
 
 def admin():
     print("\n\033[1mWelcome to the admin section 👨🏻‍💻\033[0m")
@@ -29,14 +32,17 @@ def admin():
         else:
             print("Invalid choice")
 
+
 def getFiels():
     if not os.path.exists(database_path):
         return "There are no files in the database directory. Add a file first."
     elif os.path.exists(database_path):
         return os.listdir(database_path)
 
+
 def addFile():
-    filename = input("Enter the full path to the file you want to upload:")
+    inputFile = input("Enter the full path to the file you want to upload:")
+    databaseFile = inputFile.strip().strip("'\"")
 
     # Check if the "database" directory exists, if not, create it
     if not os.path.exists(database_path):
@@ -47,16 +53,16 @@ def addFile():
         json_schema = json.load(schema_file)
 
     # Load JSON data from file
-    with open(filename, "r") as data_file:
+    with open(databaseFile, "r") as data_file:
         json_data = json.load(data_file)
 
     # Check compliance
     is_compliant = jsonValidator(json_data, json_schema)
 
     # Check if filename is already in the database and if it is a JSON file
-    if os.path.isfile(filename) and filename.endswith(".json") and is_compliant:
+    if os.path.isfile(databaseFile) and databaseFile.endswith(".json") and is_compliant:
         # Extract the filename from the full path
-        base_filename = os.path.basename(filename)
+        base_filename = os.path.basename(databaseFile)
 
         # Create the file path for the new file in the "database" directory
         new_file_path = os.path.join(database_path, base_filename)
@@ -66,7 +72,7 @@ def addFile():
             print("File already exists in the database directory.")
         else:
             # Copy the content of the original file to the new file in the "database" directory
-            shutil.copyfile(filename, new_file_path)
+            shutil.copyfile(databaseFile, new_file_path)
             print("File copied to the database directory.")
 
     elif not is_compliant:
@@ -74,6 +80,7 @@ def addFile():
 
     else:
         print("File does not exist or is not a JSON file.")
+
 
 def deleteFile():
     filename_to_delete = input("Enter the filename you want to delete from the database: ")

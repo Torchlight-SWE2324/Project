@@ -11,7 +11,8 @@ def jsonValidator(json_data, json_schema):
     except ValidationError as e:
         return False
 
-"""# Use absolute paths for schema and data files
+"""
+# Use absolute paths for schema and data files
 schema_file_path = "ChatSQL/res/schema.json"
 data_file_path = "ChatSQL/res/movies.json"
 
@@ -29,4 +30,5 @@ is_compliant, error_message = jsonValidator(json_data, json_schema)
 if is_compliant:
     print("The JSON is compliant with the schema.")
 else:
-    print(f"The JSON is not compliant. Error: {error_message}")"""
+    print(f"The JSON is not compliant. Error: {error_message}")
+"""
