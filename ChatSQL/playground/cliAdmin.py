@@ -1,5 +1,9 @@
 import os
 import csv
+import shutil
+
+#Global variables
+database_path = "ChatSQL/playground/database"
 
 def checkData(username, password):
     with open("pswrd.csv", "r") as f:
@@ -33,9 +37,6 @@ def admin():
         print("username or password incorrect")
 
 def getFiels():
-    # Specify the path to the "database" directory
-    database_path = "/Users/giovannifilippini/Desktop/UNI/swe/progetto/1_repos/ChatSQL/ChatSQL/playground/database"
-
     # Check if the "database" directory exists, if not, create it
     if not os.path.exists(database_path):
         os.makedirs(database_path)
@@ -44,24 +45,30 @@ def getFiels():
     return os.listdir(database_path)
 
 def addFile():
-    # ask for filename with full path
-    filename = input("Enter the full path to the file you want to upload: ")
-
-    # Specify the path to the "database" directory
-    database_path = "/Users/giovannifilippini/Desktop/UNI/swe/progetto/1_repos/ChatSQL/ChatSQL/playground/database"
+    # Ask for filename with full path
+    filename = input("Enter the full path to the file you want to upload:")
 
     # Check if the "database" directory exists, if not, create it
     if not os.path.exists(database_path):
         os.makedirs(database_path)
 
     # Check if filename is already in the database and if it is a JSON file
-    if filename in os.listdir(database_path) and filename.endswith(".json"):
-        print("file already exists")
+    if os.path.isfile(filename) and filename.endswith(".json"):
+        # Extract the filename from the full path
+        base_filename = os.path.basename(filename)
+
+        # Create the file path for the new file in the "database" directory
+        new_file_path = os.path.join(database_path, base_filename)
+
+        # Check if the file already exists in the database
+        if os.path.exists(new_file_path):
+            print("File already exists in the database directory.")
+        else:
+            # Copy the content of the original file to the new file in the "database" directory
+            shutil.copyfile(filename, new_file_path)
+            print("File copied to the database directory.")
     else:
-        # Create the file using the full path to the file
-        with open(os.path.join(database_path, filename), "w") as f:
-            f.write("{}")
-        print("file created")
+        print("File does not exist or is not a JSON file.")
 
 def deleteFile():
     filename = input("Delete file: ")
