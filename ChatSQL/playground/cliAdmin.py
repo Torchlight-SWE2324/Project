@@ -3,7 +3,7 @@ import csv
 import shutil
 
 #Global variables
-database_path = "ChatSQL/playground/database"
+database_path = "/Users/giovannifilippini/Desktop/UNI/swe/progetto/1_repos/ChatSQL/ChatSQL/playground/database"
 
 def checkData(username, password):
     with open("pswrd.csv", "r") as f:
@@ -71,11 +71,16 @@ def addFile():
         print("File does not exist or is not a JSON file.")
 
 def deleteFile():
-    filename = input("Delete file: ")
-    # check if filename is in the database and if the file is a JSON file
-    if filename in os.listdir("database") and filename.endswith(".json"):
-        # delete the file
-        os.remove(f"database/{filename}")
-        print("file deleted")
+    # Take the filename to delete as user input
+    filename_to_delete = input("Enter the filename you want to delete from the database: ")
+
+    # Create the full path to the file in the database directory
+    file_path = os.path.join(database_path, filename_to_delete)
+
+    # Check if the file exists before attempting to delete
+    if os.path.exists(file_path):
+        # Delete the file
+        os.remove(file_path)
+        print(f"File '{filename_to_delete}' has been deleted.")
     else:
-        print("file does not exist")
+        print(f"File '{filename_to_delete}' does not exist in the database directory.")
