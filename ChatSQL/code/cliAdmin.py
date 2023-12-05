@@ -4,13 +4,10 @@ import json
 from schemaValidator import jsonValidator
 
 #Global variables
-
 dirPath = os.path.dirname(os.path.realpath(__file__))
 database_path = os.path.join(dirPath, "database")
 
-# known issue:
-# the path to the schema is hardcoded, it should be relative to the script
-JSON_schema = "/Users/giovannifilippini/Desktop/UNI/swe/progetto/1_repos/ChatSQL/ChatSQL/JSON/schema.json"
+JSON_schema = os.path.join(dirPath, "..", "JSON", "schema.json")
 
 def admin():
     print("\n\033[1mWelcome to the admin section 👨🏻‍💻\033[0m")
