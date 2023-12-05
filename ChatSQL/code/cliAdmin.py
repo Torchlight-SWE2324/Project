@@ -25,7 +25,7 @@ def admin():
         elif choice == "2" or choice == "delete":
             deleteFile()
         elif choice == "3" or choice == "files":
-            print(getFiels())
+            print(getFiles(database_path))
         elif choice == "4" or choice == "exit":
             print("Goodbye 👋")
             break
@@ -33,11 +33,17 @@ def admin():
             print("Invalid choice")
 
 
-def getFiels():
-    if not os.path.exists(database_path):
+def getFiles(database_path):
+    files = os.listdir(database_path)
+    filesList = "\n".join([f"- {file}" for file in files])
+
+    if not files:
         return "There are no files in the database directory. Add a file first."
-    elif os.path.exists(database_path):
-        return os.listdir(database_path)
+    
+    if not os.path.exists(database_path):
+        return "Error: The database directory does not exist. Please check the path."
+    
+    return f"Files in the database directory:\n{filesList}"
 
 
 def addFile():
