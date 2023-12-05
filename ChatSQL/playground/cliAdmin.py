@@ -4,45 +4,36 @@ import shutil
 
 #Global variables
 database_path = "/Users/giovannifilippini/Desktop/UNI/swe/progetto/1_repos/ChatSQL/ChatSQL/playground/database"
-
-def checkData(username, password):
-    with open("pswrd.csv", "r") as f:
-        reader = csv.reader(f)
-        for row in reader:
-            if row[0] == username and row[1] == password:
-                return True
+'''
+database_relative_path = "ChatSQL/playground/database"
+database_path = os.path.abspath(database_relative_path)
+'''
 
 def admin():
-    print("ADMIN PAGE")
-    username = input("username: ")
-    password = input("password: ")
-    # check if username and password are in the pswrd.csv
-    if username == "admin" and password == "admin":
-        print("username and password correct")
-        while True:
-            print("1. Add file")
-            print("2. Delete file")
-            print("3. Exit")
-            choice = input("Your choice: ")
-            if choice == "1" or choice == "add":
-                addFile()
-            elif choice == "2" or choice == "delete":
-                deleteFile()
-            elif choice == "3" or choice == "exit":
-                print("Goodbye 👋")
-                break
-            else:
-                print("Invalid choice")
-    else:
-        print("username or password incorrect")
+    print("\n\033[1m Welcome to the admin section 👨🏻‍💻 \033[0m")
+    while True:
+        print("1. Add file")
+        print("2. Delete file")
+        print("3. Get files")
+        print("4. Exit")
+        choice = input("Your choice: ")
+        if choice == "1" or choice == "add":
+            addFile()
+        elif choice == "2" or choice == "delete":
+            deleteFile()
+        elif choice == "3" or choice == "files":
+            print(getFiels())
+        elif choice == "4" or choice == "exit":
+            print("Goodbye 👋")
+            break
+        else:
+            print("Invalid choice")
 
 def getFiels():
-    # Check if the "database" directory exists, if not, create it
     if not os.path.exists(database_path):
-        os.makedirs(database_path)
-
-    # Return the list of files in the "database" directory
-    return os.listdir(database_path)
+        return "There are no files in the database directory. Add a file first."
+    elif os.path.exists(database_path):
+        return os.listdir(database_path)
 
 def addFile():
     # Ask for filename with full path
