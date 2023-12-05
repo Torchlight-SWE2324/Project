@@ -4,8 +4,6 @@ import csv
 from cliAdmin import admin
 
 dirPath = os.path.dirname(os.path.realpath(__file__))
-# print the current directory
-print(dirPath)
 
 def checkData(username, password):
     file_path = os.path.join(dirPath, "pswrd.csv")

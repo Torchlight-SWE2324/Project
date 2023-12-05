@@ -1,16 +1,12 @@
 import os
-import csv
 import shutil
 
 #Global variables
-database_path = "/Users/giovannifilippini/Desktop/UNI/swe/progetto/1_repos/ChatSQL/ChatSQL/playground/database"
-'''
-database_relative_path = "ChatSQL/playground/database"
-database_path = os.path.abspath(database_relative_path)
-'''
+dirPath = os.path.dirname(os.path.realpath(__file__))
+database_path = os.path.join(dirPath, "database") 
 
 def admin():
-    print("\n\033[1m Welcome to the admin section 👨🏻‍💻 \033[0m")
+    print("\n\033[1mWelcome to the admin section 👨🏻‍💻\033[0m")
     while True:
         print("1. Add file")
         print("2. Delete file")
