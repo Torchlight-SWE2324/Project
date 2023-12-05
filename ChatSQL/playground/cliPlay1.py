@@ -1,9 +1,15 @@
-import csv
+import os
 import sys
+import csv
 from cliAdmin import admin
 
+dirPath = os.path.dirname(os.path.realpath(__file__))
+# print the current directory
+print(dirPath)
+
 def checkData(username, password):
-    with open("/Users/giovannifilippini/Desktop/UNI/swe/progetto/1_repos/ChatSQL/ChatSQL/playground/pswrd.cvs", "r") as f:
+    file_path = os.path.join(dirPath, "pswrd.csv")
+    with open(file_path, "r") as f:
         reader = csv.reader(f)
         for row in reader:
             if row[0] == username and row[1] == password:
