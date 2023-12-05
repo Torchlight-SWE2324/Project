@@ -1,9 +1,13 @@
 import os
 import shutil
+import json
+from schemaValidator import jsonValidator
 
 #Global variables
 dirPath = os.path.dirname(os.path.realpath(__file__))
-database_path = os.path.join(dirPath, "database") 
+database_path = os.path.join(dirPath, "database")
+
+JSON_schema = "/Users/giovannifilippini/Desktop/UNI/swe/progetto/1_repos/ChatSQL/ChatSQL/res/schema.json"
 
 def admin():
     print("\n\033[1mWelcome to the admin section 👨🏻‍💻\033[0m")
@@ -32,15 +36,25 @@ def getFiels():
         return os.listdir(database_path)
 
 def addFile():
-    # Ask for filename with full path
     filename = input("Enter the full path to the file you want to upload:")
 
     # Check if the "database" directory exists, if not, create it
     if not os.path.exists(database_path):
         os.makedirs(database_path)
 
+    # Load JSON Schema from file
+    with open(JSON_schema, "r") as schema_file:
+        json_schema = json.load(schema_file)
+
+    # Load JSON data from file
+    with open(filename, "r") as data_file:
+        json_data = json.load(data_file)
+
+    # Check compliance
+    is_compliant = jsonValidator(json_data, json_schema)
+
     # Check if filename is already in the database and if it is a JSON file
-    if os.path.isfile(filename) and filename.endswith(".json"):
+    if os.path.isfile(filename) and filename.endswith(".json") and is_compliant:
         # Extract the filename from the full path
         base_filename = os.path.basename(filename)
 
@@ -54,11 +68,14 @@ def addFile():
             # Copy the content of the original file to the new file in the "database" directory
             shutil.copyfile(filename, new_file_path)
             print("File copied to the database directory.")
+
+    elif not is_compliant:
+        print("The JSON is not compliant with the schema.")
+
     else:
         print("File does not exist or is not a JSON file.")
 
 def deleteFile():
-    # Take the filename to delete as user input
     filename_to_delete = input("Enter the filename you want to delete from the database: ")
 
     # Create the full path to the file in the database directory

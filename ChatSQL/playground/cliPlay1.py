@@ -22,7 +22,7 @@ def adminAuth():
         print("username or password incorrect")
 
 def main():
-    print("Welcome to the ChatSQL CLI (\033[1m PLAYGROUND 🛝 \033[0m)")
+    print("\nWelcome to the ChatSQL CLI (\033[1mPLAYGROUND 🛝\033[0m)")
     while True:
         print("What do you want to do?")
         print("1. Admin")

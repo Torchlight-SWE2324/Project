@@ -4,14 +4,14 @@ import json
 # pip install jsonschema
 from jsonschema import validate, ValidationError
 
-def is_json_compliant(json_data, json_schema):
+def jsonValidator(json_data, json_schema):
     try:
         validate(instance=json_data, schema=json_schema)
-        return True, None
+        return True
     except ValidationError as e:
-        return False, str(e)
+        return False
 
-# Use absolute paths for schema and data files
+"""# Use absolute paths for schema and data files
 schema_file_path = "ChatSQL/res/schema.json"
 data_file_path = "ChatSQL/res/movies.json"
 
@@ -24,9 +24,9 @@ with open(data_file_path, "r") as data_file:
     json_data = json.load(data_file)
 
 # Check compliance
-is_compliant, error_message = is_json_compliant(json_data, json_schema)
+is_compliant, error_message = jsonValidator(json_data, json_schema)
 
 if is_compliant:
     print("The JSON is compliant with the schema.")
 else:
-    print(f"The JSON is not compliant. Error: {error_message}")
+    print(f"The JSON is not compliant. Error: {error_message}")"""
