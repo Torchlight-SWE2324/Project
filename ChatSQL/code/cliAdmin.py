@@ -10,7 +10,7 @@ database_path = os.path.join(dirPath, "database")
 JSON_schema = os.path.join(dirPath, "..", "JSON", "schema.json")
 
 def admin():
-    print("\n\033[1mWelcome to the admin section 👨🏻‍💻\033[0m")
+    print("\n\033[1mWelcome to the admin section\033[0m")
     while True:
         print("\nWhat do you want to do?")
         print("1. Add file")
