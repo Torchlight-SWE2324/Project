@@ -22,13 +22,13 @@ def admin():
 
         choice = input("Your choice: ").lower()
 
-        if re.match(r'^1$|^add$', choice):
+        if re.match(r"^1$|^add$", choice):
             addFile()
-        elif re.match(r'^2$|^delete$', choice):
+        elif re.match(r"^2$|^delete$", choice):
             deleteFile()
-        elif re.match(r'^3$|^get$', choice):
+        elif re.match(r"^3$|^get$", choice):
             print(getFiles(database_path))
-        elif re.match(r'^4$|^exit$', choice):
+        elif re.match(r"^4$|^exit$", choice):
             print("Leaving admin section. You will be redirected to the main menu.")
             break
         else:
@@ -49,26 +49,38 @@ def getFiles(database_path):
 
 
 def addFile():
-    inputFile = input("Enter the full path to the file you want to upload:")
-    databaseFile = inputFile.strip().strip("'\"")
+    while True:
+        inputFile = input("Enter the full path to the file you want to upload (or type 'cancel' to go back): ")
+        
+        if inputFile.lower() == "cancel":
+            print("\033[1mUpload cancelled. You will be redirected to the admin menu.\033[0m")
+            return
 
-    # Check if the "database" directory exists, if not, create it
-    if not os.path.exists(database_path):
-        os.makedirs(database_path)
+        databaseFile = inputFile.strip().strip("'\"")
 
-    # Load JSON Schema from file
-    with open(JSON_schema, "r") as schema_file:
-        json_schema = json.load(schema_file)
+        if not os.path.isfile(databaseFile):
+            print("Invalid file path. Please enter a valid file path.")
+            continue
 
-    # Load JSON data from file
-    with open(databaseFile, "r") as data_file:
-        json_data = json.load(data_file)
+        if not databaseFile.endswith(".json"):
+            print("Invalid file format. Please enter a path to a JSON file.")
+            continue
 
-    # Check compliance
-    is_compliant = jsonValidator(json_data, json_schema)
+        # Load JSON Schema from file
+        with open(JSON_schema, "r") as schema_file:
+            json_schema = json.load(schema_file)
 
-    # Check if filename is already in the database and if it is a JSON file
-    if os.path.isfile(databaseFile) and databaseFile.endswith(".json") and is_compliant:
+        # Load JSON data from file
+        with open(databaseFile, "r") as data_file:
+            json_data = json.load(data_file)
+
+        # Check compliance
+        is_compliant = jsonValidator(json_data, json_schema)
+
+        if not is_compliant:
+            print("The JSON is not compliant with the schema. Please choose a valid JSON file.")
+            continue
+
         # Extract the filename from the full path
         base_filename = os.path.basename(databaseFile)
 
@@ -82,12 +94,6 @@ def addFile():
             # Copy the content of the original file to the new file in the "database" directory
             shutil.copyfile(databaseFile, new_file_path)
             print("File copied to the database directory.")
-
-    elif not is_compliant:
-        print("The JSON is not compliant with the schema.")
-
-    else:
-        print("File does not exist or is not a JSON file.")
 
 
 def deleteFile():
