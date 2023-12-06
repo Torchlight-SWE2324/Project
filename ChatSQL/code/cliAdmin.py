@@ -46,6 +46,7 @@ def getFiles(database_path):
         return "There are no files in the database directory. Add a file first."
 
     filesList = "\n".join([f"- {file}" for file in files])
+    loading_animation(.25)
     return f"Files in the database directory:\n{filesList}"
 
 def addFile():
@@ -77,7 +78,7 @@ def addFile():
             print("File already exists in the database directory.")
         else:
             shutil.copyfile(input_path, new_file_path)
-            loading_animation(1.5)
+            loading_animation(1.25)
             print("File copied to the database directory.")
 
 def deleteFile():
