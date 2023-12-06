@@ -1,6 +1,7 @@
 import os
 import sys
 import csv
+import re
 from cliAdmin import admin
 
 dirPath = os.path.dirname(os.path.realpath(__file__))
@@ -29,11 +30,11 @@ def main():
         print("2. Ask")
         print("3. Exit the program")
         choice = input("Your choice: ")
-        if choice == "1" or choice == "admin":
+        if re.match(r"^1$|^admin$", choice):
             adminAuth()
-        elif choice == "2" or choice == "ask":
+        elif re.match(r"^2$|^ask$", choice):
             pass
-        elif choice == "3" or choice == "exit":
+        elif re.match(r"^3$|^exit$", choice):
             print("Exiting the program. Bye!")
             sys.exit()
         else:
