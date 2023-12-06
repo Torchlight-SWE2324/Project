@@ -5,7 +5,7 @@ from schemaValidator import jsonValidator
 
 #Global variables
 dirPath = os.path.dirname(os.path.realpath(__file__))
-database_path = os.path.join(dirPath, "database")
+database_path = os.path.join(dirPath, "..", "database")
 
 JSON_schema = os.path.join(dirPath, "..", "JSON", "schema.json")
 
