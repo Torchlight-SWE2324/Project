@@ -1,14 +1,16 @@
 import os
+import sys
 import shutil
 import json
 import re
 
-from schemaValidator import jsonValidator
-
-#Global variables
 dirPath = os.path.dirname(os.path.realpath(__file__))
-database_path = os.path.join(dirPath, "database")
+sys.path.append(os.path.abspath(os.path.join(dirPath, '..')))
 
+from schemaValidator import jsonValidator
+from playground.loading import loading_animation
+
+database_path = os.path.join(dirPath, "database")
 JSON_schema = os.path.join(dirPath, "..", "JSON", "schema.json")
 
 def admin():
@@ -49,14 +51,14 @@ def getFiles(database_path):
 
 
 def addFile():
+    databaseFile = inputFile.strip().strip("'\"")
+
     while True:
         inputFile = input("Enter the full path to the file you want to upload (or type 'cancel' to go back): ")
         
         if inputFile.lower() == "cancel":
             print("\033[1mUpload cancelled. You will be redirected to the admin menu.\033[0m")
             return
-
-        databaseFile = inputFile.strip().strip("'\"")
 
         if not os.path.isfile(databaseFile):
             print("Invalid file path. Please enter a valid file path.")
@@ -66,11 +68,9 @@ def addFile():
             print("Invalid file format. Please enter a path to a JSON file.")
             continue
 
-        # Load JSON Schema from file
         with open(JSON_schema, "r") as schema_file:
             json_schema = json.load(schema_file)
 
-        # Load JSON data from file
         with open(databaseFile, "r") as data_file:
             json_data = json.load(data_file)
 
@@ -91,20 +91,17 @@ def addFile():
         if os.path.exists(new_file_path):
             print("File already exists in the database directory.")
         else:
-            # Copy the content of the original file to the new file in the "database" directory
             shutil.copyfile(databaseFile, new_file_path)
+            loading_animation(1.5)
             print("File copied to the database directory.")
+            break
 
 
 def deleteFile():
     filename_to_delete = input("Enter the filename you want to delete from the database: ")
-
-    # Create the full path to the file in the database directory
     file_path = os.path.join(database_path, filename_to_delete)
 
-    # Check if the file exists before attempting to delete
     if os.path.exists(file_path):
-        # Delete the file
         os.remove(file_path)
         print(f"File '{filename_to_delete}' has been deleted.")
     else:
