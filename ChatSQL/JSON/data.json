@@ -1,0 +1,71 @@
+{
+  "tables": [
+    {
+      "name": "customers",
+      "columns": [
+        {
+          "name": "id",
+          "type": "integer",
+          "description": "Unique identifier for the customer"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "description": "Customer's full name"
+        },
+        {
+          "name": "email",
+          "type": "string",
+          "description": "Customer's email address"
+        }
+      ]
+    },
+    {
+      "name": "orders",
+      "columns": [
+        {
+          "name": "id",
+          "type": "integer",
+          "description": "Unique identifier for the order"
+        },
+        {
+          "name": "customer_id",
+          "type": "integer",
+          "references": "customers",
+          "description": "Foreign key referencing the customer who placed the order"
+        },
+        {
+          "name": "product_id",
+          "type": "integer",
+          "references": "products",
+          "description": "Foreign key referencing the product ordered"
+        },
+        {
+          "name": "quantity",
+          "type": "integer",
+          "description": "Quantity of the product ordered"
+        }
+      ]
+    },
+    {
+      "name": "products",
+      "columns": [
+        {
+          "name": "id",
+          "type": "integer",
+          "description": "Unique identifier for the product"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "description": "Product name"
+        },
+        {
+          "name": "price",
+          "type": "decimal",
+          "description": "Product price"
+        }
+      ]
+    }
+  ]
+}
