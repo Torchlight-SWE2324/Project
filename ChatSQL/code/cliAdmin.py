@@ -37,15 +37,15 @@ def admin():
             print("Invalid choice")
 
 def getFiles(database_path):
+    if not os.path.exists(database_path):
+        return "Error: The database directory does not exist. Please check the path."
+
     files = os.listdir(database_path)
-    filesList = "\n".join([f"- {file}" for file in files])
 
     if not files:
         return "There are no files in the database directory. Add a file first."
-    
-    if not os.path.exists(database_path):
-        return "Error: The database directory does not exist. Please check the path."
-    
+
+    filesList = "\n".join([f"- {file}" for file in files])
     return f"Files in the database directory:\n{filesList}"
 
 def addFile():
