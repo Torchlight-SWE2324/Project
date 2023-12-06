@@ -86,6 +86,7 @@ def deleteFile():
 
     if os.path.exists(file_path):
         os.remove(file_path)
+        loading_animation(.75)
         print(f"File '{filename_to_delete}' has been deleted.")
     else:
         print(f"File '{filename_to_delete}' does not exist in the database directory.")
