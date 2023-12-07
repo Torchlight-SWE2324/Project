@@ -24,7 +24,6 @@ def admin():
             deleteFile()
         elif choice == "3" or choice == "files":
             print(getFiles(database_path))
-#agg
         elif choice == "4" or choice == "exit":
             confirmation = input("Are you sure you want to exit the admin section? (yes/no): ").lower()
             if confirmation == "yes":
