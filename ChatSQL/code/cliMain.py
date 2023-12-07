@@ -34,10 +34,15 @@ def main():
         elif choice == "2" or choice == "ask":
             pass
         elif choice == "3" or choice == "exit":
-            print("Exiting the program. Bye 👋🏻")
-            sys.exit()
-        else:
-            print("Invalid choice")
+            confirmation = input("Are you sure you want to exit the program? (yes/no): ").lower()
+            if confirmation == "yes":
+                print("Exiting the program. Bye 👋🏻")
+                sys.exit()
+            elif confirmation == "no":
+                print("Returning to the main menu.")
+            else:
+                print("Invalid choice. Returning to the main menu.")
+
 
 if __name__ == "__main__":
     main()
