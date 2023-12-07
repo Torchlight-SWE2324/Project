@@ -10,7 +10,7 @@ sys.path.append(os.path.abspath(os.path.join(dirPath, '..')))
 from schemaValidator import jsonValidator
 from playground.loading import loading_animation
 
-database_path = os.path.join(dirPath, "database")
+database_path = os.path.join(dirPath, "..", "database")
 JSON_schema = os.path.join(dirPath, "..", "JSON", "schema.json")
 
 def admin():
