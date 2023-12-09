@@ -36,8 +36,14 @@ def main():
         elif re.match(r"^2$|^ask$", choice):
             pass
         elif re.match(r"^3$|^exit$", choice):
-            print("Exiting the program. Bye!")
-            sys.exit()
+            confirmation = input("Are you sure you want to exit the program? (yes/no): ").lower()
+            if confirmation == "yes":
+                print("Exiting the program. Bye 👋🏻")
+                sys.exit()
+            elif confirmation == "no":
+                print("Returning to the main menu.")
+            else:
+                print("Invalid choice. Returning to the main menu.")
         else:
             print("Invalid choice")
 
