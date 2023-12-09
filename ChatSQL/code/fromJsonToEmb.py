@@ -1,21 +1,13 @@
-import json
 import os
 import sys
-import shutil
 import json
-import re
 
 dirPath = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.abspath(os.path.join(dirPath, '..')))
 
-from schemaValidator import jsonValidator
-from playground.loading import loading_animation
+json_file_path = os.path.join(dirPath, "..", "JSON")
 
-
-
-json_file_path = os.path.join(dirPath, "..", "database")
-
-FileDB=os.path.join(json_file_path,"movies.json") #va cambiata ogni volta che vuoi cambiare file
+FileDB = os.path.join(json_file_path,"movies.json") #va cambiata ogni volta che vuoi cambiare file
 
 def generate_emb_upsert_commands(json_file_path):
     with open(json_file_path, 'r') as file:
@@ -37,9 +29,7 @@ def generate_emb_upsert_commands(json_file_path):
 
             # Incrementa il contatore globale
             index_counter += 1
-
     return commands
-
 
 generated_commands = generate_emb_upsert_commands(FileDB)
 
