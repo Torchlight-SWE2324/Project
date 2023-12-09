@@ -1,120 +1,120 @@
 {
-    "tables": [
+  "tables": [
+    {
+      "name": "citizens",
+      "columns": [
         {
-            "name": "citizens",
-            "columns": [
-                {
-                    "name": "id",
-                    "type": "integer",
-                    "references": null,
-                    "description": "Unique identifier for the citizen"
-                },
-                {
-                    "name": "first_name",
-                    "type": "string",
-                    "references": null,
-                    "description": "First name of the citizen"
-                },
-                {
-                    "name": "last_name",
-                    "type": "string",
-                    "references": null,
-                    "description": "Last name of the citizen"
-                },
-                {
-                    "name": "date_of_birth",
-                    "type": "date",
-                    "references": null,
-                    "description": "Date of birth of the citizen"
-                },
-                {
-                    "name": "address",
-                    "type": "string",
-                    "references": null,
-                    "description": "citizen's address"
-                }
-            ]
+          "name": "id",
+          "type": "integer",
+          "references": null,
+          "description": "Unique identifier for the citizen"
         },
         {
-            "name": "municipalities",
-            "columns": [
-                {
-                    "name": "id",
-                    "type": "integer",
-                    "references": null,
-                    "description": "Unique identifier for the municipality"
-                },
-                {
-                    "name": "name",
-                    "type": "string",
-                    "references": null,
-                    "description": "Name of the municipality"
-                },
-                {
-                    "name": "region",
-                    "type": "string",
-                    "references": null,
-                    "description": "Region where the municipality is located"
-                }
-            ]
+          "name": "first_name",
+          "type": "string",
+          "references": null,
+          "description": "First name of the citizen"
         },
         {
-            "name": "residency_records",
-            "columns": [
-                {
-                    "name": "id",
-                    "type": "integer",
-                    "references": null,
-                    "description": "Unique identifier for the residency record"
-                },
-                {
-                    "name": "citizen_id",
-                    "type": "integer",
-                    "references": "citizens",
-                    "description": "Foreign key referencing the citizen"
-                },
-                {
-                    "name": "municipality_id",
-                    "type": "integer",
-                    "references": "municipalities",
-                    "description": "Foreign key referencing the municipality of residency"
-                },
-                {
-                    "name": "registration_date",
-                    "type": "date",
-                    "references": null,
-                    "description": "Date when the resident was registered in the municipality"
-                },
-                {
-                    "name": "electoral_registration",
-                    "type": "boolean",
-                    "references": null,
-                    "description": "Indicates whether the resident is registered for voting"
-                }
-            ]
+          "name": "last_name",
+          "type": "string",
+          "references": null,
+          "description": "Last name of the citizen"
         },
         {
-            "name": "elections",
-            "columns": [
-                {
-                    "name": "id",
-                    "type": "integer",
-                    "references": null,
-                    "description": "Unique identifier for the election"
-                },
-                {
-                    "name": "name",
-                    "type": "string",
-                    "references": null,
-                    "description": "Name of the election"
-                },
-                {
-                    "name": "date",
-                    "type": "date",
-                    "references": null,
-                    "description": "Date of the election"
-                }
-            ]
+          "name": "date_of_birth",
+          "type": "date",
+          "references": null,
+          "description": "Date of birth of the citizen"
+        },
+        {
+          "name": "address",
+          "type": "string",
+          "references": null,
+          "description": "citizen's address"
         }
-    ]
+      ]
+    },
+    {
+      "name": "municipalities",
+      "columns": [
+        {
+          "name": "id",
+          "type": "integer",
+          "references": null,
+          "description": "Unique identifier for the municipality"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "references": null,
+          "description": "Name of the municipality"
+        },
+        {
+          "name": "region",
+          "type": "string",
+          "references": null,
+          "description": "Region where the municipality is located"
+        }
+      ]
+    },
+    {
+      "name": "residency_records",
+      "columns": [
+        {
+          "name": "id",
+          "type": "integer",
+          "references": null,
+          "description": "Unique identifier for the residency record"
+        },
+        {
+          "name": "citizen_id",
+          "type": "integer",
+          "references": "citizens",
+          "description": "Foreign key referencing the citizen"
+        },
+        {
+          "name": "municipality_id",
+          "type": "integer",
+          "references": "municipalities",
+          "description": "Foreign key referencing the municipality of residency"
+        },
+        {
+          "name": "registration_date",
+          "type": "date",
+          "references": null,
+          "description": "Date when the resident was registered in the municipality"
+        },
+        {
+          "name": "electoral_registration",
+          "type": "boolean",
+          "references": null,
+          "description": "Indicates whether the resident is registered for voting"
+        }
+      ]
+    },
+    {
+      "name": "elections",
+      "columns": [
+        {
+          "name": "id",
+          "type": "integer",
+          "references": null,
+          "description": "Unique identifier for the election"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "references": null,
+          "description": "Name of the election"
+        },
+        {
+          "name": "date",
+          "type": "date",
+          "references": null,
+          "description": "Date of the election"
+        }
+      ]
+    }
+  ]
 }
