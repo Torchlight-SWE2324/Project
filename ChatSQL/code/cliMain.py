@@ -1,27 +1,8 @@
 import os
 import sys
-import csv
 import re
 
-from cliAdmin import admin
-
-dirPath = os.path.dirname(os.path.realpath(__file__))
-
-def checkData(username, password):
-    file_path = os.path.join(dirPath, "pswrd.csv")
-    with open(file_path, "r") as f:
-        reader = csv.reader(f)
-        for row in reader:
-            if row[0] == username and row[1] == password:
-                return True
-
-def adminAuth():
-    username = input("Username: ")
-    password = input("Password: ")
-    if checkData(username, password):
-        admin()
-    else:
-        print("username or password incorrect")
+from utils import adminAuth
 
 def main():
     print("\nWelcome to the ChatSQL CLI (\033[1mPLAYGROUND\033[0m)")
@@ -38,7 +19,7 @@ def main():
         elif re.match(r"^3$|^exit$", choice):
             confirmation = input("Are you sure you want to exit the program? (yes/no): ").lower()
             if confirmation == "yes":
-                print("Exiting the program. Bye 👋🏻")
+                print("Exiting the program. Bye!")
                 sys.exit()
             elif confirmation == "no":
                 print("Returning to the main menu.")
