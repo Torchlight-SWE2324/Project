@@ -1,8 +1,8 @@
 import os
 import json
 
-def generate_emb_upsert_commands(json_file_path):
-    with open(json_file_path, 'r') as file:
+def generateEmbeddingUpsert(jsonFileName):
+    with open(jsonFileName, 'r') as file:
         data = json.load(file)
 
     commands = []
@@ -27,8 +27,8 @@ def generate_emb_upsert_commands(json_file_path):
 if __name__ == "__main__":
     dir_path = os.path.dirname(os.path.realpath(__file__))
     json_file_path = os.path.join(dir_path, "..", "JSON")
-    fileDB = os.path.join(json_file_path, "movies.json") # va cambiata ogni volta che vuoi cambiare file
+    jsonFileName = os.path.join(json_file_path, "movies.json") # va cambiata ogni volta che vuoi cambiare file
 
-    generated_commands = generate_emb_upsert_commands(fileDB)
+    generated_commands = generateEmbeddingUpsert(jsonFileName)
     for command in generated_commands:
         print(command)
