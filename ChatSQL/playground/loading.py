@@ -13,3 +13,6 @@ def loading_animation(n):
 
     sys.stdout.write("\r")  # Move cursor to the beginning of the line
     print("Loading complete!")
+
+if __name__ == "__main__":
+    loading_animation(2)
