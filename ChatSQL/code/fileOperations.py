@@ -41,10 +41,10 @@ def addFile():
             json_schema, json_data = json.load(schema_file), json.load(data_file)
 
         # Check compliance
-        is_compliant = jsonValidator(json_data, json_schema)
+        is_compliant, error_message = jsonValidator(json_data, json_schema)
 
         if not is_compliant:
-            print("The JSON is not compliant with the schema. Please choose a valid JSON file.")
+            print(f"The JSON is not compliant with the schema. Error: {error_message}")
             continue
 
         base_filename = os.path.basename(input_path)

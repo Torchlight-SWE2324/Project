@@ -7,14 +7,14 @@ from jsonschema import validate, ValidationError
 def jsonValidator(json_data, json_schema):
     try:
         validate(instance=json_data, schema=json_schema)
-        return True
+        return True, None
     except ValidationError as e:
-        return False
+        return False, str(e)
 
 if __name__ == "__main__":
     # Use absolute paths for schema and data files
-    schema_file_path = "ChatSQL/res/schema.json"
-    data_file_path = "ChatSQL/res/movies.json"
+    schema_file_path = "ChatSQL/JSON/schema.json"
+    data_file_path = "ChatSQL/JSON/movies.json"
 
     # Load JSON Schema from file
     with open(schema_file_path, "r") as schema_file:
