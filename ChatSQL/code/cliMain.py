@@ -2,9 +2,6 @@ import os
 import sys
 import re
 
-dirPath = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(os.path.abspath(os.path.join(dirPath, '..')))
-
 from utils import adminAuth
 
 def main():
