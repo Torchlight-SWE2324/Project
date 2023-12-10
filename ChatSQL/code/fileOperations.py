@@ -4,10 +4,10 @@ import json
 import shutil
 
 dirPath = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(os.path.abspath(os.path.join(dirPath, '..')))
+sys.path.append(os.path.abspath(os.path.join(dirPath, "..")))
 
 from schemaValidator import jsonValidator
-from playground.loading import loading_animation
+from loadingUtils import loading_animation
 
 database_path = os.path.join(dirPath, "..", "database")
 JSON_schema = os.path.join(dirPath, "..", "JSON", "schema.json")
@@ -22,7 +22,7 @@ def getFiles():
         return "There are no files in the database directory. Add a file first."
 
     filesList = "\n".join([f"- {file}" for file in files])
-    loading_animation(.25)
+    loading_animation(0.25)
     return f"Files in the database directory:\n{filesList}"
 
 def addFile():
