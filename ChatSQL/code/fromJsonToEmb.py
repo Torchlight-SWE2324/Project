@@ -30,7 +30,7 @@ def generateEmbeddingUpsert(jsonFileName):
 if __name__ == "__main__":
     dir_path = os.path.dirname(os.path.realpath(__file__))
     json_file_path = os.path.join(dir_path, "..", "JSON")
-    jsonFileName = os.path.join(json_file_path, "movies.json") # va cambiata ogni volta che vuoi cambiare file
+    jsonFileName = os.path.join(json_file_path, "watches.json") # va cambiata ogni volta che vuoi cambiare file
 
     generated_commands = generateEmbeddingUpsert(jsonFileName)
     for command in generated_commands:
