@@ -10,7 +10,10 @@ def emb(jsonFile):
 
     # Utilizza i comandi generati dinamicamente per emb.upsert
     for command in generated_commands:
-        emb.upsert([eval(command)])
+        try:
+            emb.upsert([command])
+        except Exception as e:
+            print(f"Error during upsert: {e}")
 
     # Esegui una ricerca
     results = emb.search("select score,text,campo,tabella from txtai where similar('azienda') limit 2")
