@@ -18,7 +18,7 @@ def admin():
         elif re.match(r"^2$|^delete$", choice):
             deleteFile()
         elif re.match(r"^3$|^get$", choice):
-            print(getFiles())
+            print("Files in the database:" + getFiles())
         elif re.match(r"^4$|^exit$", choice):
             confirmation = input("Are you sure you want to exit the admin section? (yes/no): ").lower()
             if confirmation == "yes":
@@ -32,4 +32,4 @@ def admin():
             print("Invalid choice")
 
 if __name__ == "__main__":
-    admin()
+    print("Files in the database:" + getFiles())

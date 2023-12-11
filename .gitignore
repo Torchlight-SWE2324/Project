@@ -8,11 +8,6 @@ venv/
 
 ### VisualStudioCode ###
 .vscode/*
-.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-!.vscode/*.code-snippets
 
 # User-specific files
 *.rsuser
@@ -25,5 +20,3 @@ venv/
 # Ignore everything but code style settings and run configurations
 # that are supposed to be shared within teams.
 .idea/*
-!.idea/codeStyles
-!.idea/runConfigurations

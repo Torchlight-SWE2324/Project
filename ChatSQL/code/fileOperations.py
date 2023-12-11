@@ -23,7 +23,7 @@ def getFiles():
 
     filesList = "\n".join([f"- {file}" for file in files])
     loading_animation(0.25)
-    return f"Files in the database directory:\n{filesList}"
+    return f"\n{filesList}"
 
 def addFile():
     while True:
