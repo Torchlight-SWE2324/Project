@@ -59,7 +59,7 @@ def addFile():
 
 def deleteFile():
     # Visualizzazione di tutti i file presenti nel database prima di consentire l'eliminazione
-    print(getFiles())
+    print(getJsonFiles())
     
     filename_to_delete = input("Enter the filename you want to delete from the database: (file_name/exit): ")
     if filename_to_delete.lower() in ["exit", "e"]:
@@ -100,3 +100,16 @@ def deleteFile():
             print(f"File '{filename_to_delete}' does not exist in the database directory.")
             deleteFile()
         
+def getJsonFiles():
+    if not os.path.exists(database_path):
+        return "Error: The database directory does not exist. Please check the path."
+
+    files = os.listdir(database_path)
+    json_files = [file for file in files if file.endswith('.json')]
+
+    if not json_files:
+        return "There are no JSON files in the database directory. Add a JSON file first."
+
+    filesList = "\n".join([f"- {file}" for file in json_files])
+    loading_animation(0.25)
+    return f"JSON files in the database directory:\n{filesList}"
