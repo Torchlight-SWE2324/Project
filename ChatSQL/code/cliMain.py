@@ -3,6 +3,7 @@ import sys
 import re
 
 from utils import adminAuth
+from cliUser import user
 
 def main():
     print("\nWelcome to the ChatSQL CLI (\033[1mPLAYGROUND\033[0m)")
@@ -15,7 +16,7 @@ def main():
         if re.match(r"^1$|^admin$", choice):
             adminAuth()
         elif re.match(r"^2$|^ask$", choice):
-            pass
+            user()
         elif re.match(r"^3$|^exit$", choice):
             confirmation = input("Are you sure you want to exit the program? (yes/no): ").lower()
             if confirmation == "yes":
