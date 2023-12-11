@@ -27,7 +27,7 @@ def user():
 
             # Check again if the file exists
             if not os.path.exists(json_file_path):
-                print(f"Error: The file '{filename}' or '{filename}.json' does not exist. Please check the path.")
+                print(f"Error: The file '{filename}' or '{filename}.json' does not exist. Please check file name.")
                 continue  # Ask for the file again
 
         # If a valid file is found, break out of the loop

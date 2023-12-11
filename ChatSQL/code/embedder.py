@@ -16,7 +16,7 @@ def emb(jsonFile):
             print(f"Error during upsert: {e}")
 
     # Esegui una ricerca
-    results = emb.search("select score,text,campo,tabella from txtai where similar('azienda') limit 2")
+    # results = emb.search("select score,text,campo,tabella from txtai where similar() limit 2")
 
     # Interactive loop
     while True:
@@ -28,7 +28,7 @@ def emb(jsonFile):
             break
 
         # Perform a search based on user input
-        results = emb.search(f"select score,text,campo,tabella from txtai where similar('{user_query}') limit 2")
+        results = emb.search(f"select score,text,campo,tabella,references from txtai where similar('{user_query}') limit 2")
 
         # Print the results
         print(results)
