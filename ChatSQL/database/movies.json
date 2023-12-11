@@ -1,0 +1,79 @@
+{
+  "tables": [
+    {
+      "name": "movies",
+      "columns": [
+        {
+          "name": "id",
+          "type": "integer",
+          "references": null,
+          "description": "Unique identifier for the movie"
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "references": null,
+          "description": "Movie title"
+        },
+        {
+          "name": "release_date",
+          "type": "date",
+          "references": null,
+          "description": "Release date of the movie"
+        },
+        {
+          "name": "genre",
+          "type": "string",
+          "references": null,
+          "description": "Genre of the movie"
+        }
+      ]
+    },
+    {
+      "name": "actors",
+      "columns": [
+        {
+          "name": "id",
+          "type": "integer",
+          "references": null,
+          "description": "Unique identifier for the actor"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "references": null,
+          "description": "Actor's full name"
+        },
+        {
+          "name": "birth_date",
+          "type": "date",
+          "references": null,
+          "description": "Actor's date of birth"
+        }
+      ]
+    },
+    {
+      "name": "movie_cast",
+      "columns": [
+        {
+          "name": "id",
+          "type": "integer",
+          "references": null,
+          "description": "Unique identifier for the movie cast entry"
+        },
+        {
+          "name": "movie_id",
+          "type": "integer",
+          "references": "movies",
+          "description": "Foreign key referencing the movie"
+        },
+        {
+          "name": "actor_id",
+          "type": "integer",
+          "references": "actors",
+          "description": "Foreign key referencing the actor in the movie"
+        }
+      ]
+    }
+  ]
+}
