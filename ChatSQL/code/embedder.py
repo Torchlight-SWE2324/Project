@@ -15,12 +15,29 @@ def emb(jsonFile):
     # Esegui una ricerca
     results = emb.search("select score,text,campo,tabella from txtai where similar('azienda') limit 2")
 
+    # Interactive loop
+    while True:
+        # User input
+        user_query = input("Enter your query (type 'exit' to quit): ")
+
+        # Check for exit condition
+        if user_query.lower() == 'exit':
+            break
+
+        # Perform a search based on user input
+        results = emb.search(f"select score,text,campo,tabella from txtai where similar('{user_query}') limit 2")
+
+        # Print the results
+        print(results)
+
+    '''
     # Stampa i risultati
     print(results)
 
     # Esempio di utilizzo del metodo transform
     transformed_text = emb.transform((None, "ragione sociale", None))
     print(transformed_text)
+    '''
 
 if __name__ == "__main__":
     dir_path = os.path.dirname(os.path.realpath(__file__))

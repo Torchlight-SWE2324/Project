@@ -6,17 +6,20 @@ def generateEmbeddingUpsert(jsonFileName):
         data = json.load(file)
 
     commands = []
-    index_counter = 0  # Contatore globale per il numero incrementale
+    index_counter = 0 # Contatore globale per il numero incrementale
 
     for table in data["tables"]:
         table_name = table["name"]
 
         for column in table["columns"]:
             field_name = column["name"]
+            type = column["type"]
+            references = column["references"]
             description = column["description"]
 
             # Creazione del comando emb.upsert
-            command = f'emb.upsert([({index_counter}, {{"text": "{description}", "campo": "{field_name}", "tabella": "{table_name}"}})])'
+            command = f'emb.upsert([({index_counter}, {{"tabella": "{table_name}", "campo": "{field_name}", "tipo": "{type}", "references": "{references}", "description": "{description}"}})])'
+
             commands.append(command)
 
             # Incrementa il contatore globale
