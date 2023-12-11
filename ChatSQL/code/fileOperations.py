@@ -58,6 +58,9 @@ def addFile():
             print("File added to the database directory.")
 
 def deleteFile():
+    # Visualizzazione di tutti i file presenti nel database prima di consentire l'eliminazione
+    print(getFiles())
+    
     filename_to_delete = input("Enter the filename you want to delete from the database: ")
 
     # Aggiunta dell'estensione .json se l'utente non l'ha fornita
