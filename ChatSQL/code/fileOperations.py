@@ -82,7 +82,7 @@ def deleteFile():
         if os.path.exists(file_path):
             # Chiedi conferma prima di eliminare il file
             confirm = input(f"Are you sure you want to delete '{os.path.basename(file_path)}'? (yes/no): ").lower()
-            if confirm == 'yes':
+            if confirm.lower() in ["yes", "y"]:
                 # Elimina il file
                 loading_animation(1)
                 os.remove(file_path)
