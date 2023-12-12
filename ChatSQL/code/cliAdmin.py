@@ -21,10 +21,10 @@ def admin():
             print("Files in the database:" + getFiles())
         elif re.match(r"^4$|^exit$", choice):
             confirmation = input("Are you sure you want to exit the admin section? (yes/no): ").lower()
-            if confirmation == "yes":
+            if confirmation.lower() in ["yes", "y"]:
                 print("Leaving admin section. You will be redirected to the main menu.")
                 break
-            elif confirmation == "no":
+            elif confirmation.lower() in ["no", "n"]:
                 print("Returning to the admin section menu.")
             else:
                 print("Invalid choice. Returning to the admin section menu.")

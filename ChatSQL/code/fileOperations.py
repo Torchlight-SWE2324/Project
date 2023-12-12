@@ -58,38 +58,58 @@ def addFile():
             print("File added to the database directory.")
 
 def deleteFile():
-    filename_to_delete = input("Enter the filename you want to delete from the database: ")
-
-    # Aggiunta dell'estensione .json se l'utente non l'ha fornita
-    if not filename_to_delete.endswith(".json"):
-        filename_to_delete_with_extension = filename_to_delete + ".json"
-        filename_to_delete_without_extension = filename_to_delete
+    # Visualizzazione di tutti i file presenti nel database prima di consentire l'eliminazione
+    print(getJsonFiles())
+    
+    filename_to_delete = input("Enter the filename you want to delete from the database: (file_name/exit): ")
+    if filename_to_delete.lower() in ["exit", "e"]:
+        return
     else:
-        filename_to_delete_with_extension = filename_to_delete
-        filename_to_delete_without_extension = filename_to_delete.replace(".json", "")
+        # Aggiunta dell'estensione .json se l'utente non l'ha fornita
+        if not filename_to_delete.endswith(".json"):
+            filename_to_delete_with_extension = filename_to_delete + ".json"
+            filename_to_delete_without_extension = filename_to_delete
+        else:
+            filename_to_delete_with_extension = filename_to_delete
+            filename_to_delete_without_extension = filename_to_delete.replace(".json", "")
 
-    # Tentativo di eliminare il file specificato con e senza estensione .json
-    file_paths_to_try = [
-        os.path.join(database_path, filename_to_delete_with_extension),
-        os.path.join(database_path, filename_to_delete_without_extension)
-    ]
+        # Tentativo di eliminare il file specificato con e senza estensione .json
+        file_paths_to_try = [
+            os.path.join(database_path, filename_to_delete_with_extension),
+            os.path.join(database_path, filename_to_delete_without_extension)
+        ]
 
-    file_deleted = False
-    for file_path in file_paths_to_try:
-        if os.path.exists(file_path):
-            # Chiedi conferma prima di eliminare il file
-            confirm = input(f"Are you sure you want to delete '{os.path.basename(file_path)}'? (yes/no): ").lower()
-            if confirm == 'yes':
-                # Elimina il file
-                loading_animation(1)
-                os.remove(file_path)
-                print(f"File '{os.path.basename(file_path)}' has been deleted.")
-                file_deleted = True
-                break
-            else:
-                print(f"Deletion of '{os.path.basename(file_path)}' canceled.")
-                file_deleted = True  # Consider the file as deleted to skip the "not file_deleted" message
-                break
+        file_deleted = False
+        for file_path in file_paths_to_try:
+            if os.path.exists(file_path):
+                # Chiedi conferma prima di eliminare il file
+                confirm = input(f"Are you sure you want to delete '{os.path.basename(file_path)}'? (yes/no): ").lower()
+                if confirm.lower() in ["yes", "y"]:
+                    # Elimina il file
+                    loading_animation(1)
+                    os.remove(file_path)
+                    print(f"File '{os.path.basename(file_path)}' has been deleted.")
+                    file_deleted = True
+                    break
+                elif confirm.lower() in ["no", "n"]:
+                    print(f"Deletion of '{os.path.basename(file_path)}' canceled.")
+                    file_deleted = True  # Consider the file as deleted to skip the "not file_deleted" message
+                    break
+                
+        if not file_deleted:
+            print(f"File '{filename_to_delete}' does not exist in the database directory.")
+            deleteFile()
 
-    if not file_deleted:
-        print(f"File '{filename_to_delete}' does not exist in the database directory.")
+def getJsonFiles():
+    if not os.path.exists(database_path):
+        return "Error: The database directory does not exist. Please check the path."
+
+    files = os.listdir(database_path)
+    json_files = [file for file in files if file.endswith('.json')]
+
+    if not json_files:
+        return "There are no JSON files in the database directory. Add a JSON file first."
+
+    filesList = "\n".join([f"- {file}" for file in json_files])
+    loading_animation(0.25)
+    return f"JSON files in the database directory:\n{filesList}"

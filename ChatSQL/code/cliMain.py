@@ -19,10 +19,10 @@ def main():
             user()
         elif re.match(r"^3$|^exit$", choice):
             confirmation = input("Are you sure you want to exit the program? (yes/no): ").lower()
-            if confirmation == "yes":
+            if confirmation.lower() in ["yes", "y"]:
                 print("Exiting the program. Bye!")
                 sys.exit()
-            elif confirmation == "no":
+            elif confirmation.lower() in ["no", "n"]:
                 print("Returning to the main menu.")
             else:
                 print("Invalid choice. Returning to the main menu.")
