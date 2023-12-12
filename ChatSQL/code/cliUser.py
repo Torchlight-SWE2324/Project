@@ -8,7 +8,7 @@ from fileOperations import getFiles
 from embedder import emb
 
 def user():
-    os.system('clear')
+    #os.system('clear')
     print("Welcome! Please choose a file to chat in:" + getFiles())
     
     JSON_path = os.path.abspath(os.path.join(dirPath, os.pardir, "JSON"))
