@@ -1,20 +1,29 @@
 from txtai import Embeddings
+import os
+import sys
 
-# Inizializza il modulo Embeddings con il modello specificato
+# Your existing code
+content = (0, {"table": "watches", "field": "id", "type": "integer", "references": "None", "description": "Unique identifier for the watch"})
+
+# Extract relevant information
+text = content[1]["description"]
+field_name = content[1]["field"]
+table_name = content[1]["table"]
+
+# Initialize the Embeddings module with the specified model
 emb = Embeddings({"path": "efederici/sentence-BERTino", "content": True})
 
-# Aggiungi alcuni dati di esempio
-emb.upsert([(0, {"text": "campo che contiene la citta", "campo": "CITTA", "tabella": "CLIENTI"})])
-emb.upsert([(1, {"text": "informazioni metodo di pagamento", "campo": "METPAGCLI", "tabella": "CLIENTI"})])
-emb.upsert([(2, {"text": "codice cliente", "campo": "CODCLI", "tabella": "CLIENTI"})])
-emb.upsert([(3, {"text": "ragione sociale", "campo": "RAGSOCCLI", "tabella": "CLIENTI"})])
-emb.upsert([(4, {"text": "nome della azienda", "campo": "RAGSOCCLI", "tabella": "CLIENTI"})])
+# Upsert the data into the txtai Embeddings
+emb.upsert([(0, {"text": text, "campo": field_name, "tabella": table_name})])
 
-# Esegui una ricerca
-results = emb.search("select score,text,campo,tabella from txtai where similar('cliente') limit 2")
+# Execute a search using the txtai library
+results = emb.search("select score,text,campo,tabella from txtai where similar('unique identifier') limit 2")
 
-# Stampa i risultati
+# Print the results
 print(results)
-# Esempio di utilizzo del metodo transform
-transformed_text = emb.transform((None, "ragione sociale", None))
-print(transformed_text)
+for result in results:
+    print(f"\nScore: {result['score']}")
+    print(f"Text: {result['text']}")
+    print(f"Field name: {result['campo']}")
+    print(f"Table name: {result['tabella']}\n")
+
