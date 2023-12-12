@@ -1,0 +1,73 @@
+{
+    "tables": [
+        {
+            "name": "Prodotti",
+            "columns": [
+                {
+                    "name": "ID",
+                    "type": "int",
+                    "references": null,
+                    "description": "Identificatore unico del prodotto"
+                },
+                {
+                    "name": "Nome",
+                    "type": "string",
+                    "references": null,
+                    "description": "Nome del prodotto"
+                },
+                {
+                    "name": "Prezzo",
+                    "type": "float",
+                    "references": null,
+                    "description": "Prezzo del prodotto"
+                }
+            ]
+        },
+        {
+            "name": "Reparti",
+            "columns": [
+                {
+                    "name": "ID",
+                    "type": "int",
+                    "references": null,
+                    "description": "Identificatore unico del reparto"
+                },
+                {
+                    "name": "Nome",
+                    "type": "string",
+                    "references": null,
+                    "description": "Nome del reparto"
+                },
+                {
+                    "name": "Descrizione",
+                    "type": "string",
+                    "references": null,
+                    "description": "Descrizione del reparto"
+                }
+            ]
+        },
+        {
+            "name": "Scaffali",
+            "columns": [
+                {
+                    "name": "ID",
+                    "type": "int",
+                    "references": null,
+                    "description": "Identificatore unico dello scaffale"
+                },
+                {
+                    "name": "Numero",
+                    "type": "int",
+                    "references": null,
+                    "description": "Numero dello scaffale"
+                },
+                {
+                    "name": "Reparto",
+                    "type": "int",
+                    "references": "Reparti.ID",
+                    "description": "ID del reparto a cui appartiene lo scaffale"
+                }
+            ]
+        }
+    ]
+}

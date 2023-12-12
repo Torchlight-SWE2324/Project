@@ -17,13 +17,15 @@ def generateEmbeddingUpsert(jsonFileName):
             references = column["references"]
             description = column["description"]
 
-            # Creazione del comando emb.upsert
-            command = f'emb.upsert([({index_counter}, {{"tabella": "{table_name}", "campo": "{field_name}", "tipo": "{type}", "references": "{references}", "description": "{description}"}})])'
+            # Create the emb.upsert command
+            command = f'({index_counter}, {{ "table": "{table_name}", "field": "{field_name}", "type": "{type}", "references": "{references}", "description": "{description}" }})'
+            """emb.upsert[({index_counter}, {{ "table": "{table_name}", "field": "{field_name}", "type": "{type}", "references": "{references}", "description": "{description}" }})]"""
 
             commands.append(command)
 
-            # Incrementa il contatore globale
+            # Increment the global counter
             index_counter += 1
+
 
     return commands
 
