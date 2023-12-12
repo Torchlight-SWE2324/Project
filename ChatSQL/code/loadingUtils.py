@@ -11,10 +11,8 @@ def loading_animation(n):
             sys.stdout.flush()
             time.sleep(0.1)
 
-    #sys.stdout.write("\r")  # Move cursor to the beginning of the line
+    sys.stdout.write("\r")  # Move cursor to the beginning of the line
     #print("Loading complete!")
-    sys.stdout.write("\r" + " " * (len("Loading " + animation_chars[-1]) + 1))  # Clear the loading animation
-    sys.stdout.flush()
     
 
 if __name__ == "__main__":
