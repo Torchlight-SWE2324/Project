@@ -12,7 +12,8 @@ def loading_animation(n):
             time.sleep(0.1)
 
     sys.stdout.write("\r")  # Move cursor to the beginning of the line
-    print("Loading complete!")
+    #print("Loading complete!")
+    
 
 if __name__ == "__main__":
     loading_animation(2)

@@ -1,0 +1,79 @@
+{
+    "tables": [
+        {
+            "name": "Studenti",
+            "columns": [
+                {
+                    "name": "Matricola",
+                    "type": "string",
+                    "references": null,
+                    "description": "Numero di matricola dello studente"
+                },
+                {
+                    "name": "Nome",
+                    "type": "string",
+                    "references": null,
+                    "description": "Nome dello studente"
+                },
+                {
+                    "name": "Cognome",
+                    "type": "string",
+                    "references": null,
+                    "description": "Cognome dello studente"
+                },
+                {
+                    "name": "AnnoIscrizione",
+                    "type": "int",
+                    "references": null,
+                    "description": "Anno in cui lo studente si è iscritto al corso"
+                }
+            ]
+        },
+        {
+            "name": "Corsi",
+            "columns": [
+                {
+                    "name": "CodiceCorso",
+                    "type": "string",
+                    "references": null,
+                    "description": "Codice identificativo del corso"
+                },
+                {
+                    "name": "NomeCorso",
+                    "type": "string",
+                    "references": null,
+                    "description": "Nome del corso"
+                },
+                {
+                    "name": "Crediti",
+                    "type": "int",
+                    "references": null,
+                    "description": "Numero di crediti associati al corso"
+                }
+            ]
+        },
+        {
+            "name": "Iscrizioni",
+            "columns": [
+                {
+                    "name": "MatricolaStudente",
+                    "type": "string",
+                    "references": "Studenti.Matricola",
+                    "description": "Matricola dello studente iscritto al corso"
+                },
+                {
+                    "name": "CodiceCorso",
+                    "type": "string",
+                    "references": "Corsi.CodiceCorso",
+                    "description": "Codice del corso a cui lo studente è iscritto"
+                },
+                {
+                    "name": "DataIscrizione",
+                    "type": "string",
+                    "references": null,
+                    "description": "Data in cui lo studente si è iscritto al corso"
+                }
+            ]
+        }
+    ]
+}
