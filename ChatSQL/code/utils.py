@@ -62,7 +62,7 @@ def generateEmbeddingUpsert(jsonFileName):
             description = column["description"]
 
             # Create the emb.upsert command
-            dictionary = {"table": table_name, "table-description": table_description,"field": field_name, "type": type, "references": references, "description": description}
+            dictionary = {"table": table_name,"table-description": table_description,"field": field_name, "type": type, "references": references, "description": description}
             command = (index_counter, dictionary)
 
             commands.append(command)

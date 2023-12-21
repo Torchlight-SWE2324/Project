@@ -1,4 +1,5 @@
 import os
+import re
 from utils import generateEmbeddingUpsert
 
 if __name__ == "__main__":
@@ -12,13 +13,50 @@ if __name__ == "__main__":
         #print(command)
         dictionary = command[1]
         #print(dictionary["table"])
-        print(f"Table name: {dictionary['table']}")
+        """print(f"Table name: {dictionary['table']}")
         print(f"Table description: {dictionary['table-description']}")
         print(f"Field name: {dictionary['field']}")
         print(f"Field type: {dictionary['type']}")
         print(f"References: {dictionary['references']}")
-        print(f"Description: {dictionary['description']}\n")
+        print(f"Description: {dictionary['description']}\n")"""
 
+    table_fields = {}
+
+    # Iterate through generated_commands to collect field names and references for each table
+    for command in generated_commands:
+        dictionary = command[1]
+        tableName = dictionary["table"]
+        fieldName = dictionary["field"]
+
+        # Add the field to the dictionary for the corresponding table
+        if tableName in table_fields:
+            table_fields[tableName].append(fieldName)
+        else:
+            table_fields[tableName] = [fieldName]
+
+    # Print the result in the desired format
+    print("The database contains the following tables:")
+    for table, fields in table_fields.items():
+        field_str = ', '.join([f"'{field}'" for field in fields])
+        print(f"'{table}' with fields {field_str};")
+
+    print("\nThe database contains the following relationships:")
+    for command in generated_commands:
+        dictionary = command[1]
+        tableName = dictionary["table"]
+        fieldName = dictionary["field"]
+        references = dictionary["references"]
+
+        if references is not None:
+            print(f"'{tableName}.{fieldName}' references '{references}';")
+
+    user_query = "select all the actors that played in the movie 'The Godfather'"
+    print(f"\nGenerate the SQL query equivalent to: {user_query}\n")
+    
+
+
+
+    """
     index_to_print = 1
 
     # Check if the index is valid
@@ -34,4 +72,4 @@ if __name__ == "__main__":
         print(f"References: {selected_dictionary['references']}")
         print(f"Description: {selected_dictionary['description']}\n")
     else:
-        print("Invalid index. Please enter a valid index.")
+        print("Invalid index. Please enter a valid index.")"""

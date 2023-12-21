@@ -55,9 +55,6 @@ def emb(jsonFile):
                 print("References: " + str(references_value) if references_value is not None else "References: None")
                 print("Field description: " + generated_commands[id_value][1]["description"])
 
-                table = "pluto"
-                print(f"Question: Write an SQL query to {user_query} for the ")
-
             else:
                 print("ID not found in the given text.")
 
