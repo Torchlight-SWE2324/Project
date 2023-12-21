@@ -11,20 +11,21 @@ from utils import jsonValidator, loading_animation
 database_path = os.path.join(dirPath, "..", "database")
 JSON_schema = os.path.join(dirPath, "..", "JSON", "schema.json")
 
-def getFiles():
+def getFiles(file_type='.json'):
     if not os.path.exists(database_path):
         return "Error: The database directory does not exist. Please check the path."
 
     files = os.listdir(database_path)
+    filtered_files = [file for file in files if file.endswith(file_type)]
 
-    if not files:
-        return "There are no files in the database directory. Add a file first."
+    if not filtered_files:
+        return f"There are no {file_type.upper()} files in the database directory. Add a file first."
 
-    filesList = "\n".join([f"- {file}" for file in files])
+    filesList = "\n".join([f"- {file}" for file in filtered_files])
     loading_animation(0.25)
-    return f"\n{filesList}"
+    return f"\n\nFiles in the database:\n{filesList}"
 
-def addFile():
+def uploadFile():
     while True:
         input_path = input("Enter the full path to the file you want to upload (or type 'exit' to go back): ").strip().strip("'\"").lower()
 
@@ -58,7 +59,7 @@ def addFile():
 
 def deleteFile():
     # View all the files in the database
-    print(getJsonFiles())
+    print(getFiles())
     
     filename_to_delete = input("Enter the name of the file you want to delete (or type 'exit' to go back): ").strip().strip("'\"").lower()
     if filename_to_delete == "exit" or filename_to_delete == "e":
@@ -98,17 +99,3 @@ def deleteFile():
         if not file_deleted:
             print(f"The file \033[1m'{filename_to_delete}'\033[0m does not exist in the database directory.")
             deleteFile()
-
-def getJsonFiles():
-    if not os.path.exists(database_path):
-        return "Error: The database directory does not exist. Please check the path."
-
-    files = os.listdir(database_path)
-    json_files = [file for file in files if file.endswith('.json')]
-
-    if not json_files:
-        return "There are no JSON files in the database directory, please add a file first"
-
-    filesList = "\n".join([f"- {file}" for file in json_files])
-    loading_animation(0.25)
-    return f"\n\nFiles in the database:\n{filesList}"

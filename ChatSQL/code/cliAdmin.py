@@ -1,4 +1,4 @@
-from fileOperations import getFiles, addFile, deleteFile
+from fileOperations import getFiles, uploadFile, deleteFile
 from utils import leaver
 
 def admin():
@@ -14,7 +14,7 @@ def admin():
         choice = input("Your choice: ").lower()
 
         if choice == "1" or choice == "add":
-            addFile()
+            uploadFile()
         elif choice == "2" or choice == "delete":
             deleteFile()
         elif choice == "3" or choice == "get":
