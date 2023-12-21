@@ -15,7 +15,7 @@ def emb(jsonFile):
     loading_thread.start()
 
     # Initialize the Embeddings module with the specified model
-    emb = Embeddings({"path": "intfloat/e5-large-v2", "content": True})
+    emb = Embeddings({"path": "sentence-transformers/stsb-roberta-large", "content": True})
 
     # Upsert the data into the txtai Embeddings
     for command in generated_commands:
@@ -38,8 +38,9 @@ def emb(jsonFile):
 
         table_fields = {}
 
+        print("\n\033[1mSCORE FOR DEBUGGING ONLY\033[0m")
         for result in results:
-            print(f"\nScore: {result['score']}")
+            print(f"Score: {result['score']}")
 
             text = result['text']
             match = re.search(r"\((\d+),", text)
@@ -60,18 +61,32 @@ def emb(jsonFile):
         for table, fields in table_fields.items():
             field_str = ', '.join([f"'{field}'" for field in fields])
             print(f"'{table}' with fields {field_str};")
+        
 
-        for result in results:
-            id_value = int(re.search(r"\((\d+),", result['text']).group(1))
-            references_value = generated_commands[id_value][1]["references"]
+        show_message = False
+        messages = []
 
-            if references_value is not None:
-                table_name = generated_commands[id_value][1]["table"]
-                field_name = generated_commands[id_value][1]["field"]
-                print("\nThe database contains the following relationships:")
-                print(f"'{table_name}.{field_name}' references '{references_value}';")
+        for command_result in results:
+            command_id = int(re.search(r"\((\d+),", command_result['text']).group(1))
+            references_value = generated_commands[command_id][1]["references"]
 
+            if references_value:
+                table_name = generated_commands[command_id][1]["table"]
+                field_name = generated_commands[command_id][1]["field"]
+                messages.append(f"'{table_name}.{field_name}' references '{references_value}';")
 
+        # Check if there are messages to show
+        if messages:
+            show_message = True
+            print("\nThe database contains the following relationships:")
+
+        # Print messages if show_message is True
+        for message in messages:
+            print(message)
+
+        """# Optionally, print a generic message if no messages were found
+        if not show_message:
+            print("No reference values found.")"""
 
         print(f"\nGenerate the SQL query equivalent to: {user_query}\n")
 
@@ -79,5 +94,5 @@ def emb(jsonFile):
 if __name__ == "__main__":
     dir_path = os.path.dirname(os.path.realpath(__file__))
     json_file_path = os.path.join(dir_path, "..", "JSON")
-    jsonFileName = os.path.join(json_file_path, "movies.json")  # Change this to the JSON file you want to use
+    jsonFileName = os.path.join(json_file_path, "movies.json") # Change this to the JSON file you want to use
     emb(jsonFileName)
