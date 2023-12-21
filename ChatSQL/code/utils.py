@@ -42,10 +42,6 @@ def loading_animation(n):
             time.sleep(0.1)
 
     sys.stdout.write("\r")  # Move cursor to the beginning of the line
-    
-
-if __name__ == "__main__":
-    loading_animation(2)
 
 
 def generateEmbeddingUpsert(jsonFileName):
