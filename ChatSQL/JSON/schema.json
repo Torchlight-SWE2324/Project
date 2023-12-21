@@ -49,7 +49,7 @@
         },
         "required": [
           "name",
-          "description",
+          "table-description",
           "columns"
         ]
       }

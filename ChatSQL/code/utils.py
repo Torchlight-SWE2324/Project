@@ -1,11 +1,10 @@
 import os
 import sys
 import csv
+import time
 
 dirPath = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.abspath(os.path.join(dirPath, '..')))
-
-from cliAdmin import admin
 
 database_path = os.path.join(dirPath, "..", "database")
 JSON_schema = os.path.join(dirPath, "..", "JSON", "schema.json")
@@ -18,10 +17,30 @@ def checkData(username, password):
             if row[0] == username and row[1] == password:
                 return True
 
-def adminAuth():
-    username = input("Username: ")
-    password = input("Password: ")
-    if checkData(username, password):
-        admin()
+def leaver(section):
+    confirmation = input(f"Are you sure you want to leave the {section} section? (y/n): ").lower()
+    if confirmation == "yes" or confirmation == "y":
+        print(f"Leaving the {section}. Bye!\n")
+        return True
+    elif confirmation == "no" or confirmation == "n":
+        print(f"Returning to the {section} section.\n")
+        return False
     else:
-        print("username or password incorrect")
+        print(f"Invalid choice. Returning to the {section} menu.\n")
+        return False
+
+def loading_animation(n):
+    animation_chars = "|/-\\"
+    start_time = time.time()
+
+    while time.time() - start_time < n:
+        for char in animation_chars:
+            sys.stdout.write("\r" + "Loading " + char)
+            sys.stdout.flush()
+            time.sleep(0.1)
+
+    sys.stdout.write("\r")  # Move cursor to the beginning of the line
+    
+
+if __name__ == "__main__":
+    loading_animation(2)

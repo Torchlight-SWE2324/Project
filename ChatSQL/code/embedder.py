@@ -1,12 +1,11 @@
 import os
 import re
-
-import time
 import threading
 import logging
+
 from txtai import Embeddings
 from fromJsonToEmb import generateEmbeddingUpsert
-from loadingUtils import loading_animation
+from utils import loading_animation
 
 def emb(jsonFile):
     generated_commands = generateEmbeddingUpsert(jsonFile)
@@ -36,7 +35,7 @@ def emb(jsonFile):
         if user_query.lower() == 'exit':
             break
 
-        results = emb.search(f"select score,text,table,field,type,references,description from txtai where similar('{user_query}') limit 3")
+        results = emb.search(f"select score,text,table,table-description,field,type,references,description from txtai where similar('{user_query}') limit 3")
 
         for result in results:
             print(f"\nScore: {result['score']}")
@@ -53,8 +52,13 @@ def emb(jsonFile):
                 print("Field type: " + generated_commands[id_value][1]["type"])
                 print("Table name: " + generated_commands[id_value][1]["table"])
                 references_value = generated_commands[id_value][1]["references"]
+                print("Table description: " + generated_commands[id_value][1]["table-description"]) #ADDED
                 print("References: " + str(references_value) if references_value is not None else "References: None")
                 print("Field description: " + generated_commands[id_value][1]["description"])
+
+                table = "pluto"
+                print(f"Question: Write an SQL query to {user_query} for the ")
+
             else:
                 print("ID not found in the given text.")
 

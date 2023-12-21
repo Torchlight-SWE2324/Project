@@ -10,6 +10,7 @@ def generateEmbeddingUpsert(jsonFileName):
 
     for table in data["tables"]:
         table_name = table["name"]
+        table_description = table["table-description"]
 
         for column in table["columns"]:
             field_name = column["name"]
@@ -18,7 +19,7 @@ def generateEmbeddingUpsert(jsonFileName):
             description = column["description"]
 
             # Create the emb.upsert command
-            dictionary = {"table": table_name, "field": field_name, "type": type, "references": references, "description": description}
+            dictionary = {"table": table_name, "table-description": table_description,"field": field_name, "type": type, "references": references, "description": description}
             command = (index_counter, dictionary)
 
             commands.append(command)
@@ -30,7 +31,7 @@ def generateEmbeddingUpsert(jsonFileName):
 if __name__ == "__main__":
     dir_path = os.path.dirname(os.path.realpath(__file__))
     json_file_path = os.path.join(dir_path, "..", "JSON")
-    jsonFileName = os.path.join(json_file_path, "watches.json")
+    jsonFileName = os.path.join(json_file_path, "movies.json")
 
     generated_commands = generateEmbeddingUpsert(jsonFileName)
 
@@ -39,6 +40,7 @@ if __name__ == "__main__":
         dictionary = command[1]
         #print(dictionary["table"])
         print(f"Table name: {dictionary['table']}")
+        print(f"Table description: {dictionary['table-description']}")
         print(f"Field name: {dictionary['field']}")
         print(f"Field type: {dictionary['type']}")
         print(f"References: {dictionary['references']}")
@@ -53,6 +55,7 @@ if __name__ == "__main__":
 
         print(f"Selected Command at Index {index_to_print}:")
         print(f"Table name: {selected_dictionary['table']}")
+        print(f"Table description: {selected_dictionary['table-description']}")
         print(f"Field name: {selected_dictionary['field']}")
         print(f"Field type: {selected_dictionary['type']}")
         print(f"References: {selected_dictionary['references']}")
