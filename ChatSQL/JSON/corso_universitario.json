@@ -2,7 +2,7 @@
     "tables": [
         {
             "name": "Studenti",
-            "description": "Tabella contenente i dati degli studenti iscritti al corso",
+            "table-description": "Tabella contenente i dati degli studenti iscritti al corso",
             "columns": [
                 {
                     "name": "Matricola",
@@ -32,7 +32,7 @@
         },
         {
             "name": "Corsi",
-            "description": "Tabella contenente i dati dei corsi",
+            "table-description": "Tabella contenente i dati dei corsi",
             "columns": [
                 {
                     "name": "CodiceCorso",
@@ -56,7 +56,7 @@
         },
         {
             "name": "Iscrizioni",
-            "description": "Tabella contenente i dati delle iscrizioni",
+            "table-description": "Tabella contenente i dati delle iscrizioni",
             "columns": [
                 {
                     "name": "MatricolaStudente",

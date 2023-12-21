@@ -2,28 +2,28 @@
   "tables": [
     {
       "name": "customers",
-      "description": "Table containing all customers who have placed orders",
+      "table-description": "Table containing all customers who have placed orders",
       "columns": [
         {
           "name": "id",
           "type": "integer",
-          "description": "Unique identifier for the customer"
+          "table-description": "Unique identifier for the customer"
         },
         {
           "name": "name",
           "type": "string",
-          "description": "Customer's full name"
+          "table-description": "Customer's full name"
         },
         {
           "name": "email",
           "type": "string",
-          "description": "Customer's email address"
+          "table-description": "Customer's email address"
         }
       ]
     },
     {
       "name": "orders",
-      "description": "Table containing all orders placed by customers",
+      "table-description": "Table containing all orders placed by customers",
       "columns": [
         {
           "name": "id",
@@ -51,7 +51,7 @@
     },
     {
       "name": "products",
-      "description": "Table containing all products available for purchase",
+      "table-description": "Table containing all products available for purchase",
       "columns": [
         {
           "name": "id",

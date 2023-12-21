@@ -2,7 +2,7 @@
   "tables": [
     {
       "name": "movies",
-      "description": "Table containing information about movies",
+      "table-description": "Table containing information about movies",
       "columns": [
         {
           "name": "id",
@@ -32,7 +32,7 @@
     },
     {
       "name": "actors",
-      "description": "Table containing information about actors",
+      "table-description": "Table containing information about actors",
       "columns": [
         {
           "name": "id",
@@ -56,7 +56,7 @@
     },
     {
       "name": "movie_cast",
-      "description": "Table containing information about the cast of a movie",
+      "table-description": "Table containing information about the cast of a movie",
       "columns": [
         {
           "name": "id",
