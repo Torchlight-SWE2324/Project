@@ -2,6 +2,7 @@
   "tables": [
     {
       "name": "customers",
+      "description": "Table containing all customers who have placed orders",
       "columns": [
         {
           "name": "id",
@@ -22,6 +23,7 @@
     },
     {
       "name": "orders",
+      "description": "Table containing all orders placed by customers",
       "columns": [
         {
           "name": "id",
@@ -49,6 +51,7 @@
     },
     {
       "name": "products",
+      "description": "Table containing all products available for purchase",
       "columns": [
         {
           "name": "id",

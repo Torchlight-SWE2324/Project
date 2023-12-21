@@ -2,6 +2,7 @@
   "tables": [
     {
       "name": "watches",
+      "description": "Table containing information about watches",
       "columns": [
         {
           "name": "id",
@@ -31,6 +32,7 @@
     },
     {
       "name": "owners",
+      "description": "Table containing information about owners",
       "columns": [
         {
           "name": "id",
@@ -54,6 +56,7 @@
     },
     {
       "name": "watch_collection",
+      "description": "Table containing information about watch collections",
       "columns": [
         {
           "name": "id",
