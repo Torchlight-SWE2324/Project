@@ -15,7 +15,7 @@ def emb(jsonFile):
     loading_thread.start()
 
     # Initialize the Embeddings module with the specified model
-    emb = Embeddings({"path": "roberta-base", "content": True})
+    emb = Embeddings({"path": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2", "content": True})
 
     # Upsert the data into the txtai Embeddings
     for command in generated_commands:
@@ -36,27 +36,43 @@ def emb(jsonFile):
 
         results = emb.search(f"select score,text,table,table-description,field,type,references,description from txtai where similar('{user_query}') limit 3")
 
+        table_fields = {}
+
         for result in results:
-            print(f"\nScore: {result['score']}")
-            
             text = result['text']
             match = re.search(r"\((\d+),", text)
 
             if match:
                 id_value = int(match.group(1))
-                print("ID:", id_value)
+                table_name = generated_commands[id_value][1]["table"]
+                field_name = generated_commands[id_value][1]["field"]
 
-                # Access specific data from generated_commands using the ID
-                print("Field name: " + generated_commands[id_value][1]["field"])
-                print("Field type: " + generated_commands[id_value][1]["type"])
-                print("Table name: " + generated_commands[id_value][1]["table"])
+                # Add the field to the dictionary for the corresponding table
+                if table_name in table_fields:
+                    table_fields[table_name].append(field_name)
+                else:
+                    table_fields[table_name] = [field_name]
+
+        # Print the result in the desired format
+        print("\nThe database contains the following tables:")
+        for table, fields in table_fields.items():
+            field_str = ', '.join([f"'{field}'" for field in fields])
+            print(f"'{table}' with fields {field_str};")
+
+        if any(generated_commands[int(re.search(r"\((\d+),", result['text']).group(1))][1]["references"] for result in results):
+            print("\nThe database contains the following relationships:")
+            for result in results:
+                id_value = int(re.search(r"\((\d+),", result['text']).group(1))
                 references_value = generated_commands[id_value][1]["references"]
-                print("Table description: " + generated_commands[id_value][1]["table-description"]) #ADDED
-                print("References: " + str(references_value) if references_value is not None else "References: None")
-                print("Field description: " + generated_commands[id_value][1]["description"])
+                if references_value is not None:
+                    print(f"'{table_name}.{field_name}' references '{references_value}';")
 
-            else:
-                print("ID not found in the given text.")
+
+            if references_value is not None:
+                print(f"'{table_name}.{field_name}' references '{references_value}';")
+
+        print(f"\nGenerate the SQL query equivalent to: {user_query}\n")
+
 
 if __name__ == "__main__":
     dir_path = os.path.dirname(os.path.realpath(__file__))
