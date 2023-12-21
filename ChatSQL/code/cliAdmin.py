@@ -6,7 +6,7 @@ def admin():
         print("\nWhat do you want to do?")
         print("1. Add a file")
         print("2. Delete a file")
-        print("3. Get all the file sin the database")
+        print("3. Get all the files in the database")
         print("4. Leave the admin section")
 
         choice = input("Your choice: ").lower()
@@ -33,4 +33,4 @@ def handle_exit():
 
 
 if __name__ == "__main__":
-    print("Files in the database:" + getFiles())
+    admin()

@@ -27,9 +27,9 @@ def getFiles():
 
 def addFile():
     while True:
-        input_path = input("Enter the full path to the file you want to upload (or type 'cancel' to go back): ").strip().strip("'\"")
+        input_path = input("Enter the full path to the file you want to upload (or type 'exit' to go back): ").strip().strip("'\"").lower()
 
-        if input_path.lower() == "cancel":
+        if input_path == "exit" or input_path == "e":
             print("\033[1mUpload cancelled. You will be redirected to the admin menu.\033[0m")
             return
 
@@ -58,11 +58,11 @@ def addFile():
             print("File added to the database directory.")
 
 def deleteFile():
-    # Visualizzazione di tutti i file presenti nel database prima di consentire l'eliminazione
+    # View all the files in the database
     print(getJsonFiles())
     
-    filename_to_delete = input("Enter the filename you want to delete from the database: (file_name/exit): ")
-    if filename_to_delete.lower() in ["exit", "e"]:
+    filename_to_delete = input("Enter the name of the file you want to delete (or type 'exit' to go back): ").strip().strip("'\"").lower()
+    if filename_to_delete == "exit" or filename_to_delete == "e":
         return
     else:
         # Aggiunta dell'estensione .json se l'utente non l'ha fornita
@@ -83,21 +83,21 @@ def deleteFile():
         for file_path in file_paths_to_try:
             if os.path.exists(file_path):
                 # Chiedi conferma prima di eliminare il file
-                confirm = input(f"Are you sure you want to delete '{os.path.basename(file_path)}'? (yes/no): ").lower()
+                confirm = input(f"Are you sure you want to delete the file \033[1m'{os.path.basename(file_path)}'\033[0m? (yes/no): ").lower()
                 if confirm.lower() in ["yes", "y"]:
                     # Elimina il file
                     loading_animation(1)
                     os.remove(file_path)
-                    print(f"File '{os.path.basename(file_path)}' has been deleted.")
+                    print(f"The file \033[1m'{os.path.basename(file_path)}'\033[0m has been deleted.")
                     file_deleted = True
                     break
                 elif confirm.lower() in ["no", "n"]:
-                    print(f"Deletion of '{os.path.basename(file_path)}' canceled.")
+                    print(f"Deletion of the file \033[1m'{os.path.basename(file_path)}'\033[0m has been cancelled.")
                     file_deleted = True  # Consider the file as deleted to skip the "not file_deleted" message
                     break
                 
         if not file_deleted:
-            print(f"File '{filename_to_delete}' does not exist in the database directory.")
+            print(f"The file \033[1m'{filename_to_delete}'\033[0m does not exist in the database directory.")
             deleteFile()
 
 def getJsonFiles():
@@ -108,8 +108,8 @@ def getJsonFiles():
     json_files = [file for file in files if file.endswith('.json')]
 
     if not json_files:
-        return "There are no JSON files in the database directory. Add a JSON file first."
+        return "There are no JSON files in the database directory, please add a file first"
 
     filesList = "\n".join([f"- {file}" for file in json_files])
     loading_animation(0.25)
-    return f"JSON files in the database directory:\n{filesList}"
+    return f"\n\nFiles in the database:\n{filesList}"
