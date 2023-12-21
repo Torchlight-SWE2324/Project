@@ -15,7 +15,7 @@ def emb(jsonFile):
     loading_thread.start()
 
     # Initialize the Embeddings module with the specified model
-    emb = Embeddings({"path": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2", "content": True})
+    emb = Embeddings({"path": "intfloat/e5-large-v2", "content": True})
 
     # Upsert the data into the txtai Embeddings
     for command in generated_commands:
@@ -39,6 +39,8 @@ def emb(jsonFile):
         table_fields = {}
 
         for result in results:
+            print(f"\nScore: {result['score']}")
+
             text = result['text']
             match = re.search(r"\((\d+),", text)
 
@@ -59,17 +61,17 @@ def emb(jsonFile):
             field_str = ', '.join([f"'{field}'" for field in fields])
             print(f"'{table}' with fields {field_str};")
 
-        if any(generated_commands[int(re.search(r"\((\d+),", result['text']).group(1))][1]["references"] for result in results):
-            print("\nThe database contains the following relationships:")
-            for result in results:
-                id_value = int(re.search(r"\((\d+),", result['text']).group(1))
-                references_value = generated_commands[id_value][1]["references"]
-                if references_value is not None:
-                    print(f"'{table_name}.{field_name}' references '{references_value}';")
-
+        for result in results:
+            id_value = int(re.search(r"\((\d+),", result['text']).group(1))
+            references_value = generated_commands[id_value][1]["references"]
 
             if references_value is not None:
+                table_name = generated_commands[id_value][1]["table"]
+                field_name = generated_commands[id_value][1]["field"]
+                print("\nThe database contains the following relationships:")
                 print(f"'{table_name}.{field_name}' references '{references_value}';")
+
+
 
         print(f"\nGenerate the SQL query equivalent to: {user_query}\n")
 
