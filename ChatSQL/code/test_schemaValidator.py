@@ -3,7 +3,7 @@ from utils import jsonValidator
 
 if __name__ == "__main__":
     # Use absolute paths for schema and data files
-    schema_file_path = "ChatSQL/JSON/schema.json"
+    schema_file_path = "ChatSQL/code/schema.json"
     data_file_path = "ChatSQL/JSON/movies.json"
 
     # Load JSON Schema from file

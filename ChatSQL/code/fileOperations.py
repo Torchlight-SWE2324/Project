@@ -9,7 +9,7 @@ sys.path.append(os.path.abspath(os.path.join(dirPath, "..")))
 from utils import jsonValidator, loading_animation
 
 database_path = os.path.join(dirPath, "..", "database")
-JSON_schema = os.path.join(dirPath, "..", "JSON", "schema.json")
+JSON_schema = os.path.join(dirPath, "..", "code", "schema.json")
 
 def getFiles(file_type='.json'):
     if not os.path.exists(database_path):
@@ -23,7 +23,7 @@ def getFiles(file_type='.json'):
 
     filesList = "\n".join([f"- {file}" for file in filtered_files])
     loading_animation(0.25)
-    return f"\n\nFiles in the database:\n{filesList}"
+    return f"\n\nFiles in the database:\n{filesList}\n"
 
 def uploadFile():
     while True:
