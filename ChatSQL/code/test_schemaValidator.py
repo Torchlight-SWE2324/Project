@@ -1,15 +1,5 @@
 import json
-# IMPORTANT: jsonschema is not a python library
-# You need to install it with pip using the command:
-# pip install jsonschema
-from jsonschema import validate, ValidationError
-
-def jsonValidator(json_data, json_schema):
-    try:
-        validate(instance=json_data, schema=json_schema)
-        return True, None
-    except ValidationError as e:
-        return False, str(e)
+from utils import jsonValidator
 
 if __name__ == "__main__":
     # Use absolute paths for schema and data files

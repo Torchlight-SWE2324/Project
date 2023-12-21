@@ -4,8 +4,7 @@ import threading
 import logging
 
 from txtai import Embeddings
-from fromJsonToEmb import generateEmbeddingUpsert
-from utils import loading_animation
+from utils import loading_animation, generateEmbeddingUpsert
 
 def emb(jsonFile):
     generated_commands = generateEmbeddingUpsert(jsonFile)

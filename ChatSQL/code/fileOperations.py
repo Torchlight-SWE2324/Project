@@ -6,8 +6,7 @@ import shutil
 dirPath = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.abspath(os.path.join(dirPath, "..")))
 
-from schemaValidator import jsonValidator
-from utils import loading_animation
+from utils import jsonValidator, loading_animation
 
 database_path = os.path.join(dirPath, "..", "database")
 JSON_schema = os.path.join(dirPath, "..", "JSON", "schema.json")
