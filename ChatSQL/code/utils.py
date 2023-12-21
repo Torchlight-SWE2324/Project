@@ -16,7 +16,7 @@ def checkData(username, password):
     with open(file_path, "r") as f:
         reader = csv.reader(f)
         for row in reader:
-            if row[0] == username and row[1] == password:
+            if row[0] == username and row[1] == password and row[2] == "admin":
                 return True
 
 def leaver(section):
