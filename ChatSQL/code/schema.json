@@ -10,6 +10,9 @@
           "name": {
             "type": "string"
           },
+          "table-description": {
+            "type": "string"
+          },
           "columns": {
             "type": "array",
             "items": {
@@ -46,6 +49,7 @@
         },
         "required": [
           "name",
+          "table-description",
           "columns"
         ]
       }

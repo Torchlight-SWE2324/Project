@@ -1,33 +1,35 @@
-import os
-import sys
-import re
-
-from utils import adminAuth
 from cliUser import user
+from cliAdmin import admin
+from utils import checkData, leaver
 
 def main():
     print("\nWelcome to the ChatSQL CLI (\033[1mPLAYGROUND\033[0m)")
     while True:
-        print("\nWhat do you want to do?")
-        print("1. Admin")
-        print("2. Ask")
+        print("What do you want to do?")
+        print("1. Access the admin section")
+        print("2. Interact with the database")
         print("3. Exit the program")
-        choice = input("Your choice: ")
-        if re.match(r"^1$|^admin$", choice):
+        choice = input("Choose one of the options above (type the number or the name of the option): ").lower()
+        if choice == "1" or choice == "admin":
             adminAuth()
-        elif re.match(r"^2$|^ask$", choice):
+        elif choice == "2" or choice == "interact":
             user()
-        elif re.match(r"^3$|^exit$", choice):
-            confirmation = input("Are you sure you want to exit the program? (yes/no): ").lower()
-            if confirmation.lower() in ["yes", "y"]:
-                print("Exiting the program. Bye!")
-                sys.exit()
-            elif confirmation.lower() in ["no", "n"]:
-                print("Returning to the main menu.")
+        elif choice == "3" or choice == "exit":
+            leave = leaver("program")
+            if leave == True:
+                break
             else:
-                print("Invalid choice. Returning to the main menu.")
+                continue
         else:
-            print("Invalid choice")
+            print("Invalid choice\n")
+
+def adminAuth():
+    username = input("Username: ")
+    password = input("Password: ")
+    if checkData(username, password):
+        admin()
+    else:
+        print("username or password incorrect")
 
 if __name__ == "__main__":
     main()

@@ -1,35 +1,32 @@
-import re
-
-from fileOperations import getFiles, addFile, deleteFile
+from fileOperations import getFiles, uploadFile, deleteFile
+from utils import leaver
 
 def admin():
     print("\n\033[1mWelcome to the admin section\033[0m")
     while True:
-        print("\nWhat do you want to do?")
-        print("1. Add file")
-        print("2. Delete file")
-        print("3. Get files")
+        print("What do you want to do?")
+        print("1. Add a file")
+        print("2. Delete a file")
+        print("3. Get all the files in the database")
         print("4. Leave the admin section")
+        print("Type the number of the option you want to choose or type the name of the option (e.g. 'add', 'delete', 'get', 'leave')")
 
         choice = input("Your choice: ").lower()
 
-        if re.match(r"^1$|^add$", choice):
-            addFile()
-        elif re.match(r"^2$|^delete$", choice):
+        if choice == "1" or choice == "add":
+            uploadFile()
+        elif choice == "2" or choice == "delete":
             deleteFile()
-        elif re.match(r"^3$|^get$", choice):
+        elif choice == "3" or choice == "get":
             print("Files in the database:" + getFiles())
-        elif re.match(r"^4$|^exit$", choice):
-            confirmation = input("Are you sure you want to exit the admin section? (yes/no): ").lower()
-            if confirmation.lower() in ["yes", "y"]:
-                print("Leaving admin section. You will be redirected to the main menu.")
+        elif choice == "4" or choice == "leave":
+            leave = leaver("admin")
+            if leave == True:
                 break
-            elif confirmation.lower() in ["no", "n"]:
-                print("Returning to the admin section menu.")
             else:
-                print("Invalid choice. Returning to the admin section menu.")
+                continue
         else:
-            print("Invalid choice")
+            print("Invalid choice\n")
 
 if __name__ == "__main__":
-    print("Files in the database:" + getFiles())
+    admin()

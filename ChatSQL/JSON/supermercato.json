@@ -2,6 +2,7 @@
     "tables": [
         {
             "name": "Prodotti",
+            "table-description": "Tabella contenente i prodotti",
             "columns": [
                 {
                     "name": "ID",
@@ -25,6 +26,7 @@
         },
         {
             "name": "Reparti",
+            "table-description": "Tabella contenente i reparti",
             "columns": [
                 {
                     "name": "ID",
@@ -48,6 +50,7 @@
         },
         {
             "name": "Scaffali",
+            "table-description": "Tabella contenente gli scaffali",
             "columns": [
                 {
                     "name": "ID",

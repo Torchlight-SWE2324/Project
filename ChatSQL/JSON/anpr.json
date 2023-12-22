@@ -2,6 +2,7 @@
   "tables": [
     {
       "name": "citizens",
+      "table-description": "Table containing information about citizens",
       "columns": [
         {
           "name": "id",
@@ -37,6 +38,7 @@
     },
     {
       "name": "municipalities",
+      "table-description": "Table containing information about municipalities",
       "columns": [
         {
           "name": "id",
@@ -60,6 +62,7 @@
     },
     {
       "name": "residency_records",
+      "table-description": "Table containing information about residency records",
       "columns": [
         {
           "name": "id",
@@ -95,6 +98,7 @@
     },
     {
       "name": "elections",
+      "table-description": "Table containing information about elections",
       "columns": [
         {
           "name": "id",
