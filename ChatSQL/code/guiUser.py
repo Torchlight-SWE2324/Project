@@ -1,6 +1,6 @@
 import streamlit as st
 import time
-from fileOperations import getFiles
+from guiFileOperations import getFiles
 
 def answer(assistant_response):
     with st.chat_message("assistant"):
@@ -23,13 +23,14 @@ def exit():
 
 def guiUser():
     st.title("ChatSQL")
-    st.subheader("Type your natural language query in the chat box below and press enter to get the corresponding SQL query. To access the admin section or exit the program, use the buttons on the sidebar.")
+    st.subheader("Type your natural language query in the chat box below and press enter to get the corresponding SQL query.")
+    st.subheader("To access the admin section or exit the program, use the buttons on the sidebar.")
 
     with st.sidebar:
-        button_admin = st.button("Admin section", help="Access the admin section to upload or delete a data dictionary file",
-                                 on_click=admin, type="primary", use_container_width=False, disabled=False, key=None)
-        option = st.selectbox('Data dictionary file:',
-                             ('Dizionario1', 'Dizionario2', 'Dizionario3'))
+        st.button("Admin section", help="Access the admin section to upload or delete a data dictionary file",
+                   on_click=admin, type="primary", use_container_width=False, disabled=False, key=None)
+        files=getFiles()
+        option = st.selectbox('Data dictionary file:', files)
         st.write("***")
         button_exit = st.button("Exit", help="Exit the program :(", on_click=exit, type="secondary", use_container_width=False, disabled=False, key=None)
 
@@ -41,7 +42,7 @@ def guiUser():
     for message in st.session_state.chat:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
-
+    
     # React to user input
     if prompt := st.chat_input("Insert natural language query here"):
         # Display user message in chat message container
@@ -50,10 +51,11 @@ def guiUser():
         # Add user message to chat history
         st.session_state.chat.append({"role": "user", "content": prompt})
 
-        response = f"Echo: {prompt}"
-
         # Display assistant response in chat message container
-        answer("Messaggio di prova")
+        if option != None:
+            answer("Messaggio di prova. Dizionario dati selezionato: " + option)
+        else:
+            answer("Cannot answer without a data dictionary file. Please upload one using the admin section.")
 
 if __name__ == "__main__":
     guiUser()
