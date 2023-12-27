@@ -1,7 +1,7 @@
 import streamlit as st
 import time
 from guiFileOperations import getFiles
-from guiUtils import getPath, generateEmbeddingUpsert
+from guiUtils import getPath, generateUpsertCommands, upsert
 from guiEmbedder import generatePrompt
 
 
@@ -14,7 +14,9 @@ def generateUpsert():
         if jsonFilePath == "Error":
             st.session_state.chat.append({"role": "assistant", "content": "Error: file path not valid"})
         else:
-            st.session_state.upsert_commands=generateEmbeddingUpsert(jsonFilePath)
+            st.session_state.upsert_commands=generateUpsertCommands(jsonFilePath)
+            st.session_state.emb=upsert(st.session_state.upsert_commands)
+
 
 
 def answer(assistant_response):
@@ -29,6 +31,7 @@ def answer(assistant_response):
             message_placeholder.markdown(full_response + "▌")
         message_placeholder.markdown(full_response)
         st.session_state.chat.append({"role": "assistant", "content": full_response})
+
 
 def admin():
     st.session_state.chat.append({"role": "assistant", "content": "Access the admin section"})
@@ -48,6 +51,8 @@ def init():
     # Initialize upsert commands
     if "upsert_commands" not in st.session_state:
         st.session_state.upsert_commands = []
+    if "emb" not in st.session_state:
+        st.session_state.emb = None
 
 def guiUser():
     init()
@@ -64,6 +69,7 @@ def guiUser():
         st.session_state.option = st.selectbox('Data dictionary file:', files)
         #effettua gli upsert solo se il dizionario dati selezionato è cambiato rispetto a prima
         if st.session_state.option != st.session_state.option_prev:
+            #animazione caricamento
             generateUpsert()
         st.write("***")
         st.button("Exit", help="Exit the program :(", on_click=exit, type="secondary", use_container_width=False, disabled=False, key=None)
@@ -84,7 +90,7 @@ def guiUser():
         # Display assistant response in chat message container
         if st.session_state.option != None:
             #answer("Messaggio di prova. Dizionario dati selezionato: " + st.session_state.option)
-            answer(generatePrompt(st.session_state.upsert_commands, prompt))
+            answer(generatePrompt(st.session_state.upsert_commands, st.session_state.emb, prompt))
         else:
             answer("Cannot answer without a data dictionary file. Please upload one using the admin section.")
 

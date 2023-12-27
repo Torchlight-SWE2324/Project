@@ -5,21 +5,7 @@ from txtai import Embeddings
 from utils import generateEmbeddingUpsert
 import logging
 
-def generatePrompt(generated_commands, user_query):
-    #generated_commands = generateEmbeddingUpsert(jsonFile)
-
-    # Initialize the Embeddings module with the specified model
-    emb = Embeddings({"path": "sentence-transformers/stsb-roberta-large", "content": True})
-
-    # Upsert the data into the txtai Embeddings
-    for command in generated_commands:
-        try:
-            cmd = str(command)
-            emb.upsert([cmd])
-            print(cmd)
-        except Exception as e:
-            return f"Error during upsert: {e}"
-
+def generatePrompt(generated_commands, emb, user_query):
     results = emb.search(f"select score,text,table,table-description,field,type,references,description from txtai where similar('{user_query}') limit 3")
     table_fields = {}
 
@@ -64,5 +50,5 @@ def generatePrompt(generated_commands, user_query):
     # Print messages if show_message is True
     for message in messages:
         ret += "\n"+message
-    ret += f"\nGenerate the SQL query equivalent to: {user_query}\n"
+    ret += f"\nGenerate the SQL query equivalent to: {user_query}"
     return ret

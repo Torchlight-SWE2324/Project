@@ -3,11 +3,26 @@
 import os
 import sys
 import json
+from txtai import Embeddings
 
 dirPath = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.abspath(os.path.join(dirPath, '..')))
 
-def generateEmbeddingUpsert(jsonFileName):
+def upsert(commands):
+    # Initialize the Embeddings module with the specified model
+    #emb = Embeddings({"path": "sentence-transformers/stsb-roberta-large", "content": True})
+    emb = Embeddings({"path": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2", "content": True})
+
+    # Upsert the data into the txtai Embeddings
+    for command in commands:
+        try:
+            cmd = str(command)
+            emb.upsert([cmd])
+        except Exception as e:
+            return f"Error during upsert: {e}"
+    return emb
+
+def generateUpsertCommands(jsonFileName):
     with open(jsonFileName, 'r') as file:
         data = json.load(file)
 
