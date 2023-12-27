@@ -1,8 +1,12 @@
+
+import os
 import streamlit as st
 import time
 from guiFileOperations import getFiles
 from guiUtils import getPath, generateUpsertCommands, upsert
 from guiEmbedder import generatePrompt
+import keyboard
+import psutil
 
 
 #genera gli upsert solo quando il dizionario dati viene cambiato
@@ -36,7 +40,15 @@ def admin():
     st.session_state.chat.append({"role": "assistant", "content": "Access the admin section"})
 
 def exit():
-    st.session_state.chat.append({"role": "assistant", "content": "Exit the program"})
+    st.session_state.chat.append({"role": "assistant", "content": "Exiting the program..."})
+    # Delay for user experience
+    time.sleep(1)
+    # Close streamlit browser tab
+    keyboard.press_and_release('ctrl+w')
+    # Terminate streamlit python process
+    pid = os.getpid()
+    p = psutil.Process(pid)
+    p.terminate()
 
 def init():
     # Initialize chat history
@@ -52,6 +64,8 @@ def init():
         st.session_state.upsert_commands = []
     if "emb" not in st.session_state:
         st.session_state.emb = None
+
+
 
 def guiUser():
     init()

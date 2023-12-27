@@ -1,5 +1,6 @@
 #versione per GUI di utils.py
 
+import csv
 import os
 import sys
 import json
@@ -61,3 +62,11 @@ def getPath(jsonFile):
             #return f"Error: The file '{jsonFile}' or '{jsonFile}.json' does not exist. Please check file name."
             return "Error"
     return json_file_path
+
+def checkData(username, password):
+    file_path = os.path.join(dirPath, "pswrd.csv")
+    with open(file_path, "r") as f:
+        reader = csv.reader(f)
+        for row in reader:
+            if row[0] == username and row[1] == password:
+                return True
