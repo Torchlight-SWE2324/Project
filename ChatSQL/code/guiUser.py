@@ -8,7 +8,6 @@ from guiEmbedder import generatePrompt
 #genera gli upsert solo quando il dizionario dati viene cambiato
 def generateUpsert():
     if st.session_state.option != None:
-        st.session_state.chat.append({"role": "assistant", "content": "Effettua gli upsert relativi al dizionario dati selezionato: "+st.session_state.option})
         #effettua gli upsert relativi al dizionario appena selezionato
         jsonFilePath=getPath(st.session_state.option)
         if jsonFilePath == "Error":
@@ -61,16 +60,13 @@ def guiUser():
     st.subheader("Type your natural language query in the chat box below and press enter to get the corresponding SQL query.")
     st.subheader("To access the admin section or exit the program, use the buttons on the sidebar.")
 
+    
     with st.sidebar:
         st.button("Admin section", help="Access the admin section to upload or delete a data dictionary file",
-                   on_click=admin, type="primary", use_container_width=False, disabled=False, key=None)
+                on_click=admin, type="primary", use_container_width=False, disabled=False, key=None)
         files=getFiles()
         st.session_state.option_prev = st.session_state.option
         st.session_state.option = st.selectbox('Data dictionary file:', files)
-        #effettua gli upsert solo se il dizionario dati selezionato è cambiato rispetto a prima
-        if st.session_state.option != st.session_state.option_prev:
-            #animazione caricamento
-            generateUpsert()
         st.write("***")
         st.button("Exit", help="Exit the program :(", on_click=exit, type="secondary", use_container_width=False, disabled=False, key=None)
 
@@ -78,6 +74,11 @@ def guiUser():
     for message in st.session_state.chat:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
+    
+    #effettua gli upsert solo se il dizionario dati selezionato è cambiato rispetto a prima
+    if st.session_state.option != st.session_state.option_prev:
+        with st.spinner('Loading...'):
+            generateUpsert()
     
     # React to user input
     if prompt := st.chat_input("Insert natural language query here"):
