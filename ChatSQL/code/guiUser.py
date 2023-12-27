@@ -34,8 +34,8 @@ def answer(assistant_response):
         st.session_state.chat.append({"role": "assistant", "content": full_response})
 
 
-def admin():
-    st.session_state.chat.append({"role": "assistant", "content": "Access the admin section"})
+#def admin():
+#    st.session_state.chat.append({"role": "assistant", "content": "Access the admin section"})
 
 def exit():
     st.session_state.chat.append({"role": "assistant", "content": "Exiting the program..."})
@@ -74,8 +74,8 @@ def guiUser():
     st.subheader("To access the admin section or exit the program, use the buttons on the sidebar.")
 
     with st.sidebar:
-        st.button("Admin section", help="Access the admin section to upload or delete a data dictionary file",
-                on_click=admin, type="primary", use_container_width=False, disabled=False, key=None)
+#        st.button("Admin section", help="Access the admin section to upload or delete a data dictionary file",
+#                on_click=admin, type="primary", use_container_width=False, disabled=False, key=None)
         st.session_state.files=getFiles()
         st.session_state.option_prev = st.session_state.option
         st.session_state.option = st.selectbox('Data dictionary file:', st.session_state.files)
@@ -88,7 +88,7 @@ def guiUser():
             st.markdown(message["content"])
     
     #effettua gli upsert solo se il dizionario dati selezionato è cambiato rispetto a prima
-    if st.session_state.option != st.session_state.option_prev:
+    if (st.session_state.option != st.session_state.option_prev) and (st.session_state.option != None):
         answer(f"Switching data dictionary to \"{st.session_state.option}\"...")
         with st.spinner('Loading...'):
             generateUpsert()
