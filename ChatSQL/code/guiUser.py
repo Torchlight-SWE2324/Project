@@ -1,4 +1,3 @@
-
 import os
 import streamlit as st
 import time
@@ -20,8 +19,7 @@ def generateUpsert():
             st.session_state.upsert_commands=generateUpsertCommands(jsonFilePath)
             st.session_state.emb=upsert(st.session_state.upsert_commands)
 
-
-
+#risposta del chatbot
 def answer(assistant_response):
     with st.chat_message("assistant"):
         message_placeholder = st.empty()
@@ -29,7 +27,7 @@ def answer(assistant_response):
         # Simulate stream of response with milliseconds delay
         for character in assistant_response:
             full_response += character
-            time.sleep(0.014)
+            time.sleep(0.01)
             # Add a blinking cursor to simulate typing
             message_placeholder.markdown(full_response + "▌")
         message_placeholder.markdown(full_response)
@@ -64,23 +62,23 @@ def init():
         st.session_state.upsert_commands = []
     if "emb" not in st.session_state:
         st.session_state.emb = None
+    if "files" not in st.session_state:
+        st.session_state.files = []
 
 
 
 def guiUser():
     init()
-
     st.title("ChatSQL")
     st.subheader("Type your natural language query in the chat box below and press enter to get the corresponding SQL query.")
     st.subheader("To access the admin section or exit the program, use the buttons on the sidebar.")
 
-    
     with st.sidebar:
         st.button("Admin section", help="Access the admin section to upload or delete a data dictionary file",
                 on_click=admin, type="primary", use_container_width=False, disabled=False, key=None)
-        files=getFiles()
+        st.session_state.files=getFiles()
         st.session_state.option_prev = st.session_state.option
-        st.session_state.option = st.selectbox('Data dictionary file:', files)
+        st.session_state.option = st.selectbox('Data dictionary file:', st.session_state.files)
         st.write("***")
         st.button("Exit", help="Exit the program :(", on_click=exit, type="secondary", use_container_width=False, disabled=False, key=None)
 
@@ -91,8 +89,10 @@ def guiUser():
     
     #effettua gli upsert solo se il dizionario dati selezionato è cambiato rispetto a prima
     if st.session_state.option != st.session_state.option_prev:
+        answer(f"Switching data dictionary to \"{st.session_state.option}\"...")
         with st.spinner('Loading...'):
             generateUpsert()
+        answer(f"Data dictionary switched to \"{st.session_state.option}\" correctly 👍")
     
     # React to user input
     if prompt := st.chat_input("Insert natural language query here"):
