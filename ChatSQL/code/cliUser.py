@@ -31,7 +31,6 @@ def user():
 
         # If a valid file is found, break out of the loop
         break
-
     emb(json_file_path)
 
 

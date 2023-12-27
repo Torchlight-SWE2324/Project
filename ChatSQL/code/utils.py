@@ -68,7 +68,6 @@ def generateEmbeddingUpsert(jsonFileName):
             commands.append(command)
 
             index_counter += 1
-
     return commands
 
 def jsonValidator(json_data, json_schema):
