@@ -5,9 +5,17 @@ import os
 import sys
 import json
 from txtai import Embeddings
+from jsonschema import validate, ValidationError
 
 dirPath = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.abspath(os.path.join(dirPath, '..')))
+
+def jsonValidator(json_data, json_schema):
+    try:
+        validate(instance=json_data, schema=json_schema)
+        return True, None
+    except ValidationError as e:
+        return False, str(e)
 
 def upsert(commands):
     # Initialize the Embeddings module with the specified model

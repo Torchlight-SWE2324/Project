@@ -6,6 +6,8 @@ from utils import generateEmbeddingUpsert
 import logging
 
 def generatePrompt(generated_commands, emb, user_query):
+    if emb == None:
+        return "Error: emb is None"
     results = emb.search(f"select score,text,table,table-description,field,type,references,description from txtai where similar('{user_query}') limit 3")
     table_fields = {}
 
