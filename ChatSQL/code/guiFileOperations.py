@@ -9,8 +9,8 @@ from guiUtils import jsonValidator
 dirPath = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.abspath(os.path.join(dirPath, "..")))
 
-database_path = os.path.join(dirPath, "..", "database")
-JSON_schema = os.path.join(dirPath, "..", "code", "schema.json")
+database_path = os.path.join(dirPath, "database")
+JSON_schema = os.path.join(dirPath, "schema.json")
 
 def getFiles(file_type='.json'):
     if not os.path.exists(database_path):
@@ -58,7 +58,7 @@ def uploadFile(file_content, file_name):
     
     is_compliant, error_message = jsonValidator(json_data, json_schema)
     if not is_compliant:
-        return f"JSON file is not compliant with the schema. Error: {error_message}"
+        return f"JSON file is not compliant with the schema. Please upload a valid JSON file." # Error: {error_message}
     
     destination_path = os.path.join(database_path, file_name)
     with open(destination_path, "wb") as destination_file:
