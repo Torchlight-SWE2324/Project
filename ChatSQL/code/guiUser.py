@@ -3,7 +3,7 @@ import streamlit as st
 import time
 from guiFileOperations import getFiles
 from guiUtils import getPath, generateUpsertCommands, upsert
-from guiEmbedder import generatePrompt
+from guiEmbedder import generatePromptUser
 import keyboard
 import psutil
 
@@ -13,12 +13,12 @@ def generateUpsert(): #!!!!! DA REALIZZARE SALVATAGGIO INDEXING
     if st.session_state.option != None: #?????? MANCA CASO ELSE
         #effettua gli upsert relativi al dizionario appena selezionato
         dictionaryFilePath = getPath(st.session_state.option)
+
         if dictionaryFilePath == "Error":
             st.session_state.chat.append({"role": "assistant", "content": "Error: file path not valid"})
         else:
             st.session_state.upsert_commands = generateUpsertCommands(dictionaryFilePath) #????? LA VARIABILE DEVE ESSERE GLOBALE?
             st.session_state.emb = upsert(st.session_state.upsert_commands) #?? SERVE VAR GLOBALE!!!!!!!!!!!!!!!!!!!!!
-
 
 #risposta del chatbot
 def answer(assistant_response):
@@ -34,10 +34,8 @@ def answer(assistant_response):
         message_placeholder.markdown(full_response)
         st.session_state.chat.append({"role": "assistant", "content": full_response})
 
-
 #def admin():
 #    st.session_state.chat.append({"role": "assistant", "content": "Access the admin section"})
-
 
 def exit():
     st.session_state.chat.append({"role": "assistant", "content": "Exiting the program..."})
@@ -49,7 +47,6 @@ def exit():
     pid = os.getpid()
     p = psutil.Process(pid)
     p.terminate()
-
 
 def init():
     # Initialize chat history
@@ -107,7 +104,8 @@ def guiUser():
         # Display assistant response in chat message container
         if st.session_state.option != None:
             #answer("Messaggio di prova. Dizionario dati selezionato: " + st.session_state.option)
-            answer(generatePrompt(st.session_state.upsert_commands, st.session_state.emb, prompt)) #!!! DA REFACTORING
+            #answer(generatePrompt(st.session_state.upsert_commands, st.session_state.emb, prompt)) #!!! DA REFACTORING
+            answer(generatePromptUser(st.session_state.emb, prompt))  # !!! DA REFACTORING
         else:
             answer("Cannot answer without a data dictionary file. Please upload one using the admin section.")
 

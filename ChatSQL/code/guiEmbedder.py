@@ -5,10 +5,22 @@ from txtai import Embeddings
 from utils import generateEmbeddingUpsert
 import logging
 
-def generatePrompt(generated_commands, emb, user_query): #!!!!! DA REFACTORING + FARE VERSIONE USER ED ADMIN
+#def generatePrompt(generated_commands, emb, user_query): #!!!!! DA REFACTORING + FARE VERSIONE USER ED ADMIN
+def generatePromptUser(emb, user_query):  # !!!!! DA REFACTORING + FARE VERSIONE USER ED ADMIN
     if emb == None:
-        return "Error: emb is None" #???? PROPRIO QUESTO DEVE RITORNARE
-    results = emb.search(f"select score,text,table,table-description,field,type,references,description from txtai where similar('{user_query}') limit 3")
+        return "Error: there is no model connected"
+
+    results = emb.search(f"select score, text, table_name, table_description, field_name, field_type, field_references, "
+                         f" from txtai where similar('{user_query}') limit 30")
+
+    x=""
+    for result in results:
+        x = x+"\n"+str(result)+"\n"
+
+    return x
+
+
+'''
     table_fields = {}
 
     ret = "SCORE FOR DEBUGGING ONLY\n\n"
@@ -54,3 +66,4 @@ def generatePrompt(generated_commands, emb, user_query): #!!!!! DA REFACTORING +
         ret += "\n"+message
     ret += f"\nGenerate the SQL query equivalent to: {user_query}"
     return ret
+'''

@@ -19,17 +19,12 @@ def jsonValidator(json_data, json_schema):
         return False, str(e)
 
 def upsert(commands): #???? è QUI DA FARE SALVATAGGIO INDICE??
-    # Initialize the Embeddings module with the specified model
-    #emb = Embeddings({"path": "sentence-transformers/stsb-roberta-large", "content": True})
     emb = Embeddings({"path": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2", "content": True})
 
-    # Upsert the data into the txtai Embeddings
-    for command in commands:
-        try:
-            cmd = str(command) #""""""""""""""""""""""""""""""""""""""""""
-            emb.upsert([cmd])
-        except Exception as e:
-            return f"Error during upsert: {e}" #??? DA IMPLEMENTARE CATCH INTORNO FUNZIONE
+    emb.index([{"table_name": command["table_name"], "table_description": command["table_description"], # ?? DA CAMBIARE PER UPSERT
+                "field_name": command["field_name"], "field_type": command["field_type"], "field_references": command["field_references"],
+                "text": command["field_description"]} for command in commands])
+
     return emb
 
 def generateUpsertCommands(jsonFilePath):
@@ -37,7 +32,6 @@ def generateUpsertCommands(jsonFilePath):
         data = json.load(file)
 
     commands = []
-    index_counter = 0 #?????? SERVE # Contatore globale per il numero incrementale
 
     for table in data["tables"]:
         table_name = table["name"]
@@ -50,11 +44,11 @@ def generateUpsertCommands(jsonFilePath):
             description = column["description"]
 
             # Create the emb.upsert command
-            dictionary = {"table": table_name, "table-description": table_description, "field": field_name,
-                          "type": type, "references": references, "description": description}
-            command = (index_counter, dictionary) #!!!!!!!!!!!!!!!!! DA RIDEFINIRE
-            commands.append(command)
-            index_counter += 1
+            dictionary = {"table_name": table_name, "table_description": table_description, "field_name": field_name,
+                          "field_type": type, "field_references": references, "field_description": description}
+
+            commands.append(dictionary)
+
     return commands
 
 def getPath(dictionaryFileName):
