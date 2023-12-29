@@ -12,7 +12,7 @@ sys.path.append(os.path.abspath(os.path.join(dirPath, "..")))
 database_path = os.path.join(dirPath, "database")
 JSON_schema = os.path.join(dirPath, "schema.json")
 
-def getFiles(file_type='.json'):
+def getFiles(file_type='.json'): #?? NON BISOGNA FARE CONTROLLA JSONSCHEMA
     if not os.path.exists(database_path):
         return []
     files = os.listdir(database_path)

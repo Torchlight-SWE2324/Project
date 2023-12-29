@@ -7,6 +7,7 @@ import json
 from txtai import Embeddings
 from jsonschema import validate, ValidationError
 
+
 dirPath = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.abspath(os.path.join(dirPath, '..')))
 
@@ -17,7 +18,7 @@ def jsonValidator(json_data, json_schema):
     except ValidationError as e:
         return False, str(e)
 
-def upsert(commands):
+def upsert(commands): #???? è QUI DA FARE SALVATAGGIO INDICE??
     # Initialize the Embeddings module with the specified model
     #emb = Embeddings({"path": "sentence-transformers/stsb-roberta-large", "content": True})
     emb = Embeddings({"path": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2", "content": True})
@@ -25,18 +26,18 @@ def upsert(commands):
     # Upsert the data into the txtai Embeddings
     for command in commands:
         try:
-            cmd = str(command)
+            cmd = str(command) #""""""""""""""""""""""""""""""""""""""""""
             emb.upsert([cmd])
         except Exception as e:
-            return f"Error during upsert: {e}"
+            return f"Error during upsert: {e}" #??? DA IMPLEMENTARE CATCH INTORNO FUNZIONE
     return emb
 
-def generateUpsertCommands(jsonFileName):
-    with open(jsonFileName, 'r') as file:
+def generateUpsertCommands(jsonFilePath):
+    with open(jsonFilePath, 'r') as file:
         data = json.load(file)
 
     commands = []
-    index_counter = 0 # Contatore globale per il numero incrementale
+    index_counter = 0 #?????? SERVE # Contatore globale per il numero incrementale
 
     for table in data["tables"]:
         table_name = table["name"]
@@ -51,25 +52,25 @@ def generateUpsertCommands(jsonFileName):
             # Create the emb.upsert command
             dictionary = {"table": table_name, "table-description": table_description, "field": field_name,
                           "type": type, "references": references, "description": description}
-            command = (index_counter, dictionary)
+            command = (index_counter, dictionary) #!!!!!!!!!!!!!!!!! DA RIDEFINIRE
             commands.append(command)
             index_counter += 1
     return commands
 
-def getPath(jsonFile):
-    JSON_path = os.path.abspath(os.path.join(dirPath, os.pardir, "JSON"))
+def getPath(dictionaryFileName):
+    dictionariesFolderPath = os.path.abspath(os.path.join(dirPath, "database"))
     # Construct the initial file path
-    json_file_path = os.path.join(JSON_path, jsonFile)
+    dictionaryFilePath = os.path.join(dictionariesFolderPath, dictionaryFileName)
 
     # Check if the file exists
-    if not os.path.exists(json_file_path):
+    if not os.path.exists(dictionaryFilePath):
         # If the file doesn't exist, try adding the .json extension
-        json_file_path = os.path.join(JSON_path, f"{jsonFile}.json")
+        dictionaryFilePath = os.path.join(dictionariesFolderPath, f"{dictionaryFileName}.json")
         # Check again if the file exists
-        if not os.path.exists(json_file_path):
-            #return f"Error: The file '{jsonFile}' or '{jsonFile}.json' does not exist. Please check file name."
+        if not os.path.exists(dictionaryFilePath):
+            #return f"Error: The file '{dictionaryFileName}' or '{dictionaryFileName}.json' does not exist. Please check file name."
             return "Error"
-    return json_file_path
+    return dictionaryFilePath
 
 def checkData(username, password):
     file_path = os.path.join(dirPath, "pswrd.csv")

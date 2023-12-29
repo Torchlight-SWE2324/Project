@@ -5,9 +5,9 @@ from txtai import Embeddings
 from utils import generateEmbeddingUpsert
 import logging
 
-def generatePrompt(generated_commands, emb, user_query):
+def generatePrompt(generated_commands, emb, user_query): #!!!!! DA REFACTORING + FARE VERSIONE USER ED ADMIN
     if emb == None:
-        return "Error: emb is None"
+        return "Error: emb is None" #???? PROPRIO QUESTO DEVE RITORNARE
     results = emb.search(f"select score,text,table,table-description,field,type,references,description from txtai where similar('{user_query}') limit 3")
     table_fields = {}
 

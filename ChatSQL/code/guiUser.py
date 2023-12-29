@@ -9,15 +9,16 @@ import psutil
 
 
 #genera gli upsert solo quando il dizionario dati viene cambiato
-def generateUpsert():
-    if st.session_state.option != None:
+def generateUpsert(): #!!!!! DA REALIZZARE SALVATAGGIO INDEXING
+    if st.session_state.option != None: #?????? MANCA CASO ELSE
         #effettua gli upsert relativi al dizionario appena selezionato
-        jsonFilePath=getPath(st.session_state.option)
-        if jsonFilePath == "Error":
+        dictionaryFilePath = getPath(st.session_state.option)
+        if dictionaryFilePath == "Error":
             st.session_state.chat.append({"role": "assistant", "content": "Error: file path not valid"})
         else:
-            st.session_state.upsert_commands=generateUpsertCommands(jsonFilePath)
-            st.session_state.emb=upsert(st.session_state.upsert_commands)
+            st.session_state.upsert_commands = generateUpsertCommands(dictionaryFilePath) #????? LA VARIABILE DEVE ESSERE GLOBALE?
+            st.session_state.emb = upsert(st.session_state.upsert_commands) #?? SERVE VAR GLOBALE!!!!!!!!!!!!!!!!!!!!!
+
 
 #risposta del chatbot
 def answer(assistant_response):
@@ -37,6 +38,7 @@ def answer(assistant_response):
 #def admin():
 #    st.session_state.chat.append({"role": "assistant", "content": "Access the admin section"})
 
+
 def exit():
     st.session_state.chat.append({"role": "assistant", "content": "Exiting the program..."})
     # Delay for user experience
@@ -47,6 +49,7 @@ def exit():
     pid = os.getpid()
     p = psutil.Process(pid)
     p.terminate()
+
 
 def init():
     # Initialize chat history
@@ -64,7 +67,6 @@ def init():
         st.session_state.emb = None
     if "files" not in st.session_state:
         st.session_state.files = []
-
 
 
 def guiUser():
@@ -88,10 +90,10 @@ def guiUser():
             st.markdown(message["content"])
     
     #effettua gli upsert solo se il dizionario dati selezionato è cambiato rispetto a prima
-    if (st.session_state.option != st.session_state.option_prev) and (st.session_state.option != None):
+    if (st.session_state.option != st.session_state.option_prev) and (st.session_state.option != None): # SE USO SAVE INDEX QUSTA PARTE NON SER
         answer(f"Switching data dictionary to \"{st.session_state.option}\"...")
         with st.spinner('Loading...'):
-            generateUpsert()
+            generateUpsert() #??? NON SI IMPALLA QUANDO NON CARICATO NESSUN FILE
         answer(f"Data dictionary switched to \"{st.session_state.option}\" correctly 👍")
     
     # React to user input
@@ -105,9 +107,10 @@ def guiUser():
         # Display assistant response in chat message container
         if st.session_state.option != None:
             #answer("Messaggio di prova. Dizionario dati selezionato: " + st.session_state.option)
-            answer(generatePrompt(st.session_state.upsert_commands, st.session_state.emb, prompt))
+            answer(generatePrompt(st.session_state.upsert_commands, st.session_state.emb, prompt)) #!!! DA REFACTORING
         else:
             answer("Cannot answer without a data dictionary file. Please upload one using the admin section.")
+
 
 if __name__ == "__main__":
     guiUser()
