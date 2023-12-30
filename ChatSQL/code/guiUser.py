@@ -1,12 +1,12 @@
+import keyboard
 import os
+import psutil
+import random
 import streamlit as st
 import time
 from guiFileOperations import getFiles
 from guiUtils import getPath, generateUpsertCommands, upsert
 from guiEmbedder import generatePrompt
-import keyboard
-import psutil
-
 
 #genera gli upsert solo quando il dizionario dati viene cambiato
 def generateUpsert():
@@ -71,7 +71,8 @@ def guiUser():
     init()
     st.title("ChatSQL")
     st.subheader("Type your natural language query in the chat box below and press enter to get the corresponding SQL query.")
-    st.subheader("To access the admin section or exit the program, use the buttons on the sidebar.")
+    st.divider()
+    st.text("To access the admin section or exit the program, use the buttons on the sidebar.")
 
     with st.sidebar:
 #        st.button("Admin section", help="Access the admin section to upload or delete a data dictionary file",
@@ -104,8 +105,16 @@ def guiUser():
 
         # Display assistant response in chat message container
         if st.session_state.option != None:
-            #answer("Messaggio di prova. Dizionario dati selezionato: " + st.session_state.option)
-            answer(generatePrompt(st.session_state.upsert_commands, st.session_state.emb, prompt))
+            # answer("Messaggio di prova. Dizionario dati selezionato: " + st.session_state.option)
+            # answer(generatePrompt(st.session_state.upsert_commands, st.session_state.emb, prompt))
+            answer("Generating SQL query...")
+
+            with st.spinner('Loading whimsical wonders and dazzling delights into the digital playground of possibilities!'):
+                t_start = 1.25
+                t_end = 2.75
+                sleep_duration = random.uniform(t_start, t_end)
+                time.sleep(sleep_duration)
+                st.code(generatePrompt(st.session_state.upsert_commands, st.session_state.emb, prompt), language='markdown')
         else:
             answer("Cannot answer without a data dictionary file. Please upload one using the admin section.")
 

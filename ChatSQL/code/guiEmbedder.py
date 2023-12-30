@@ -1,9 +1,5 @@
 #versione per GUI di embedder.py
-
 import re
-from txtai import Embeddings
-from utils import generateEmbeddingUpsert
-import logging
 
 def generatePrompt(generated_commands, emb, user_query):
     if emb == None:
@@ -30,7 +26,7 @@ def generatePrompt(generated_commands, emb, user_query):
                 table_fields[table_name] = [field_name]
 
     # Print the result in the desired format
-    ret += "\n\nThe database contains the following tables:\n"
+    ret += "\nThe database contains the following tables:\n"
     for table, fields in table_fields.items():
         field_str = ', '.join([f"'{field}'" for field in fields])
         ret += f"'{table}' with fields {field_str};\n"
