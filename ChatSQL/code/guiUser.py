@@ -103,8 +103,6 @@ def guiUser():
 
         # Display assistant response in chat message container
         if st.session_state.option != None:
-            #answer("Messaggio di prova. Dizionario dati selezionato: " + st.session_state.option)
-            #answer(generatePrompt(st.session_state.upsert_commands, st.session_state.emb, prompt)) #!!! DA REFACTORING
             answer(generatePromptUser(st.session_state.emb, prompt))  # !!! DA REFACTORING
         else:
             answer("Cannot answer without a data dictionary file. Please upload one using the admin section.")
