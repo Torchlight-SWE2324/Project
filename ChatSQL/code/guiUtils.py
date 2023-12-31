@@ -1,5 +1,3 @@
-#versione per GUI di utils.py
-
 import csv
 import os
 import sys

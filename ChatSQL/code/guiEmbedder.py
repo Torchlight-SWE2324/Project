@@ -1,4 +1,5 @@
 import json
+#!!!!!!!!!! DA AGGIUSTARE FILE SCHEMA.JSON PER CAMPO REFERENCES
 
 
 def generatePromptAdmin(emb, user_query):  # !!!!! DA REFACTORING + FARE VERSIONE USER ED ADMIN
