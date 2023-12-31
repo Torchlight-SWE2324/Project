@@ -27,8 +27,8 @@ def upsert(commands): #???? è QUI DA FARE SALVATAGGIO INDICE??
 
     return emb
 
-def generateUpsertCommands(jsonFilePath):
-    with open(jsonFilePath, 'r') as file:
+def generateUpsertCommands(dictionary_path):
+    with open(dictionary_path, 'r') as file:
         data = json.load(file)
 
     commands = []
@@ -51,20 +51,20 @@ def generateUpsertCommands(jsonFilePath):
 
     return commands
 
-def getPath(dictionaryFileName):
-    dictionariesFolderPath = os.path.abspath(os.path.join(dirPath, "database"))
+def getDictionaryPath(dictionary_file_name):
+    dictionaries_folder_path = os.path.abspath(os.path.join(dirPath, "database"))
     # Construct the initial file path
-    dictionaryFilePath = os.path.join(dictionariesFolderPath, dictionaryFileName)
+    dictionary_file_path = os.path.join(dictionaries_folder_path, dictionary_file_name)
 
     # Check if the file exists
-    if not os.path.exists(dictionaryFilePath):
+    if not os.path.exists(dictionary_file_path):
         # If the file doesn't exist, try adding the .json extension
-        dictionaryFilePath = os.path.join(dictionariesFolderPath, f"{dictionaryFileName}.json")
+        dictionary_file_path = os.path.join(dictionaries_folder_path, f"{dictionary_file_name}.json")
         # Check again if the file exists
-        if not os.path.exists(dictionaryFilePath):
-            #return f"Error: The file '{dictionaryFileName}' or '{dictionaryFileName}.json' does not exist. Please check file name."
+        if not os.path.exists(dictionary_file_path):
+            #return f"Error: The file '{dictionary_file_name}' or '{dictionary_file_name}.json' does not exist. Please check file name."
             return "Error"
-    return dictionaryFilePath
+    return dictionary_file_path
 
 def checkData(username, password):
     file_path = os.path.join(dirPath, "pswrd.csv")
