@@ -1,10 +1,9 @@
-# versione per GUI di fileOperations.py
-
 import os
 import sys
 import json
 import shutil
 from guiUtils import jsonValidator
+from guiEmbedder import indexFile
 #from giuUser import generateUpsert !!!!!!!!! da spostare generateUpsert in un altro file
 
 dirPath = os.path.dirname(os.path.realpath(__file__))
@@ -66,5 +65,6 @@ def uploadFile(file_content, file_name):
         destination_file.write(file_content)
 
     # CREATE and SAVE and load!! INDEXING generateUpsert() ?? COME PASSARE NOME FILE?? destination_path??
+    indexFile(destination_path)
     
     return f'File "{file_name}" uploaded!'

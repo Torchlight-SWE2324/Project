@@ -65,6 +65,7 @@ def getDictionaryPath(dictionary_file_name):
     return dictionary_file_path
 
 def checkData(username, password):
+    return True #!!!!!!DE TOGLIERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     file_path = os.path.join(dirPath, "pswrd.csv")
     with open(file_path, "r") as f:
         reader = csv.reader(f)

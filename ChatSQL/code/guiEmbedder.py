@@ -17,6 +17,15 @@ def generateUpsert(): #!!!!! DA REALIZZARE SALVATAGGIO INDEXING
             st.session_state.emb = upsert(st.session_state.upsert_commands) #?? SERVE VAR GLOBALE!!!!!!!!!!!!!!!!!!!!!
             st.session_state.emb.save(f"indexes/{os.path.splitext(st.session_state.option)[0]}")
 
+def indexFile(dictionary_path):
+    st.session_state.upsert_commands = generateUpsertCommands(dictionary_path) #????? LA VARIABILE DEVE ESSERE GLOBALE?
+    print('11111111')
+    st.session_state.emb = upsert(st.session_state.upsert_commands) #?? SERVE VAR GLOBALE!!!!!!!!!!!!!!!!!!!!!
+    file_name = os.path.basename(dictionary_path)
+    print(file_name)
+    st.session_state.emb.save(f"indexes/{os.path.splitext(file_name)[0]}")
+    print('33333333')
+
 
 def generatePromptAdmin(emb, user_query):  # !!!!! DA REFACTORING + FARE VERSIONE USER ED ADMIN
     if emb == None:
