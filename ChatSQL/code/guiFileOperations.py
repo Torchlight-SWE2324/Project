@@ -4,7 +4,7 @@ import json
 import shutil
 from guiUtils import jsonValidator
 from guiEmbedder import createIndex, deleteIndex
-#from giuUser import generateUpsert !!!!!!!!! da spostare generateUpsert in un altro file
+
 
 dirPath = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.abspath(os.path.join(dirPath, "..")))

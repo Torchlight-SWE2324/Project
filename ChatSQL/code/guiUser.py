@@ -3,7 +3,7 @@ import streamlit as st
 import time
 from guiFileOperations import getFiles
 
-from guiEmbedder import generatePromptUser, generateUpsert
+from guiEmbedder import generatePromptUser, loadIndex
 import keyboard
 import psutil
 
@@ -54,6 +54,7 @@ def init():
         st.session_state.files = []
 
 
+
 def guiUser():
     init()
     st.title("ChatSQL")
@@ -78,7 +79,8 @@ def guiUser():
     if (st.session_state.option != st.session_state.option_prev) and (st.session_state.option != None): # SE USO SAVE INDEX QUSTA PARTE NON SER
         answer(f"Switching data dictionary to \"{st.session_state.option}\"...")
         with st.spinner('Loading...'):
-            generateUpsert() #!!!!!! QUA SI FA LOADING DELL INDICE DA FILE: st.session_state.option
+            loadIndex(st.session_state.option)
+            #generateUpsert() #!!!!!! QUA SI FA LOADING DELL INDICE DA FILE: st.session_state.option
         answer(f"Data dictionary switched to \"{st.session_state.option}\" correctly 👍")
     
     # React to user input

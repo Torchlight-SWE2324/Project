@@ -2,20 +2,13 @@ import os
 import json
 import streamlit as st
 
-from guiUtils import getDictionaryPath, generateUpsertCommands, upsert
+from guiUtils import generateUpsertCommands, upsert
+from txtai import Embeddings #?????SERVE
 
-#genera gli upsert solo quando il dizionario dati viene cambiato
-def generateUpsert(): #!!!!! DA REALIZZARE SALVATAGGIO INDEXING
-    if st.session_state.option != None: #?????? MANCA CASO ELSE
-        #effettua gli upsert relativi al dizionario appena selezionato
-        dictionary_path = getDictionaryPath(st.session_state.option)
-
-        if dictionary_path == "Error":
-            st.session_state.chat.append({"role": "assistant", "content": "Error: file path not valid"})
-        else:
-            st.session_state.upsert_commands = generateUpsertCommands(dictionary_path) #????? LA VARIABILE DEVE ESSERE GLOBALE?
-            st.session_state.emb = upsert(st.session_state.upsert_commands) #?? SERVE VAR GLOBALE!!!!!!!!!!!!!!!!!!!!!
-            st.session_state.emb.save(f"indexes/{os.path.splitext(st.session_state.option)[0]}")
+def loadIndex(dictionary_file_name):
+    if st.session_state.emb == None:
+        st.session_state.emb = Embeddings({"path": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2", "content": True})
+    st.session_state.emb.load(f"indexes/{os.path.splitext(dictionary_file_name)[0]}")
 
 def createIndex(dictionary_path):
     st.session_state.upsert_commands = generateUpsertCommands(dictionary_path) #????? LA VARIABILE DEVE ESSERE GLOBALE?
@@ -86,3 +79,4 @@ def generatePromptUser(emb, user_query):
         prompt += f"\nGenerate the SQL query equivalent to: {user_query}"
 
     return prompt
+
