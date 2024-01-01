@@ -3,7 +3,7 @@ import sys
 import json
 import shutil
 from guiUtils import jsonValidator
-from guiEmbedder import indexFile
+from guiEmbedder import createIndex, deleteIndex
 #from giuUser import generateUpsert !!!!!!!!! da spostare generateUpsert in un altro file
 
 dirPath = os.path.dirname(os.path.realpath(__file__))
@@ -41,7 +41,11 @@ def deleteFile(filename_to_delete: str):
             # Elimina il file
             os.remove(file_path)
             file_deleted = True
+
+            deleteIndex(dirPath, filename_to_delete_without_extension)
+
             return f'File "{filename_to_delete}" deleted successfully'
+
     if not file_deleted:
         return f'Error: file "{filename_to_delete}" could not be deleted'
 
@@ -65,6 +69,6 @@ def uploadFile(file_content, file_name):
         destination_file.write(file_content)
 
     # CREATE and SAVE and load!! INDEXING generateUpsert() ?? COME PASSARE NOME FILE?? destination_path??
-    indexFile(destination_path)
+    createIndex(destination_path)
     
     return f'File "{file_name}" uploaded!'

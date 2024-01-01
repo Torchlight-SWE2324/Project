@@ -17,15 +17,21 @@ def generateUpsert(): #!!!!! DA REALIZZARE SALVATAGGIO INDEXING
             st.session_state.emb = upsert(st.session_state.upsert_commands) #?? SERVE VAR GLOBALE!!!!!!!!!!!!!!!!!!!!!
             st.session_state.emb.save(f"indexes/{os.path.splitext(st.session_state.option)[0]}")
 
-def indexFile(dictionary_path):
+def createIndex(dictionary_path):
     st.session_state.upsert_commands = generateUpsertCommands(dictionary_path) #????? LA VARIABILE DEVE ESSERE GLOBALE?
-    print('11111111')
     st.session_state.emb = upsert(st.session_state.upsert_commands) #?? SERVE VAR GLOBALE!!!!!!!!!!!!!!!!!!!!!
     file_name = os.path.basename(dictionary_path)
-    print(file_name)
     st.session_state.emb.save(f"indexes/{os.path.splitext(file_name)[0]}")
-    print('33333333')
+    st.session_state.emb.close()
 
+def deleteIndex(dirPath, filename_to_delete_without_extension):
+    indexes_folder_path = os.path.join(dirPath, "indexes")
+    index_folder_to_delete_path = os.path.join(indexes_folder_path, filename_to_delete_without_extension)
+
+    for file_to_delete in os.listdir(index_folder_to_delete_path):
+        file_to_delete_path = os.path.join(index_folder_to_delete_path, file_to_delete)
+        os.remove(file_to_delete_path)
+    os.rmdir(index_folder_to_delete_path)
 
 def generatePromptAdmin(emb, user_query):  # !!!!! DA REFACTORING + FARE VERSIONE USER ED ADMIN
     if emb == None:
@@ -39,7 +45,6 @@ def generatePromptAdmin(emb, user_query):  # !!!!! DA REFACTORING + FARE VERSION
         prompt = prompt+"\n"+str(result)+"\n"
 
     return prompt
-
 
 def generatePromptUser(emb, user_query):
     if emb == None:
