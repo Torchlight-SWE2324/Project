@@ -2,23 +2,11 @@ import os
 import streamlit as st
 import time
 from guiFileOperations import getFiles
-from guiUtils import getDictionaryPath, generateUpsertCommands, upsert
-from guiEmbedder import generatePromptUser
+
+from guiEmbedder import generatePromptUser, generateUpsert
 import keyboard
 import psutil
 
-
-#genera gli upsert solo quando il dizionario dati viene cambiato
-def generateUpsert(): #!!!!! DA REALIZZARE SALVATAGGIO INDEXING
-    if st.session_state.option != None: #?????? MANCA CASO ELSE
-        #effettua gli upsert relativi al dizionario appena selezionato
-        dictionary_path = getDictionaryPath(st.session_state.option)
-
-        if dictionary_path == "Error":
-            st.session_state.chat.append({"role": "assistant", "content": "Error: file path not valid"})
-        else:
-            st.session_state.upsert_commands = generateUpsertCommands(dictionary_path) #????? LA VARIABILE DEVE ESSERE GLOBALE?
-            st.session_state.emb = upsert(st.session_state.upsert_commands) #?? SERVE VAR GLOBALE!!!!!!!!!!!!!!!!!!!!!
 
 #risposta del chatbot
 def answer(assistant_response):
@@ -90,7 +78,7 @@ def guiUser():
     if (st.session_state.option != st.session_state.option_prev) and (st.session_state.option != None): # SE USO SAVE INDEX QUSTA PARTE NON SER
         answer(f"Switching data dictionary to \"{st.session_state.option}\"...")
         with st.spinner('Loading...'):
-            generateUpsert() #??? NON SI IMPALLA QUANDO NON CARICATO NESSUN FILE
+            generateUpsert() #!!!!!! QUA SI FA LOADING DELL INDICE DA FILE: st.session_state.option
         answer(f"Data dictionary switched to \"{st.session_state.option}\" correctly 👍")
     
     # React to user input

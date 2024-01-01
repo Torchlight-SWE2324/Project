@@ -11,10 +11,10 @@ def delete():
     st.session_state.files=getFiles()
     st.success(message, icon="👍")
 
-def upload():
+def upload(): #!!!!! FILE CON STESSO NOME DI UN FILE GIA CARICATO LO SOVRASCRIV
     if st.session_state.uploaded_file is not None:
-        message=uploadFile(st.session_state.uploaded_file.read(), st.session_state.uploaded_file.name)
-        st.session_state.files=getFiles()
+        message = uploadFile(st.session_state.uploaded_file.read(), st.session_state.uploaded_file.name)
+        st.session_state.files = getFiles()
         st.warning(message)
     else:
         st.success("Choose a file to upload")
@@ -45,14 +45,16 @@ def guiAdmin():
                 st.rerun()
             else:
                 st.error("Invalid username or password!")
+
     #se l'utente è loggato mostra il menu dell'admin
     else:
         with st.container():
             col1, col2 = st.columns(2)
             with col1:
                 st.session_state.uploaded_file = st.file_uploader("Upload new data dictionary file", accept_multiple_files=False, type="json")
-            with col2:
+            with col2: #!!! DOPO CARICAMENTO LASCIA SOTTO LISTA FILE CARICATI
                 st.button("Upload file", type="primary", on_click=upload, disabled=st.session_state.uploaded_file==None)
+
         with st.container():
             col1, col2 = st.columns(2)
             with col1:

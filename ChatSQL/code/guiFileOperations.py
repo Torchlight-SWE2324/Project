@@ -5,6 +5,7 @@ import sys
 import json
 import shutil
 from guiUtils import jsonValidator
+#from giuUser import generateUpsert !!!!!!!!! da spostare generateUpsert in un altro file
 
 dirPath = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.abspath(os.path.join(dirPath, "..")))
@@ -63,5 +64,7 @@ def uploadFile(file_content, file_name):
     destination_path = os.path.join(database_path, file_name)
     with open(destination_path, "wb") as destination_file:
         destination_file.write(file_content)
+
+    # CREATE and SAVE and load!! INDEXING generateUpsert() ?? COME PASSARE NOME FILE?? destination_path??
     
     return f'File "{file_name}" uploaded!'
