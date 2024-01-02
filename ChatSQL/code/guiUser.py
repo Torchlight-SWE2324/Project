@@ -68,9 +68,6 @@ def init():
         st.session_state.files = []     
 
 
-        
-
-
 
 def guiUser():
     init()
