@@ -97,7 +97,7 @@ def guiUser():
                 t_end = 2.75
                 sleep_duration = random.uniform(t_start, t_end)
                 time.sleep(sleep_duration)
-                st.code(answer(generatePromptUser(st.session_state.emb, prompt)), language='markdown')
+                st.code(generatePromptUser(st.session_state.emb, prompt), language='markdown')
         else:
             answer("Cannot answer without a data dictionary file. Please upload one using the admin section.")
 
