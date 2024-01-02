@@ -3,7 +3,7 @@ import json
 import streamlit as st
 
 from guiUtils import generateUpsertCommands, upsert
-from txtai import Embeddings #?????SERVE
+from txtai import Embeddings
 
 def loadIndex(dictionary_file_name):
     if st.session_state.emb == None:
@@ -11,8 +11,8 @@ def loadIndex(dictionary_file_name):
     st.session_state.emb.load(f"indexes/{os.path.splitext(dictionary_file_name)[0]}")
 
 def createIndex(dictionary_path):
-    st.session_state.upsert_commands = generateUpsertCommands(dictionary_path) #????? LA VARIABILE DEVE ESSERE GLOBALE?
-    st.session_state.emb = upsert(st.session_state.upsert_commands) #?? SERVE VAR GLOBALE!!!!!!!!!!!!!!!!!!!!!
+    st.session_state.upsert_commands = generateUpsertCommands(dictionary_path)
+    st.session_state.emb = upsert(st.session_state.upsert_commands)
     file_name = os.path.basename(dictionary_path)
     st.session_state.emb.save(f"indexes/{os.path.splitext(file_name)[0]}")
     st.session_state.emb.close()
@@ -26,7 +26,7 @@ def deleteIndex(dirPath, filename_to_delete_without_extension):
         os.remove(file_to_delete_path)
     os.rmdir(index_folder_to_delete_path)
 
-def generatePromptAdmin(emb, user_query):  # !!!!! DA REFACTORING + FARE VERSIONE USER ED ADMIN
+def generatePromptAdmin(emb, user_query):
     if emb == None:
         return "Error: there is no model connected"
 
@@ -63,16 +63,15 @@ def generatePromptUser(emb, user_query):
             relationship_list.append(f"'{table_name}.{field_name}' references '{references['table_name']}."
                             f"{references['field_name']}';\n")
 
-    #!!! DA VEDERE QUANDO NON TROVA NESSUNA TABELLA
-    prompt = f"\n\nThe database contains the following tables:\n\n" # SCEGLERE SE METTERE "s" QUANDO MULTIPLO
+    prompt = f"\n\nThe database contains the following tables:\n\n"
 
     for table, fields in selected_fields_list.items():
         field_str = ', '.join([f"'{field}'" for field in fields])
-        prompt += f"'{table}' with fields {field_str};\n\n" #!!! ULTIMA ITERAZIONE SI METTE PUNTO # SCEGLERE SE METTERE "s" QUANDO MULTIPLO
+        prompt += f"'{table}' with fields {field_str};\n\n"
 
 
     if relationship_list:
-        prompt += "\nand the database contains the following relationships:\n" # SCEGLERE SE METTERE "s" QUANDO MULTIPLO
+        prompt += "\nand the database contains the following relationships:\n"
 
         for relation in relationship_list:
             prompt += "\n"+relation

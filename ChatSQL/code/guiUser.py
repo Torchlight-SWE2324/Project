@@ -8,7 +8,7 @@ import keyboard
 import psutil
 
 
-#risposta del chatbot
+# risposta del chatbot
 def answer(assistant_response):
     with st.chat_message("assistant"):
         message_placeholder = st.empty()
@@ -75,12 +75,11 @@ def guiUser():
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
     
-    #effettua gli upsert solo se il dizionario dati selezionato è cambiato rispetto a prima
-    if (st.session_state.option != st.session_state.option_prev) and (st.session_state.option != None): # SE USO SAVE INDEX QUSTA PARTE NON SER
+    # effettua gli upsert solo se il dizionario dati selezionato è cambiato rispetto a prima
+    if (st.session_state.option != st.session_state.option_prev) and (st.session_state.option != None):
         answer(f"Switching data dictionary to \"{st.session_state.option}\"...")
         with st.spinner('Loading...'):
             loadIndex(st.session_state.option)
-            #generateUpsert() #!!!!!! QUA SI FA LOADING DELL INDICE DA FILE: st.session_state.option
         answer(f"Data dictionary switched to \"{st.session_state.option}\" correctly 👍")
     
     # React to user input
@@ -93,7 +92,7 @@ def guiUser():
 
         # Display assistant response in chat message container
         if st.session_state.option != None:
-            answer(generatePromptUser(st.session_state.emb, prompt))  # !!! DA REFACTORING
+            answer(generatePromptUser(st.session_state.emb, prompt))
         else:
             answer("Cannot answer without a data dictionary file. Please upload one using the admin section.")
 

@@ -1,7 +1,7 @@
 import os
 import sys
 import json
-import shutil
+
 from guiUtils import jsonValidator
 from guiEmbedder import createIndex, deleteIndex
 
@@ -12,7 +12,7 @@ sys.path.append(os.path.abspath(os.path.join(dirPath, "..")))
 database_path = os.path.join(dirPath, "database")
 JSON_schema = os.path.join(dirPath, "schema.json")
 
-def getFiles(file_type='.json'): #?? NON BISOGNA FARE CONTROLLA JSONSCHEMA
+def getFiles(file_type='.json'):
     if not os.path.exists(database_path):
         return []
     files = os.listdir(database_path)
@@ -68,7 +68,6 @@ def uploadFile(file_content, file_name):
     with open(destination_path, "wb") as destination_file:
         destination_file.write(file_content)
 
-    # CREATE and SAVE and load!! INDEXING generateUpsert() ?? COME PASSARE NOME FILE?? destination_path??
     createIndex(destination_path)
     
     return f'File "{file_name}" uploaded!'
