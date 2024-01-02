@@ -20,4 +20,3 @@ venv/
 # Ignore everything but code style settings and run configurations
 # that are supposed to be shared within teams.
 .idea/*
-/ChatSQL/code/indexes/
