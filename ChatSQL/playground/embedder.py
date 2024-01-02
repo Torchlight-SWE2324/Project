@@ -1,7 +1,7 @@
+import logging
 import os
 import re
 import threading
-import logging
 
 from txtai import Embeddings
 from utils import loading_animation, generateEmbeddingUpsert

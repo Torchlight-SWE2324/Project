@@ -5,6 +5,7 @@ import streamlit as st
 from guiUtils import generateUpsertCommands, upsert
 from txtai import Embeddings
 
+
 def loadIndex(dictionary_file_name):
     if st.session_state.emb == None:
         st.session_state.emb = Embeddings({"path": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2", "content": True})

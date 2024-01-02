@@ -1,11 +1,12 @@
+import keyboard
 import os
+import psutil
+import random
 import streamlit as st
 import time
-from guiFileOperations import getFiles
 
+from guiFileOperations import getFiles
 from guiEmbedder import generatePromptUser, loadIndex
-import keyboard
-import psutil
 
 
 # risposta del chatbot
@@ -22,8 +23,6 @@ def answer(assistant_response):
         message_placeholder.markdown(full_response)
         st.session_state.chat.append({"role": "assistant", "content": full_response})
 
-#def admin():
-#    st.session_state.chat.append({"role": "assistant", "content": "Access the admin section"})
 
 def exit():
     st.session_state.chat.append({"role": "assistant", "content": "Exiting the program..."})
@@ -59,11 +58,10 @@ def guiUser():
     init()
     st.title("ChatSQL")
     st.subheader("Type your natural language query in the chat box below and press enter to get the corresponding SQL query.")
-    st.subheader("To access the admin section or exit the program, use the buttons on the sidebar.")
+    st.divider()
+    st.text("To access the admin section or exit the program, use the buttons on the sidebar.")
 
     with st.sidebar:
-#        st.button("Admin section", help="Access the admin section to upload or delete a data dictionary file",
-#                on_click=admin, type="primary", use_container_width=False, disabled=False, key=None)
         st.session_state.files=getFiles()
         st.session_state.option_prev = st.session_state.option
         st.session_state.option = st.selectbox('Data dictionary file:', st.session_state.files)
@@ -92,7 +90,14 @@ def guiUser():
 
         # Display assistant response in chat message container
         if st.session_state.option != None:
-            answer(generatePromptUser(st.session_state.emb, prompt))
+            answer("Generating SQL query...")
+
+            with st.spinner('Loading whimsical wonders and dazzling delights into the digital playground of possibilities!'):
+                t_start = 1.25
+                t_end = 2.75
+                sleep_duration = random.uniform(t_start, t_end)
+                time.sleep(sleep_duration)
+                st.code(answer(generatePromptUser(st.session_state.emb, prompt)), language='markdown')
         else:
             answer("Cannot answer without a data dictionary file. Please upload one using the admin section.")
 
