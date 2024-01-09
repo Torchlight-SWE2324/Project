@@ -14,7 +14,7 @@ def delete():
 
 def upload():
     if st.session_state.uploaded_file is not None:
-        message = uploadFile(st.session_state.uploaded_file.read(), st.session_state.uploaded_file.name)
+        message=uploadFile(st.session_state.uploaded_file.read(), st.session_state.uploaded_file.name)
         st.session_state.files = getFiles()
         st.warning(message)
     else:
