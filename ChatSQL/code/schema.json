@@ -27,7 +27,15 @@
                 "references": {
                   "anyOf": [
                     {
-                      "type": "string"
+                      "type": "object",
+                      "properties": {
+                        "table_name": {
+                          "type": "string"
+                        },
+                        "field_name": {
+                          "type": "string"
+                        }
+                      }
                     },
                     {
                       "type": "null"

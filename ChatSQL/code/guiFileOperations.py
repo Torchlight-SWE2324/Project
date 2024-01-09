@@ -1,10 +1,10 @@
-# versione per GUI di fileOperations.py
-
 import os
 import sys
 import json
-import shutil
+
 from guiUtils import jsonValidator
+from guiEmbedder import createIndex, deleteIndex
+
 
 dirPath = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.abspath(os.path.join(dirPath, "..")))
@@ -41,7 +41,11 @@ def deleteFile(filename_to_delete: str):
             # Elimina il file
             os.remove(file_path)
             file_deleted = True
+
+            deleteIndex(dirPath, filename_to_delete_without_extension)
+
             return f'File "{filename_to_delete}" deleted successfully'
+
     if not file_deleted:
         return f'Error: file "{filename_to_delete}" could not be deleted'
 
@@ -63,5 +67,7 @@ def uploadFile(file_content, file_name):
     destination_path = os.path.join(database_path, file_name)
     with open(destination_path, "wb") as destination_file:
         destination_file.write(file_content)
+
+    createIndex(destination_path)
     
     return f'File "{file_name}" uploaded!'

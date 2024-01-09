@@ -6,21 +6,10 @@ import streamlit as st
 import time
 from guiAdmin import guiAdmin
 from guiFileOperations import getFiles
-from guiUtils import getPath, generateUpsertCommands, upsert
-from guiEmbedder import generatePrompt
+from guiEmbedder import generatePromptUser, loadIndex
 
-#genera gli upsert solo quando il dizionario dati viene cambiato
-def generateUpsert():
-    if st.session_state.option != None:
-        #effettua gli upsert relativi al dizionario appena selezionato
-        jsonFilePath=getPath(st.session_state.option)
-        if jsonFilePath == "Error":
-            st.session_state.chat.append({"role": "assistant", "content": "Error: file path not valid"})
-        else:
-            st.session_state.upsert_commands=generateUpsertCommands(jsonFilePath)
-            st.session_state.emb=upsert(st.session_state.upsert_commands)
 
-#risposta del chatbot
+# risposta del chatbot
 def answer(assistant_response):
     with st.chat_message("assistant"):
         message_placeholder = st.empty()
@@ -34,9 +23,6 @@ def answer(assistant_response):
         message_placeholder.markdown(full_response)
         st.session_state.chat.append({"role": "assistant", "content": full_response})
 
-
-#def admin():
-#    st.session_state.chat.append({"role": "assistant", "content": "Access the admin section"})
 
 def exit():
     st.session_state.chat.append({"role": "assistant", "content": "Exiting the program..."})
@@ -77,8 +63,6 @@ def guiUser():
     st.text("To access the admin section or exit the program, use the buttons on the sidebar.")
 
     with st.sidebar:
-#        st.button("Admin section", help="Access the admin section to upload or delete a data dictionary file",
-#                on_click=admin, type="primary", use_container_width=False, disabled=False, key=None)
         st.session_state.files=getFiles()
         st.session_state.option_prev = st.session_state.option
         st.session_state.option = st.selectbox('Data dictionary file:', st.session_state.files)
@@ -91,11 +75,11 @@ def guiUser():
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
     
-    #effettua gli upsert solo se il dizionario dati selezionato è cambiato rispetto a prima
+    # effettua gli upsert solo se il dizionario dati selezionato è cambiato rispetto a prima
     if (st.session_state.option != st.session_state.option_prev) and (st.session_state.option != None):
         answer(f"Switching data dictionary to \"{st.session_state.option}\"...")
         with st.spinner('Loading...'):
-            generateUpsert()
+            loadIndex(st.session_state.option)
         answer(f"Data dictionary switched to \"{st.session_state.option}\" correctly 👍")
     
     # React to user input
@@ -108,8 +92,6 @@ def guiUser():
 
         # Display assistant response in chat message container
         if st.session_state.option != None:
-            # answer("Messaggio di prova. Dizionario dati selezionato: " + st.session_state.option)
-            # answer(generatePrompt(st.session_state.upsert_commands, st.session_state.emb, prompt))
             answer("Generating SQL query...")
 
             with st.spinner('Loading whimsical wonders and dazzling delights into the digital playground of possibilities!'):
@@ -117,9 +99,10 @@ def guiUser():
                 t_end = 2.75
                 sleep_duration = random.uniform(t_start, t_end)
                 time.sleep(sleep_duration)
-                st.code(generatePrompt(st.session_state.upsert_commands, st.session_state.emb, prompt), language='markdown')
+                st.code(generatePromptUser(st.session_state.emb, prompt), language='markdown')
         else:
             answer("Cannot answer without a data dictionary file. Please upload one using the admin section.")
+
 
 if __name__ == "__main__":
     guiUser()
