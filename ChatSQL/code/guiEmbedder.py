@@ -79,4 +79,3 @@ def generatePromptUser(emb, user_query):
         prompt += f"\nGenerate the SQL query equivalent to: {user_query}"
 
     return prompt
-

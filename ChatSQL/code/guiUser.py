@@ -34,6 +34,7 @@ def exit():
     pid = os.getpid()
     p = psutil.Process(pid)
     p.terminate()
+    
 
 def init():
     # Initialize chat history
@@ -50,7 +51,7 @@ def init():
     if "emb" not in st.session_state:
         st.session_state.emb = None
     if "files" not in st.session_state:
-        st.session_state.files = []
+        st.session_state.files = []     
 
 
 
@@ -66,8 +67,9 @@ def guiUser():
         st.session_state.option_prev = st.session_state.option
         st.session_state.option = st.selectbox('Data dictionary file:', st.session_state.files)
         st.write("***")
+        guiAdmin()
         st.button("Exit", help="Exit the program :(", on_click=exit, type="secondary", use_container_width=False, disabled=False, key=None)
-
+        
     # Display chat messages from history on app rerun
     for message in st.session_state.chat:
         with st.chat_message(message["role"]):
