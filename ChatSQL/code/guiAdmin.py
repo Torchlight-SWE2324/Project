@@ -4,10 +4,11 @@ from guiFileOperations import deleteFile, uploadFile, getFiles
 
 def logout():
     st.session_state.logged_in = False
+    st.session_state.chat=[]
     st.success("Logout successfull!", icon="👍")
-
+ 
 def delete():
-    message=deleteFile(st.session_state.selected_file_admin) # filename_to_delete=st.session_state.selected_file_admin
+    message=deleteFile(st.session_state.selected_file_admin) #filename_to_delete=st.session_state.selected_file_admin
     st.session_state.files=getFiles()
     st.success(message, icon="👍")
 
@@ -42,11 +43,11 @@ def guiAdmin():
             if checkData(username, password):
                 st.success("Login successful!")
                 st.session_state.logged_in = True
+                st.session_state.chat=[]
                 st.rerun()
             else:
                 st.error("Invalid username or password!")
-
-    # se l'utente è loggato mostra il menu dell'admin
+    #se l'utente è loggato mostra il menu dell'admin
     else:
         with st.container():
             col1, col2 = st.columns(2)
