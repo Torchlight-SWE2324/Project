@@ -1,6 +1,8 @@
+"""
 import keyboard
 import os
 import psutil
+"""
 import random
 import streamlit as st
 import time
@@ -35,6 +37,23 @@ def exit():
     p = psutil.Process(pid)
     p.terminate()
 """
+
+def init():
+    # Initialize chat history
+    if "chat" not in st.session_state:
+        st.session_state.chat = []
+    # Initialize option parameter
+    if "option" not in st.session_state:
+        st.session_state.option = None
+    if "option_prev" not in st.session_state:
+        st.session_state.option_prev = None
+    # Initialize upsert commands
+    if "upsert_commands" not in st.session_state:
+        st.session_state.upsert_commands = []
+    if "emb" not in st.session_state:
+        st.session_state.emb = None
+    if "files" not in st.session_state:
+        st.session_state.files = []
 
 def guiUser():
     init()
@@ -82,23 +101,6 @@ def guiUser():
                 st.code(generatePromptUser(st.session_state.emb, prompt), language='markdown')
         else:
             answer("Cannot answer without a data dictionary file. Please upload one using the admin section.")
-
-def init():
-    # Initialize chat history
-    if "chat" not in st.session_state:
-        st.session_state.chat = []
-    # Initialize option parameter
-    if "option" not in st.session_state:
-        st.session_state.option = None
-    if "option_prev" not in st.session_state:
-        st.session_state.option_prev = None
-    # Initialize upsert commands
-    if "upsert_commands" not in st.session_state:
-        st.session_state.upsert_commands = []
-    if "emb" not in st.session_state:
-        st.session_state.emb = None
-    if "files" not in st.session_state:
-        st.session_state.files = []
         
 if __name__ == "__main__":
     guiUser()
