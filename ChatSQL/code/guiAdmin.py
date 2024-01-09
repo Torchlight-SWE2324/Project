@@ -62,7 +62,6 @@ def guiAdmin():
             with col2:
                 st.button("Delete selected file", type="primary", on_click=delete, disabled=st.session_state.selected_file_admin==None)
         st.write("***")
-        
         st.button("Logout", type="secondary", on_click=logout)
                    
 
