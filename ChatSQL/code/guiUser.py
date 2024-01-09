@@ -4,10 +4,10 @@ import psutil
 import random
 import streamlit as st
 import time
+
 from guiAdmin import guiAdmin
 from guiFileOperations import getFiles
 from guiEmbedder import generatePromptUser, loadIndex
-
 
 # risposta del chatbot
 def answer(assistant_response):
@@ -23,7 +23,7 @@ def answer(assistant_response):
         message_placeholder.markdown(full_response)
         st.session_state.chat.append({"role": "assistant", "content": full_response})
 
-
+"""
 def exit():
     st.session_state.chat.append({"role": "assistant", "content": "Exiting the program..."})
     # Delay for user experience
@@ -34,33 +34,14 @@ def exit():
     pid = os.getpid()
     p = psutil.Process(pid)
     p.terminate()
-    
-
-def init():
-    # Initialize chat history
-    if "chat" not in st.session_state:
-        st.session_state.chat = []
-    # Initialize option parameter
-    if "option" not in st.session_state:
-        st.session_state.option = None
-    if "option_prev" not in st.session_state:
-        st.session_state.option_prev = None
-    # Initialize upsert commands
-    if "upsert_commands" not in st.session_state:
-        st.session_state.upsert_commands = []
-    if "emb" not in st.session_state:
-        st.session_state.emb = None
-    if "files" not in st.session_state:
-        st.session_state.files = []     
-
-
+"""
 
 def guiUser():
     init()
     st.title("ChatSQL")
     st.subheader("Type your natural language query in the chat box below and press enter to get the corresponding SQL query.")
     st.divider()
-    st.text("To access the admin section or exit the program, use the buttons on the sidebar.")
+    st.text("To access the admin section use the buttons on the sidebar.")
 
     with st.sidebar:
         st.session_state.files=getFiles()
@@ -68,7 +49,6 @@ def guiUser():
         st.session_state.option = st.selectbox('Data dictionary file:', st.session_state.files)
         st.write("***")
         guiAdmin()
-        st.button("Exit", help="Exit the program :(", on_click=exit, type="secondary", use_container_width=False, disabled=False, key=None)
         
     # Display chat messages from history on app rerun
     for message in st.session_state.chat:
@@ -103,6 +83,22 @@ def guiUser():
         else:
             answer("Cannot answer without a data dictionary file. Please upload one using the admin section.")
 
-
+def init():
+    # Initialize chat history
+    if "chat" not in st.session_state:
+        st.session_state.chat = []
+    # Initialize option parameter
+    if "option" not in st.session_state:
+        st.session_state.option = None
+    if "option_prev" not in st.session_state:
+        st.session_state.option_prev = None
+    # Initialize upsert commands
+    if "upsert_commands" not in st.session_state:
+        st.session_state.upsert_commands = []
+    if "emb" not in st.session_state:
+        st.session_state.emb = None
+    if "files" not in st.session_state:
+        st.session_state.files = []
+        
 if __name__ == "__main__":
     guiUser()

@@ -6,7 +6,6 @@ import json
 from txtai import Embeddings
 from jsonschema import validate, ValidationError
 
-
 dirPath = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.abspath(os.path.join(dirPath, '..')))
 
@@ -23,7 +22,6 @@ def upsert(commands):
     emb.index([{"table_name": command["table_name"], "table_description": command["table_description"],
                 "field_name": command["field_name"], "field_type": command["field_type"], "field_references": command["field_references"],
                 "text": command["field_description"]} for command in commands])
-
     return emb
 
 def generateUpsertCommands(dictionary_path):
