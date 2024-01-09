@@ -25,19 +25,6 @@ def answer(assistant_response):
         message_placeholder.markdown(full_response)
         st.session_state.chat.append({"role": "assistant", "content": full_response})
 
-"""
-def exit():
-    st.session_state.chat.append({"role": "assistant", "content": "Exiting the program..."})
-    # Delay for user experience
-    time.sleep(1)
-    # Close streamlit browser tab
-    keyboard.press_and_release('ctrl+w')
-    # Terminate streamlit python process
-    pid = os.getpid()
-    p = psutil.Process(pid)
-    p.terminate()
-"""
-
 def init():
     # Initialize chat history
     if "chat" not in st.session_state:
@@ -59,8 +46,6 @@ def guiUser():
     init()
     st.title("ChatSQL")
     st.subheader("Type your natural language query in the chat box below and press enter to get the corresponding SQL query.")
-    st.divider()
-    st.text("To access the admin section use the buttons on the sidebar.")
 
     with st.sidebar:
         st.session_state.files=getFiles()
