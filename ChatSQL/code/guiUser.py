@@ -41,11 +41,16 @@ def init():
         st.session_state.emb = None
     if "files" not in st.session_state:
         st.session_state.files = []
+    if "logged_in" not in st.session_state: # Variabile di stato per tenere traccia dello stato di autenticazione
+        st.session_state.logged_in = False
 
 def guiUser():
     init()
     st.title("ChatSQL")
     st.subheader("Type your natural language query in the chat box below and press enter to get the corresponding SQL query.")
+    if st.session_state.logged_in == False:
+        st.divider()
+        st.text("You can access the admin menu by logging in the sidebar.")
 
     with st.sidebar:
         st.session_state.files=getFiles()
