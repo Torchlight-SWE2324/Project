@@ -34,7 +34,7 @@ def uploadFile():
             return
 
         if not os.path.isfile(input_path) or not input_path.endswith(".json"):
-            print("Invalid file path or format. Please enter a valid path to a JSON file.")
+            print("Invalid file path or format. Please enter a valid path to a JSON_old_versions file.")
             continue
 
         with open(JSON_schema, "r") as schema_file, open(input_path, "r") as data_file:
@@ -44,7 +44,7 @@ def uploadFile():
         is_compliant, error_message = jsonValidator(json_data, json_schema)
 
         if not is_compliant:
-            print(f"The JSON is not compliant with the schema. Error: {error_message}")
+            print(f"The JSON_old_versions is not compliant with the schema. Error: {error_message}")
             continue
 
         base_filename = os.path.basename(input_path)

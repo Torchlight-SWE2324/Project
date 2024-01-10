@@ -4,7 +4,7 @@ from utils import generateEmbeddingUpsert
 
 if __name__ == "__main__":
     dir_path = os.path.dirname(os.path.realpath(__file__))
-    json_file_path = os.path.join(dir_path, "..", "JSON")
+    json_file_path = os.path.join(dir_path, "..", "JSON_old_versions")
     jsonFileName = os.path.join(json_file_path, "movies.json")
 
     generated_commands = generateEmbeddingUpsert(jsonFileName)

@@ -9,7 +9,7 @@ dirPath = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.abspath(os.path.join(dirPath, '..')))
 
 database_path = os.path.join(dirPath, "..", "database")
-JSON_schema = os.path.join(dirPath, "..", "JSON", "schema.json")
+JSON_schema = os.path.join(dirPath, "..", "JSON_old_versions", "schema.json")
 
 def checkData(username, password):
     file_path = os.path.join(dirPath, "pswrd.csv")

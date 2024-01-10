@@ -20,7 +20,7 @@ def main():
                     contents = f.read()
                     json_data = json_decoder(contents)
             except Exception as e:
-                print("Error reading or decoding JSON file:", e)
+                print("Error reading or decoding JSON_old_versions file:", e)
             else:
                 code = json_data
                 print("Generated code:", code)

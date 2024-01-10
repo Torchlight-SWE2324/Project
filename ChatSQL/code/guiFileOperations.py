@@ -79,18 +79,18 @@ def deleteFile(filename_to_delete: str):
 
 def uploadFile(file_content, file_name):
     if not file_name.endswith(".json"):
-        return "Invalid format. Please enter a JSON file."
+        return "Invalid format. Please enter a JSON_old_versions file."
     
     file_content_str = file_content.decode('utf-8')
     try:
         with open(JSON_schema, "r") as schema_file:
             json_schema, json_data = json.load(schema_file), json.loads(file_content_str)
     except json.JSONDecodeError as e:
-        return f"JSON file could not be loaded. Error: {e}"
+        return f"JSON_old_versions file could not be loaded. Error: {e}"
     
     is_compliant, error_message = jsonValidator(json_data, json_schema)
     if not is_compliant:
-        return f"JSON file is not compliant with the schema. Please upload a valid JSON file." # Error: {error_message}
+        return f"JSON_old_versions file is not compliant with the schema. Please upload a valid JSON_old_versions file." # Error: {error_message}
     
     destination_path = os.path.join(database_path, file_name)
     with open(destination_path, "wb") as destination_file:

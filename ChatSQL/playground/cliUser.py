@@ -10,7 +10,7 @@ from embedder import emb
 def user():
     print("Welcome! Please choose a file to chat in:" + getFiles())
     
-    JSON_path = os.path.abspath(os.path.join(dirPath, os.pardir, "JSON"))
+    JSON_path = os.path.abspath(os.path.join(dirPath, os.pardir, "JSON_old_versions"))
     
     while True:
         # Ask for a file

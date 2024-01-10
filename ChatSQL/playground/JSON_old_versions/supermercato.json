@@ -67,7 +67,7 @@
                 {
                     "name": "Reparto",
                     "type": "int",
-                    "references": {"table_name":"Reparti", "field_name": "ID"},
+                    "references": "Reparti.ID",
                     "description": "ID del reparto a cui appartiene lo scaffale"
                 }
             ]
