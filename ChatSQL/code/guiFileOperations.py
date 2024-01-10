@@ -1,7 +1,9 @@
 import os
 import sys
 import json
+import streamlit as st
 
+from txtai import Embeddings
 from guiUtils import jsonValidator
 from guiEmbedder import createIndex, deleteIndex
 
@@ -21,6 +23,18 @@ def getFiles(file_type='.json'):
         return []
     return filtered_files
 
+def switchEmbedder():
+    print('inizio switchEmbedder()')  # !!!!!!!!!!!! SOLO PER TESTING !!!!!!!!!!!!!!!!
+    dictionaries_list = getFiles()
+    #!!!!!!!! DA RIVEDERE QUESTA CONDIZIONE
+    if len(dictionaries_list) > 0:
+        if st.session_state.emb == None:
+            st.session_state.emb = Embeddings({"path": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2", "content": True})
+        st.session_state.emb.load(f"indexes/{os.path.splitext(dictionaries_list[0])[0]}")
+    else:
+        st.session_state.emb.close()
+
+
 def deleteFile(filename_to_delete: str):
     # Aggiunta dell'estensione .json se l'utente non l'ha fornita
     if not filename_to_delete.endswith(".json"):
@@ -35,12 +49,26 @@ def deleteFile(filename_to_delete: str):
         os.path.join(database_path, filename_to_delete_with_extension),
         os.path.join(database_path, filename_to_delete_without_extension)
     ]
+
     file_deleted = False
     for file_path in file_paths_to_try:
         if os.path.exists(file_path):
             # Elimina il file
             os.remove(file_path)
             file_deleted = True
+
+            #file_name = file_path.....
+            print('st.session_state.option::::::')  # !!!!!!!!!!!! SOLO PER TESTING !!!!!!!!!!!!!!!!
+            print(st.session_state.option)  # !!!!!!!!!!!! SOLO PER TESTING !!!!!!!!!!!!!!!!
+            print('st.session_state.selected_file_admin ::::::')  # !!!!!!!!!!!! SOLO PER TESTING !!!!!!!!!!!!!!!!
+            print(st.session_state.selected_file_admin)  # !!!!!!!!!!!! SOLO PER TESTING !!!!!!!!!!!!!!!!
+
+            #condizione se file da eliminare è lo stesso selezionato per debugging
+            #if len(getFiles()) > 0:
+                #if filename_to_delete_with_extension == getFiles()[0] or filename_to_delete_without_extension == getFiles()[0]:
+            if st.session_state.option == st.session_state.selected_file_admin:
+                print('PRIMA DI switchEmbedder()')  # !!!!!!!!!!!! SOLO PER TESTING !!!!!!!!!!!!!!!!
+                switchEmbedder()
 
             deleteIndex(dirPath, filename_to_delete_without_extension)
 

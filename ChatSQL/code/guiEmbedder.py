@@ -46,9 +46,11 @@ def generatePromptUser(emb, user_query):
 
     selected_fields_list = {}
     relationship_list = []
-    
+
+    ret = ""
+    #?? DA METTERE " ret = "" " qua?
     for result in embedder_search_result:
-        ret = ""
+
 
         if st.session_state.logged_in == True:
             ret = "SCORE FOR DEBUGGING ONLY\n"
