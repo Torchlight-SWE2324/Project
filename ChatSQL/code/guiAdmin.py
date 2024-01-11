@@ -50,21 +50,20 @@ def guiAdmin():
                 st.error("Invalid username or password!")
     #se l'utente è loggato mostra il menu dell'admin
     else:
-        with st.container():
-            col1, col2 = st.columns(2)
-            with col1:
-                st.session_state.uploaded_file = st.file_uploader("Upload new data dictionary file", accept_multiple_files=False, type="json")
-            with col2:
-                st.button("Upload file", type="primary", on_click=upload, disabled=st.session_state.uploaded_file==None)
-        with st.container():
-            col1, col2 = st.columns(2)
-            with col1:
-                st.session_state.selected_file_admin = st.selectbox('Your data dictionary files', st.session_state.files)
-            with col2:
-                st.button("Delete selected file", type="primary", on_click=delete, disabled=st.session_state.selected_file_admin==None)
+        container_upload = st.container()  # Creating a container for layout
+
+        with container_upload:
+            st.session_state.uploaded_file = st.file_uploader("Upload new data dictionary file", accept_multiple_files=False, type="json")
+            st.button("Upload file", type="primary", on_click=upload, disabled=st.session_state.uploaded_file == None)
+
+        container_delete = st.container()  # Creating another container for layout
+
+        with container_delete:
+            st.session_state.selected_file_admin = st.selectbox('Your data dictionary files', st.session_state.files)
+            st.button("Delete selected file", type="primary", on_click=delete, disabled=st.session_state.selected_file_admin == None)
+
         st.write("***")
         st.button("Logout", type="secondary", on_click=logout)
-                   
-
+        
 if __name__ == "__main__":
     guiAdmin()
