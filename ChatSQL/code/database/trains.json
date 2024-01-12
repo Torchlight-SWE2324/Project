@@ -1,0 +1,106 @@
+{
+    "tables": [
+        {
+            "name": "trains",
+            "table-description": "Table containing information about trains owned by the train company",
+            "columns": [
+                {
+                    "name": "train_id",
+                    "type": "integer",
+                    "references": null,
+                    "description": "Unique identifier assigned to each train"
+                },
+                {
+                    "name": "model",
+                    "type": "string",
+                    "references": null,
+                    "description": "Model or type of the train"
+                },
+                {
+                    "name": "seats",
+                    "type": "integer",
+                    "references": null,
+                    "description": "Total number of seats in the train"
+                },
+                {
+                    "name": "manufacturing_date",
+                    "type": "date",
+                    "references": null,
+                    "description": "Date when the train was manufactured"
+                }
+            ]
+        },
+        {
+            "name": "routes",
+            "table-description": "Table containing information about train routes",
+            "columns": [
+                {
+                    "name": "route_id",
+                    "type": "integer",
+                    "references": null,
+                    "description": "Unique identifier assigned to each route"
+                },
+                {
+                    "name": "origin",
+                    "type": "string",
+                    "references": null,
+                    "description": "Starting point of the train route"
+                },
+                {
+                    "name": "destination",
+                    "type": "string",
+                    "references": null,
+                    "description": "Final destination of the train route"
+                },
+                {
+                    "name": "distance",
+                    "type": "float",
+                    "references": null,
+                    "description": "Distance covered by the train route in kilometers"
+                }
+            ]
+        },
+        {
+            "name": "daily_schedule",
+            "table-description": "Table linking trains to their daily schedules on specific routes",
+            "columns": [
+                {
+                    "name": "schedule_id",
+                    "type": "integer",
+                    "references": null,
+                    "description": "Unique identifier assigned to each daily schedule entry"
+                },
+                {
+                    "name": "train_id",
+                    "type": "integer",
+                    "references": {
+                        "table_name": "trains",
+                        "field_name": "train_id"
+                    },
+                    "description": "Foreign key referencing the train scheduled for the day"
+                },
+                {
+                    "name": "route_id",
+                    "type": "integer",
+                    "references": {
+                        "table_name": "routes",
+                        "field_name": "route_id"
+                    },
+                    "description": "Foreign key referencing the route assigned to the train on the day"
+                },
+                {
+                    "name": "departure_time",
+                    "type": "time",
+                    "references": null,
+                    "description": "Time when the train departs on the scheduled route"
+                },
+                {
+                    "name": "arrival_time",
+                    "type": "time",
+                    "references": null,
+                    "description": "Time when the train arrives at the final destination on the scheduled route"
+                }
+            ]
+        }
+    ]
+}
