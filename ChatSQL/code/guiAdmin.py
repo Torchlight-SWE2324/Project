@@ -18,6 +18,7 @@ def upload():
         message=uploadFile(st.session_state.uploaded_file.read(), st.session_state.uploaded_file.name)
         st.session_state.files=getFiles()
         st.warning(message)
+        #st.session_state.uploaded_file = None
     else:
         st.success("Choose a file to upload")
 
@@ -62,7 +63,7 @@ def guiAdmin():
             st.session_state.selected_file_admin = st.selectbox('Your data dictionary files', st.session_state.files)
             st.button("Delete selected file", type="primary", on_click=delete, disabled=st.session_state.selected_file_admin == None)
 
-        st.write("***")
+        #st.write("***")
         st.button("Logout", type="secondary", on_click=logout)
         
 if __name__ == "__main__":
