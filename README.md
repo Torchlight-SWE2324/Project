@@ -18,3 +18,9 @@ This project endeavors to create a chat application that employs LLM models to p
 ## Documentation
 
 The documentation of the project can be found [here](https://github.com/Torchlight-SWE2324/Documentazione) (in Italian).
+
+## Model license
+
+The model used is [paraphrase-multilingual-MiniLM-L12-v2](https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2).
+
+It was trained by [sentences-transformers](https://www.sbert.net/) and is licensed under the [Apache License 2.0](https://choosealicense.com/licenses/apache-2.0/) license.
