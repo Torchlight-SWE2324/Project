@@ -56,7 +56,7 @@ def guiUser():
         st.session_state.files=getFiles()
         st.session_state.option_prev = st.session_state.option
         st.session_state.option = st.selectbox('Data dictionary file:', st.session_state.files)
-        st.write("***")
+        #st.write("***")
         guiAdmin()
 
     # Display chat messages from history on app rerun
