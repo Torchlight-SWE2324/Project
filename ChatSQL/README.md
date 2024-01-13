@@ -8,8 +8,8 @@ Let's start with python.
 
 You need to have Python 3.9 or higher installed on your computer. You can download it from the following link: <https://www.python.org/downloads/>
 
->[!NOTE]
-The program has been tested with version of python ranging from 3.9 to 3.11.6, versions lower than 3.9 may not work.
+> [!NOTE]
+> The program has been tested with version of python ranging from 3.9 to 3.11.6, versions lower than 3.9 may not work.
 Also, the latest version of python, 3.12, has been tested, but it does not work with the current version of txtai, so it is not recommended to use it.
 
 ### Step Two
@@ -46,19 +46,19 @@ streamlit run guiUser.py
 
 The program will start and the browser will be opened automatically. If this does not happen, you can open the browser yourself and go to the ```localhost``` address specified in the terminal.
 
->[!WARNING]
-In order to run the program properly, you need to open the ChatSQL folder in the terminal and run the ```guiUser.py``` file from there.
-
-It should look something like this:
-
-```shell
-C:\path\to\the\folder\ChatSQL>
-```
-
-Then you need to run the ```guiUser.py``` file:
-
-```shell
-C:\path\to\the\folder\ChatSQL> streamlit run guiUser.py
-```
-
-Beaware that, if you run the ```guiUser.py``` file from another folder, the program will not work properly.
+> [!WARNING]
+> In order to run the program properly, you need to open the ChatSQL folder in the terminal and run the ```guiUser.py``` file from there.
+>
+> It should look something like this:
+>
+> ```shell
+> C:\path\to\the\folder\ChatSQL>
+> ```
+>
+> Then you need to run the ```guiUser.py``` file:
+>
+> ```shell
+> C:\path\to\the\folder\ChatSQL> streamlit run guiUser.py
+> ```
+>
+> Beaware that, if you run the ```guiUser.py``` file from another folder, the program will not work properly.
