@@ -1,8 +1,3 @@
-"""
-import keyboard
-import os
-import psutil
-"""
 import random
 import streamlit as st
 import time
@@ -56,7 +51,6 @@ def guiUser():
         st.session_state.files=getFiles()
         st.session_state.option_prev = st.session_state.option
         st.session_state.option = st.selectbox('Data dictionary file:', st.session_state.files)
-        #st.write("***")
         guiAdmin()
 
     # Display chat messages from history on app rerun
@@ -69,7 +63,7 @@ def guiUser():
         answer(f"Switching data dictionary to \"{st.session_state.option}\"...")
         with st.spinner('Loading...'):
             loadIndex(st.session_state.option)
-        answer(f"Data dictionary switched to \"{st.session_state.option}\" correctly 👍")
+        answer(f"Data dictionary switched to \"{st.session_state.option}\" correctly.")
 
     # React to user input
     if prompt := st.chat_input("Insert natural language query here"):

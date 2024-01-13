@@ -36,8 +36,7 @@ def generatePrompt(emb, user_query, dictionary_name):
 
     # Creazione prompt per Admin
     if st.session_state.logged_in == True:
-        embedder_search_result = emb.search(f"select score, text, table_name, from txtai where similar('{user_query}')  "
-                                            f"group by table_name limit 200")
+        embedder_search_result = emb.search(f"select score, text, table_name, from txtai where similar('{user_query}') group by table_name limit 200")
 
         prompt = ''
         for result in embedder_search_result:
@@ -47,8 +46,7 @@ def generatePrompt(emb, user_query, dictionary_name):
 
     # Creazione prompt per User
     else:
-        embedder_search_result = emb.search(f"select score, text, table_name, table_description, field_name, field_type, "
-                                            f"field_references, from txtai where similar('{user_query}') and score > 0.2 group by table_name ")
+        embedder_search_result = emb.search(f"select score, text, table_name, table_description, field_name, field_type, field_references, from txtai where similar('{user_query}') and score > 0.2 group by table_name ")
 
         dictionary_path = os.path.join(getDictionariesFolderPath(), dictionary_name)
 
@@ -73,7 +71,6 @@ def generatePrompt(emb, user_query, dictionary_name):
 
                     tables_with_fields_list.append(table_with_fields)
 
-
         if len(tables_with_fields_list) > 0:
             prompt = "The data base contain the following tables:\n\n"
 
@@ -84,12 +81,10 @@ def generatePrompt(emb, user_query, dictionary_name):
                     prompt += f"'{field['field_name']}' that contain {field['field_description']};\n"
                 prompt += "\n"
 
-
             if len(referencies_list) > 0:
                 prompt += "and the database contains the following relationships:\n"
                 for reference in referencies_list:
                     prompt += reference
-
 
             prompt += f"\nGenerate the SQL query equivalent to: {user_query}"
             return prompt

@@ -26,7 +26,6 @@ def getFiles(file_type='.json'):
 
 def switchEmbedder():
     dictionaries_list = getFiles()
-    # !!!!!!!! DA RIVEDERE QUESTA CONDIZIONE
     if len(dictionaries_list) > 0:
         if st.session_state.emb == None:
             st.session_state.emb = Embeddings(
@@ -37,7 +36,6 @@ def switchEmbedder():
 
 
 def deleteFile(filename_to_delete: str):
-    # Aggiunta dell'estensione .json se l'utente non l'ha fornita
     if not filename_to_delete.endswith(".json"):
         filename_to_delete_with_extension = filename_to_delete + ".json"
         filename_to_delete_without_extension = filename_to_delete
@@ -45,7 +43,6 @@ def deleteFile(filename_to_delete: str):
         filename_to_delete_with_extension = filename_to_delete
         filename_to_delete_without_extension = filename_to_delete.replace(".json", "")
 
-    # Tentativo di eliminare il file specificato con e senza estensione .json
     file_paths_to_try = [
         os.path.join(database_path, filename_to_delete_with_extension),
         os.path.join(database_path, filename_to_delete_without_extension)
@@ -54,7 +51,6 @@ def deleteFile(filename_to_delete: str):
     file_deleted = False
     for file_path in file_paths_to_try:
         if os.path.exists(file_path):
-            # Elimina il file
             os.remove(file_path)
             file_deleted = True
 
@@ -72,18 +68,18 @@ def deleteFile(filename_to_delete: str):
 
 def uploadFile(file_content, file_name):
     if not file_name.endswith(".json"):
-        return "Invalid format. Please enter a JSON_old_versions file."
+        return "Invalid format. Please enter a JSON file."
 
     file_content_str = file_content.decode('utf-8')
     try:
         with open(JSON_schema, "r") as schema_file:
             json_schema, json_data = json.load(schema_file), json.loads(file_content_str)
     except json.JSONDecodeError as e:
-        return f"JSON_old_versions file could not be loaded. Error: {e}"
+        return f"JSON file could not be loaded. Error: {e}"
 
     is_compliant, error_message = jsonValidator(json_data, json_schema)
     if not is_compliant:
-        return f"JSON_old_versions file is not compliant with the schema. Please upload a valid JSON_old_versions file."  # Error: {error_message}
+        return f"The JSON file is not compliant with the schema. Please upload a valid file."
 
     destination_path = os.path.join(database_path, file_name)
     with open(destination_path, "wb") as destination_file:
