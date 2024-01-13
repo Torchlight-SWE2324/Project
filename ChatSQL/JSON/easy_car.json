@@ -1,0 +1,394 @@
+{
+  "tables": [
+    {
+      "name": "Auto",
+      "table-description": "",
+      "columns": [
+        {
+          "name": "ID",
+          "type": "",
+          "references": null,
+          "description": ""
+        },
+		{
+          "name": "Targa",
+          "type": "",
+          "references": null,
+          "description": ""
+        },
+        {
+          "name": "Tipologia",
+          "type": "",
+          "references": null,
+          "description": ""
+        },		
+		{
+          "name": "Marca",
+          "type": "",
+          "references": null,
+          "description": ""
+        },
+		{
+          "name": "Modello",
+          "type": "",
+          "references": null,
+          "description": ""
+        },
+		{
+          "name": "Posti",
+          "type": "",
+          "references": null,
+          "description": ""
+        },
+	    {
+          "name": "Alimentazione",
+          "type": "",
+          "references": null,
+          "description": ""
+        },
+		{
+          "name": "Cambio",
+          "type": "",
+          "references": null,
+          "description": ""
+        },
+		{
+          "name": "Cod_sede",
+          "type": "",
+          "references": {"table_name":"Sede", "field_name": "Codice"},
+          "description": ""
+        },
+		{
+          "name": "Categoria",
+          "type": "",
+          "references": {"table_name":"Tariffa", "field_name": "Categoria"},
+          "description": ""
+        }
+      ]
+    },
+	{
+      "name": "Multa",
+      "table-description": "",
+      "columns": [
+        {
+          "name": "Codice",
+          "type": "",
+          "references": null,
+          "description": ""
+        },
+		{
+          "name": "Auto",
+          "type": "",
+          "references": {"table_name":"Auto", "field_name": "ID"},
+          "description": ""
+        },
+		{
+          "name": "Cod_cliente",
+          "type": "",
+          "references": {"table_name":"Cliente", "field_name": "Codice"},
+          "description": ""
+        },
+		{
+          "name": "Causale",
+          "type": "",
+          "references": null,
+          "description": ""
+        },
+		{
+          "name": "Data_ora",
+          "type": "",
+          "references": null,
+          "description": ""
+        },
+		{
+          "name": "Importo",
+          "type": "",
+          "references": null,
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "Cliente",
+      "table-description": "",
+      "columns": [
+        {
+          "name": "Codice",
+          "type": "",
+          "references": null,
+          "description": ""
+        },
+		{
+          "name": "Patente",
+          "type": "",
+          "references": null,
+          "description": ""
+        },
+		{
+          "name": "Nome",
+          "type": "",
+          "references": null,
+          "description": ""
+        },
+		{
+          "name": "Cognome",
+          "type": "",
+          "references": null,
+          "description": ""
+        },
+		{
+          "name": "Telefono",
+          "type": "",
+          "references": null,
+          "description": ""
+        },
+		{
+          "name": "E_mail",
+          "type": "",
+          "references": null,
+          "description": ""
+        },
+		{
+          "name": "Accumulativo",
+          "type": "",
+          "references": null,
+          "description": ""
+        }
+      ]
+    },
+	{
+      "name": "Prenotazione",
+      "table-description": "",
+      "columns": [
+        {
+          "name": "Numero",
+          "type": "",
+          "references": null,
+          "description": ""
+        },
+		{
+          "name": "ID_auto",
+          "type": "",
+          "references": {"table_name":"Auto", "field_name": "ID"},
+          "description": ""
+        },
+		{
+          "name": "Cliente",
+          "type": "",
+          "references": {"table_name":"Cliente", "field_name": "Codice"},
+          "description": ""
+        },
+		{
+          "name": "Conferma",
+          "type": "",
+          "references": null,
+          "description": ""
+        },
+		{
+          "name": "Ritiro",
+          "type": "",
+          "references": null,
+          "description": ""
+        },
+		{
+          "name": "Consegna",
+          "type": "",
+          "references": null,
+          "description": ""
+        },
+		{
+          "name": "Totale",
+          "type": "",
+          "references": null,
+          "description": ""
+        }
+      ]
+    },
+	{
+      "name": "Servizio",
+      "table-description": "",
+      "columns": [
+        {
+          "name": "Tipo",
+          "type": "",
+          "references": null,
+          "description": ""
+        },
+		{
+          "name": "Costo",
+          "type": "",
+          "references": null,
+          "description": ""
+        }
+      ]
+    },
+	{
+      "name": "Tariffa",
+      "table-description": "",
+      "columns": [
+        {
+          "name": "Categoria",
+          "type": "",
+          "references": null,
+          "description": ""
+        },
+		{
+          "name": "Costo",
+          "type": "",
+          "references": null,
+          "description": ""
+        }
+      ]
+    },
+	{
+      "name": "Polizza",
+      "table-description": "",
+      "columns": [
+        {
+          "name": "Auto",
+          "type": "",
+          "references": {"table_name":"Auto", "field_name": "ID"},
+          "description": ""
+        },
+		{
+          "name": "Emissione",
+          "type": "",
+          "references": null,
+          "description": ""
+        },
+		{
+          "name": "Scadenza",
+          "type": "",
+          "references": null,
+          "description": ""
+        }
+      ]
+    },
+	{
+      "name": "Sede",
+      "table-description": "",
+      "columns": [
+        {
+          "name": "Codice",
+          "type": "",
+          "references": null,
+          "description": ""
+        },
+		{
+          "name": "Via",
+          "type": "",
+          "references": null,
+          "description": ""
+        },
+		{
+          "name": "Civico",
+          "type": "",
+          "references": null,
+          "description": ""
+        },
+		{
+          "name": "CAP",
+          "type": "",
+          "references": null,
+          "description": ""
+        },
+		{
+          "name": "Citta",
+          "type": "",
+          "references": null,
+          "description": ""
+        },
+		{
+          "name": "Provincia",
+          "type": "",
+          "references": null,
+          "description": ""
+        },
+		{
+          "name": "E_mail",
+          "type": "",
+          "references": null,
+          "description": ""
+        },
+		{
+          "name": "Dirigente",
+          "type": "",
+          "references": {"table_name":"Dirigente", "field_name": "Matricola"},
+          "description": ""
+        }
+      ]
+    },
+	{
+      "name": "Dirigente",
+      "table-description": "",
+      "columns": [
+        {
+          "name": "Matricola",
+          "type": "",
+          "references": null,
+          "description": ""
+        },
+		{
+          "name": "CF",
+          "type": "",
+          "references": null,
+          "description": ""
+        },
+		{
+          "name": "Nome",
+          "type": "",
+          "references": null,
+          "description": ""
+        },
+		{
+          "name": "Cognome",
+          "type": "",
+          "references": null,
+          "description": ""
+        },
+		{
+          "name": "Nascita",
+          "type": "",
+          "references": null,
+          "description": ""
+        },
+		{
+          "name": "Luogo",
+          "type": "",
+          "references": null,
+          "description": ""
+        },
+		{
+          "name": "Provincia",
+          "type": "",
+          "references": null,
+          "description": ""
+        },
+		{
+          "name": "Ruolo",
+          "type": "",
+          "references": null,
+          "description": ""
+        }
+      ]
+    },	
+	{
+      "name": "Telefono",
+      "table-description": "",
+      "columns": [
+        {
+          "name": "Numero",
+          "type": "",
+          "references": null,
+          "description": ""
+        },
+		{
+          "name": "Cod_sede",
+          "type": "",
+          "references": {"table_name":"Sede", "field_name": "Codice"},
+          "description": ""
+        }
+	  ]	
+    }
+  ]
+}

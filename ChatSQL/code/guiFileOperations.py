@@ -7,12 +7,12 @@ from txtai import Embeddings
 from guiUtils import jsonValidator
 from guiEmbedder import createIndex, deleteIndex
 
-
 dirPath = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.abspath(os.path.join(dirPath, "..")))
 
 database_path = os.path.join(dirPath, "database")
 JSON_schema = os.path.join(dirPath, "schema.json")
+
 
 def getFiles(file_type='.json'):
     if not os.path.exists(database_path):
@@ -23,13 +23,14 @@ def getFiles(file_type='.json'):
         return []
     return filtered_files
 
+
 def switchEmbedder():
-    print('inizio switchEmbedder()')  # !!!!!!!!!!!! SOLO PER TESTING !!!!!!!!!!!!!!!!
     dictionaries_list = getFiles()
-    #!!!!!!!! DA RIVEDERE QUESTA CONDIZIONE
+    # !!!!!!!! DA RIVEDERE QUESTA CONDIZIONE
     if len(dictionaries_list) > 0:
         if st.session_state.emb == None:
-            st.session_state.emb = Embeddings({"path": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2", "content": True})
+            st.session_state.emb = Embeddings(
+                {"path": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2", "content": True})
         st.session_state.emb.load(f"indexes/{os.path.splitext(dictionaries_list[0])[0]}")
     else:
         st.session_state.emb.close()
@@ -57,17 +58,8 @@ def deleteFile(filename_to_delete: str):
             os.remove(file_path)
             file_deleted = True
 
-            #file_name = file_path.....
-            print('st.session_state.option::::::')  # !!!!!!!!!!!! SOLO PER TESTING !!!!!!!!!!!!!!!!
-            print(st.session_state.option)  # !!!!!!!!!!!! SOLO PER TESTING !!!!!!!!!!!!!!!!
-            print('st.session_state.selected_file_admin ::::::')  # !!!!!!!!!!!! SOLO PER TESTING !!!!!!!!!!!!!!!!
-            print(st.session_state.selected_file_admin)  # !!!!!!!!!!!! SOLO PER TESTING !!!!!!!!!!!!!!!!
-
-            #condizione se file da eliminare è lo stesso selezionato per debugging
-            #if len(getFiles()) > 0:
-                #if filename_to_delete_with_extension == getFiles()[0] or filename_to_delete_without_extension == getFiles()[0]:
+            # condizione se file da eliminare è lo stesso selezionato per debugging
             if st.session_state.option == st.session_state.selected_file_admin:
-                print('PRIMA DI switchEmbedder()')  # !!!!!!!!!!!! SOLO PER TESTING !!!!!!!!!!!!!!!!
                 switchEmbedder()
 
             deleteIndex(dirPath, filename_to_delete_without_extension)
@@ -77,25 +69,26 @@ def deleteFile(filename_to_delete: str):
     if not file_deleted:
         return f'Error: file "{filename_to_delete}" could not be deleted'
 
+
 def uploadFile(file_content, file_name):
     if not file_name.endswith(".json"):
         return "Invalid format. Please enter a JSON_old_versions file."
-    
+
     file_content_str = file_content.decode('utf-8')
     try:
         with open(JSON_schema, "r") as schema_file:
             json_schema, json_data = json.load(schema_file), json.loads(file_content_str)
     except json.JSONDecodeError as e:
         return f"JSON_old_versions file could not be loaded. Error: {e}"
-    
+
     is_compliant, error_message = jsonValidator(json_data, json_schema)
     if not is_compliant:
-        return f"JSON_old_versions file is not compliant with the schema. Please upload a valid JSON_old_versions file." # Error: {error_message}
-    
+        return f"JSON_old_versions file is not compliant with the schema. Please upload a valid JSON_old_versions file."  # Error: {error_message}
+
     destination_path = os.path.join(database_path, file_name)
     with open(destination_path, "wb") as destination_file:
         destination_file.write(file_content)
 
     createIndex(destination_path)
-    
+
     return f'File "{file_name}" uploaded!'
