@@ -16,13 +16,6 @@ def jsonValidator(json_data, json_schema):
     except ValidationError as e:
         return False, str(e)
 
-def upsert(commands):
-    emb = Embeddings({"path": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2", "content": True})
-
-    emb.index([{"table_name": command["table_name"], "table_description": command["table_description"],
-                "field_name": command["field_name"], "field_type": command["field_type"], "field_references": command["field_references"],
-                "text": command["field_description"]} for command in commands])
-    return emb
 
 def generateUpsertCommands(dictionary_path):
     with open(dictionary_path, 'r') as file:
@@ -48,20 +41,21 @@ def generateUpsertCommands(dictionary_path):
 
     return commands
 
-def getDictionaryPath(dictionary_file_name):
-    dictionaries_folder_path = os.path.abspath(os.path.join(dirPath, "database"))
-    # Construct the initial file path
-    dictionary_file_path = os.path.join(dictionaries_folder_path, dictionary_file_name)
 
-    # Check if the file exists
-    if not os.path.exists(dictionary_file_path):
-        # If the file doesn't exist, try adding the .json extension
-        dictionary_file_path = os.path.join(dictionaries_folder_path, f"{dictionary_file_name}.json")
-        # Check again if the file exists
-        if not os.path.exists(dictionary_file_path):
-            # return f"Error: The file '{dictionary_file_name}' or '{dictionary_file_name}.json' does not exist. Please check file name."
-            return "Error"
-    return dictionary_file_path
+def upsert(commands):
+    emb = Embeddings({"path": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2", "content": True})
+
+    emb.index([{"table_name": command["table_name"], "table_description": command["table_description"],
+                "field_name": command["field_name"], "field_type": command["field_type"], "field_references": command["field_references"],
+                "text": command["table_description"]} for command in commands])
+    return emb
+
+
+def getDictionariesFolderPath():
+    utils_folder_path = os.path.dirname(os.path.realpath(__file__))
+    dictionaries_folder_path = os.path.abspath(os.path.join(utils_folder_path, "database"))
+    return dictionaries_folder_path
+
 
 def checkData(username, password):
     file_path = os.path.join(dirPath, "pswrd.csv")

@@ -9,7 +9,7 @@ import time
 
 from guiAdmin import guiAdmin
 from guiFileOperations import getFiles
-from guiEmbedder import generatePromptUser, loadIndex
+from guiEmbedder import generatePrompt, loadIndex
 
 # risposta del chatbot
 def answer(assistant_response):
@@ -58,19 +58,19 @@ def guiUser():
         st.session_state.option = st.selectbox('Data dictionary file:', st.session_state.files)
         st.write("***")
         guiAdmin()
-        
+
     # Display chat messages from history on app rerun
     for message in st.session_state.chat:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
-    
+
     # effettua gli upsert solo se il dizionario dati selezionato è cambiato rispetto a prima
     if (st.session_state.option != st.session_state.option_prev) and (st.session_state.option != None):
         answer(f"Switching data dictionary to \"{st.session_state.option}\"...")
         with st.spinner('Loading...'):
             loadIndex(st.session_state.option)
         answer(f"Data dictionary switched to \"{st.session_state.option}\" correctly 👍")
-    
+
     # React to user input
     if prompt := st.chat_input("Insert natural language query here"):
         # Display user message in chat message container
@@ -88,7 +88,8 @@ def guiUser():
                 t_end = 2.75
                 sleep_duration = random.uniform(t_start, t_end)
                 time.sleep(sleep_duration)
-                st.code(generatePromptUser(st.session_state.emb, prompt), language='markdown')
+                #st.session_state.option
+                st.code(generatePrompt(st.session_state.emb, prompt, st.session_state.option), language='markdown')
         else:
             answer("Cannot answer without a data dictionary file. Please upload one using the admin section.")
         
