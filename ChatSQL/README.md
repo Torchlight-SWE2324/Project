@@ -23,7 +23,7 @@ git clone https://github.com/Torchlight-SWE2324/ChatSQL.git
 
 ### Step Three
 
-Now you need to install the necessary libraries. To do this, go to the ```ChatSQL\code`` folder and run the following command in a terminal
+Now you need to install the necessary libraries. To do this, go to the ```ChatSQL`` folder and run the following command in a terminal
 
 ```shell
 pip install -r requirements.txt
@@ -32,7 +32,7 @@ pip install -r requirements.txt
 Alternatively, you can specify the path to the ```requirements.txt``` file:
 
 ```shell
-pip install -r \path\to\ChatSQL\code\requirements.txt
+pip install -r \path\to\ChatSQL\requirements.txt
 ```
 
 ### Step Four
