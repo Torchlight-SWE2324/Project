@@ -66,9 +66,9 @@ def guiUser():
         answer(f"Data dictionary switched to \"{st.session_state.option}\" correctly.")
 
     if st.session_state.option is None:
-        st.chat_input("Currently there are no data dictionary uploaded. Please upload one first using the admin section.", disabled=True)
+        st.chat_input("No data dictionary uploaded. Please use the admin section to upload one.", disabled=True)
     else:
-        st.chat_input(disabled=False)    
+        st.chat_input(disabled=False)
         # React to user input
         if prompt := st.chat_input("Insert natural language query here"):
             # Display user message in chat message container
