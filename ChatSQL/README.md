@@ -4,10 +4,11 @@
 
 ### Step One
 
-Ensure that you have Python 3.9 or a higher version installed on your computer. You can download it from the following link: <https://www.python.org/downloads/>.
+Ensure that you have Python 3.11 installed on your computer. You can download it from the following link: <https://www.python.org/downloads/>.
 
 > [!NOTE]
-> Please note that the program has been tested with versions of Python ranging from 3.9 to 3.11.6. Versions lower than 3.9 may not be compatible.
+> Please note that the program has been tested with versions of Python ranging from 3.11 to 3.11.6. Versions lower than that may not be compatible.
+> Tests w'ere also conducted with Python 3.9 and 3.10, but the program did not work properly, due to problems with the libraries.
 > The latest version of Python, 3.12, has been tested but is not recommended for use with the current version of *txtai*.
 
 ### Step Two
