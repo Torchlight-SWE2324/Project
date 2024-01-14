@@ -67,13 +67,13 @@
         {
           "name": "movie_id",
           "type": "integer",
-          "references": "movies.id",
+          "references": {"table_name":"movies", "field_name": "id"},
           "description": "Foreign key referencing the movie in which the actor participated"
         },
         {
           "name": "actor_id",
           "type": "integer",
-          "references": "actors.id",
+          "references": {"table_name":"actors", "field_name": "id"},
           "description": "Foreign key referencing the actor who participated in the movie"
         }
       ]

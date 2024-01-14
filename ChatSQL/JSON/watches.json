@@ -67,13 +67,13 @@
         {
           "name": "watch_id",
           "type": "integer",
-          "references": "watches",
+          "references": {"table_name":"watches", "field_name": "id"},
           "description": "Foreign key referencing the watch"
         },
         {
           "name": "owner_id",
           "type": "integer",
-          "references": "owners",
+          "references": {"table_name":"owners", "field_name": "id"},
           "description": "Foreign key referencing the owner of the watch"
         },
         {
