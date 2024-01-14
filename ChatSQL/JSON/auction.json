@@ -1,0 +1,205 @@
+{
+    "tables": [
+        {
+            "name": "auctions",
+            "table-description": "Table containing information about auctions",
+            "columns": [
+                {
+                    "name": "id",
+                    "type": "integer",
+                    "references": null,
+                    "description": "Unique identifier assigned to each auction"
+                },
+                {
+                    "name": "title",
+                    "type": "string",
+                    "references": null,
+                    "description": "Title of the auction"
+                },
+                {
+                    "name": "start_date",
+                    "type": "datetime",
+                    "references": null,
+                    "description": "Date and time when the auction starts"
+                },
+                {
+                    "name": "end_date",
+                    "type": "datetime",
+                    "references": null,
+                    "description": "Date and time when the auction ends"
+                },
+                {
+                    "name": "staff_id",
+                    "type": "integer",
+                    "references": {
+                        "table_name": "auction_staff",
+                        "field_name": "id"
+                    },
+                    "description": "Foreign key referencing the staff managing the auction"
+                }
+            ]
+        },
+        {
+            "name": "items",
+            "table-description": "Table containing information about auction items",
+            "columns": [
+                {
+                    "name": "id",
+                    "type": "integer",
+                    "references": null,
+                    "description": "Unique identifier assigned to each auction item"
+                },
+                {
+                    "name": "name",
+                    "type": "string",
+                    "references": null,
+                    "description": "Name of the auction item"
+                },
+                {
+                    "name": "description",
+                    "type": "text",
+                    "references": null,
+                    "description": "Description of the auction item"
+                },
+                {
+                    "name": "starting_bid",
+                    "type": "decimal",
+                    "references": null,
+                    "description": "Starting bid amount for the auction item"
+                }
+            ]
+        },
+        {
+            "name": "bidders",
+            "table-description": "Table containing information about bidders",
+            "columns": [
+                {
+                    "name": "id",
+                    "type": "integer",
+                    "references": null,
+                    "description": "Unique identifier assigned to each bidder"
+                },
+                {
+                    "name": "name",
+                    "type": "string",
+                    "references": null,
+                    "description": "Full name of the bidder"
+                },
+                {
+                    "name": "email",
+                    "type": "string",
+                    "references": null,
+                    "description": "Email address of the bidder"
+                }
+            ]
+        },
+        {
+            "name": "bids",
+            "table-description": "Table containing information about bids",
+            "columns": [
+                {
+                    "name": "id",
+                    "type": "integer",
+                    "references": null,
+                    "description": "Unique identifier assigned to each bid"
+                },
+                {
+                    "name": "bid_amount",
+                    "type": "decimal",
+                    "references": null,
+                    "description": "Amount of the bid"
+                },
+                {
+                    "name": "bidder_id",
+                    "type": "integer",
+                    "references": {
+                        "table_name": "bidders",
+                        "field_name": "id"
+                    },
+                    "description": "Foreign key referencing the bidder who placed the bid"
+                },
+                {
+                    "name": "item_id",
+                    "type": "integer",
+                    "references": {
+                        "table_name": "items",
+                        "field_name": "id"
+                    },
+                    "description": "Foreign key referencing the item for which the bid is placed"
+                }
+            ]
+        },
+        {
+            "name": "winning_bids",
+            "table-description": "Table containing information about winning bids",
+            "columns": [
+                {
+                    "name": "id",
+                    "type": "integer",
+                    "references": null,
+                    "description": "Unique identifier assigned to each winning bid entry"
+                },
+                {
+                    "name": "bid_id",
+                    "type": "integer",
+                    "references": {
+                        "table_name": "bids",
+                        "field_name": "id"
+                    },
+                    "description": "Foreign key referencing the bid that won the auction item"
+                }
+            ]
+        },
+        {
+            "name": "payment_records",
+            "table-description": "Table containing information about payment records",
+            "columns": [
+                {
+                    "name": "id",
+                    "type": "integer",
+                    "references": null,
+                    "description": "Unique identifier assigned to each payment record"
+                },
+                {
+                    "name": "bid_id",
+                    "type": "integer",
+                    "references": {
+                        "table_name": "bids",
+                        "field_name": "id"
+                    },
+                    "description": "Foreign key referencing the bid for which the payment is made"
+                },
+                {
+                    "name": "payment_date",
+                    "type": "datetime",
+                    "references": null,
+                    "description": "Date and time when the payment was made"
+                }
+            ]
+        },
+        {
+            "name": "auction_staff",
+            "table-description": "Table containing information about staff involved in the auction",
+            "columns": [
+                {
+                    "name": "id",
+                    "type": "integer",
+                    "references": null,
+                    "description": "Unique identifier assigned to each staff member"
+                },
+                {
+                    "name": "name",
+                    "type": "string",
+                    "references": null,
+                    "description": "Full name of the staff member"
+                },
+                {
+                    "name": "role",
+                    "type": "string",
+                    "references": null,
+                    "description": "Role or position of the staff member in the auction"
+                }
+            ]
+        }
+    ]
+}
