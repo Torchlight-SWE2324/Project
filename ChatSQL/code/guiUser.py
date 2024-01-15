@@ -65,16 +65,19 @@ def guiUser():
             loadIndex(st.session_state.option)
         answer(f"Data dictionary switched to \"{st.session_state.option}\" correctly.")
 
-    # React to user input
-    if prompt := st.chat_input("Insert natural language query here"):
-        # Display user message in chat message container
-        with st.chat_message("user"):
-            st.markdown(prompt)
-        # Add user message to chat history
-        st.session_state.chat.append({"role": "user", "content": prompt})
+    if st.session_state.option is None:
+        st.chat_input("No data dictionary uploaded. Please use the admin section to upload one.", disabled=True)
+    else:
+        st.chat_input(disabled=False)
+        # React to user input
+        if prompt := st.chat_input("Insert natural language query here"):
+            # Display user message in chat message container
+            with st.chat_message("user"):
+                st.markdown(prompt)
+            # Add user message to chat history
+            st.session_state.chat.append({"role": "user", "content": prompt})
 
-        # Display assistant response in chat message container
-        if st.session_state.option != None:
+            # Display assistant response in chat message container
             answer("Generating SQL query...")
 
             with st.spinner('Loading whimsical wonders and dazzling delights into the digital playground of possibilities!'):
@@ -84,8 +87,6 @@ def guiUser():
                 time.sleep(sleep_duration)
                 #st.session_state.option
                 st.code(generatePrompt(st.session_state.emb, prompt, st.session_state.option), language='markdown')
-        else:
-            answer("Cannot answer without a data dictionary file. Please upload one using the admin section.")
-        
+      
 if __name__ == "__main__":
     guiUser()
