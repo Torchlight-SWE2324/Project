@@ -59,29 +59,29 @@ def generatePrompt(emb, user_query, dictionary_name):
                 tables_with_fields_list.append(table_with_fields)
 
     if len(tables_with_fields_list) > 0:
-        admin_prompt = ""
+        technician_prompt = ""
         if st.session_state.logged_in == True:
-            admin_prompt = "ADMIN MODE\nShowing sentences similarity scores:\n\n"
+            technician_prompt = "TECHNICIAN MODE\nShowing results score(s) from the database:\n"
             embedder_search_result_adim = emb.search(f"select score, text, table_name, from txtai where similar('{user_query}') group by table_name limit 200")
             for result in embedder_search_result_adim:
-                admin_prompt += f"table '{result['table_name']}' with score {result['score']}\n"
-            admin_prompt += "\n"
+                technician_prompt += f"table '{result['table_name']}' with score {result['score']}\n"
+            technician_prompt += "\n"
 
-        prompt = admin_prompt + "The data base contain the following tables:\n"
+        prompt = technician_prompt + "The database contain(s) the following table(s):\n"
 
         for table in tables_with_fields_list:
-            prompt += f"table '{table['table_name']}' with fields:\n"
+            prompt += f"- table '{table['table_name']}' with field(s):\n"
 
             for field in table['fields_list']:
                 prompt += f"'{field['field_name']}' that contain {field['field_description']};\n"
             prompt += "\n"
 
         if len(referencies_list) > 0:
-            prompt += "and the database contains the following relationships:\n"
+            prompt += "and the database contain(s) the following relationship(s):\n"
             for reference in referencies_list:
-                prompt += reference
+                prompt += f"- {reference}\n"
 
-        prompt += f"\nGenerate the SQL query equivalent to: {user_query}"
+        prompt += f"Generate the SQL query equivalent to: {user_query}"
         return prompt
 
     else:
