@@ -46,7 +46,7 @@ def generatePrompt(emb, user_query, dictionary_name):
 
     # Creazione prompt per User
     else:
-        embedder_search_result = emb.search(f"select score, text, table_name, table_description, field_name, field_type, field_references, from txtai where similar('{user_query}') and score > 0.2 group by table_name ")
+        embedder_search_result = emb.search(f"select score, text, table_name, table_description, field_name, field_type, field_references, from txtai where similar('{user_query}') and score > 0.25 group by table_name")
 
         dictionary_path = os.path.join(getDictionariesFolderPath(), dictionary_name)
 

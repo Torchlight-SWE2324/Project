@@ -66,7 +66,7 @@ def guiUser():
         answer(f"Data dictionary switched to \"{st.session_state.option}\" correctly.")
 
     if st.session_state.option is None:
-        st.chat_input("No data dictionary uploaded. Please log in as a technician to upload one.", disabled=True)
+        st.chat_input("No relevant information was found in relation to the request. Try asking again with something different. Remember that the scope of the application is to ask requests that can be turned into a SQL query.", disabled=True)
     else:
         st.chat_input(disabled=False)
         # React to user input
