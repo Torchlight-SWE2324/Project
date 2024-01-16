@@ -33,7 +33,7 @@ def init():
 
 def guiAdmin():
     init()
-    st.header("Admin menu")
+    st.header("Technician section")
 
     if not st.session_state.logged_in:
         username = st.text_input("Username")
