@@ -2,77 +2,75 @@
   "tables": [
     {
       "name": "customers",
-      "table-description": "Table containing all customers who have placed orders",
       "columns": [
         {
           "name": "id",
           "type": "integer",
-          "table-description": "Unique identifier for the customer"
+          "references": null,
+          "description": "Unique identifier for the customer"
         },
         {
           "name": "name",
           "type": "string",
-          "table-description": "Customer's full name"
+          "references": null,
+          "description": "Customer's full name"
         },
         {
           "name": "email",
           "type": "string",
-          "table-description": "Customer's email address"
+          "description": "Customer's email address"
         }
       ]
     },
     {
       "name": "products",
-      "table-description": "Table containing all products available for purchase",
       "columns": [
         {
           "name": "id",
           "type": "integer",
+          "references": null,
           "description": "Unique identifier for the product"
         },
         {
           "name": "name",
           "type": "string",
+          "references": null,
           "description": "Product name"
         },
         {
           "name": "price",
           "type": "decimal",
+          "references": null,
           "description": "Product price"
         }
       ]
     },
     {
       "name": "orders",
-      "table-description": "Table containing all orders placed by customers",
+      "table_description": "Orders placed by customers",
       "columns": [
         {
           "name": "id",
-          "type": "integer",
+          "type": "",
+          "references": null,
           "description": "Unique identifier for the order"
         },
         {
           "name": "customer_id",
           "type": "integer",
-          "references": {
-            "field_name": "id",
-            "table_name": "customers"
-          },
+          "references": "customers",
           "description": "Foreign key referencing the customer who placed the order"
         },
         {
           "name": "product_id",
           "type": "integer",
-          "references": {
-            "field_name": "id",
-            "table_name": "products"
-          },
+          "references": "products",
           "description": "Foreign key referencing the product ordered"
         },
         {
           "name": "quantity",
           "type": "integer",
-          "description": "Quantity of the product ordered"
+          "references": null
         }
       ]
     }
