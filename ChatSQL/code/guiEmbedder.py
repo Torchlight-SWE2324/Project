@@ -90,4 +90,4 @@ def generatePrompt(emb, user_query, dictionary_name):
             return prompt
 
         else:
-            return "No relevant information was found regarding your request. Please try again with a different query. Please note that this application is designed to handle requests that can be translated into a SQL query."
+            return "No relevant information was found regarding your request. \nPlease try again with a different query. \nPlease note that this application is designed to handle requests that \ncan be translated into a SQL query."
