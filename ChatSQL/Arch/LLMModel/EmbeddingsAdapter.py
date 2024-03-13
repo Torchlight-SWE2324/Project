@@ -1,7 +1,7 @@
 from txtai import Embeddings
 
 
-class EmbeddingsAdapter(self, embeddingsChatSQL):
+class EmbeddingsAdapter(embeddingsChatSQL):
     def __init__(self, embeddingsChatSQL) -> None:
         self.embeddingsChatSQL = embeddingsChatSQL
         
@@ -21,7 +21,7 @@ class EmbeddingsAdapter(self, embeddingsChatSQL):
         emb = Embeddings({"path": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2", "content": True})
         emb.load(path)
 
-    def search(self, emb, user_query, dictionary_name):
+    """def search(self, emb, user_query, dictionary_name):
         if emb == None:
             return "Error: there is no model connected"
-        else:
+        else:"""
