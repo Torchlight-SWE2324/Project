@@ -3,18 +3,18 @@ from model import *
 
 class View():
     def __init__(self):
+        self._model = Model()
         st.title("ChatSQL")
         st.subheader("Type your natural language query in the chat box below and press enter to get the corresponding SQL query.")
 
-    def ask_user(self):
-        return st.text_input("Inserisci un nuovo stato")
-
-    def update(self, state):
-        st.write(f"Stato aggiornato a: {state}")
-        
+    
     def technician_login(self):
         st.sidebar.title("Login sidebar")
         usernameSidebar = st.sidebar.text_input("Username")
         passwordSidebar = st.sidebar.text_input("Password", type="password")
         if st.sidebar.button("Login"):
-            return usernameSidebar, passwordSidebar
+            if (self._model.checkLogin(usernameSidebar, passwordSidebar)):
+                st.success("Login successful!")
+            else:
+                st.error("Login failed. Invalid username or password.")    
+            #return [usernameSidebar, passwordSidebar]

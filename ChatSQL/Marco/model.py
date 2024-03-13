@@ -24,5 +24,5 @@ class Model:
         else:
             return False
     
-    def getLoginData(self):
-        return checkLogin(self._username, self._password)
+    #def getLoginData(self):
+        #return checkLogin(self._username, self._password)
