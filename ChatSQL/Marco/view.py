@@ -17,4 +17,3 @@ class View():
                 st.success("Login successful!")
             else:
                 st.error("Login failed. Invalid username or password.")    
-            #return [usernameSidebar, passwordSidebar]
