@@ -1,9 +1,12 @@
+from Subject import Subject
 
-class Model:
+class Model(Subject):
     def __init__(self):
+        super().__init__()
         self._state = ""
         self._username = ""
         self._password = ""
+        self.isLogged = False
 
     def get_state(self):
         return self._state
@@ -11,19 +14,23 @@ class Model:
     def set_state(self, state):
         self._state = state
 
-    def defineLoginData(self, username, password):
+    def define_login_data(self, username, password):
         self._username = username
         self._password = password
 
-    def checkLogin(self, username, password):
-        #username = self._username
-        #password = self._password
-        self._username = username
-        self._password = password
-        if self._username == "admin" and self._password == "admin":
+    def check_login(self, username, password):
+        print("check")
+        if username == "admin" and password == "admin":
+            self.isLogged = True
+            self.notify_observers()
             return True
         else:
+            self.login_failure()
             return False
-    
-    #def getLoginData(self):
-        #return checkLogin(self._username, self._password)
+        
+    def login_failure(self):
+        self.isLogged = False
+        self.notify_observers()
+
+    def getIsLogedd(self):
+        return self.isLogged

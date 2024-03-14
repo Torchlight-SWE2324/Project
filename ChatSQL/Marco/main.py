@@ -1,8 +1,14 @@
 from controller import *
 
 def main():
-    controller = Controller()
-    controller.verify_login()
+    model = Model()
+    view = View(model)
+    controller = Controller(model, view)
+
+    model.attach(view)
+    view.attach(controller)
+
+    view.technician_login()
 
 
 if __name__ == "__main__":
