@@ -7,49 +7,18 @@ class Controller(Observer):
     def __init__(self, model, view):
         self._model = model
         self._view = view
-        #self._model.attach(self)
-        #self._view.attach(self)
         self.button_command_map = {}
         
-        
+    def initialize_commands(self):  
+        self.button_command_map["login"] = self.login    
 
     def update(self):
+        operazione = self._view.getOperazione()
+        if operazione in self.button_command_map:
+            command = self.button_command_map[operazione]
+            print("Command")
+            command()
+            
+    def login(self):
         user, psswd = self._view.getUser()
-        self._model.check_login(user, psswd)
-        
-
-    
-
-    """
-    # get the array of users, and then pass it into the model w/ check_login
-    def update(self):
-        print("CONTROLLER")
-        user, psswd = self._view.getUser()
-        if self._model.check_login(user, psswd):
-         
-
-        #call update view
-        #self._view.update()
-
-
-    class UseerInputController:
-    def __init__(self):
-        self.button_command_map = {}
-
-    def initialize(self):
-        self.button_command_map["LoginButton"] = LoginCmd()
-        self.button_command_map["LogoutButton"] = LogoutCmd()
-
-        # Set click handlers for all buttons
-        for button_label, command in self.button_command_map.items():
-            button = getattr(self, button_label)
-            button.on_click(self.create_click_handler(command))
-
-    def create_click_handler(self, command):
-        def click_handler():
-            self.update(command)
-        return click_handler
-
-    def update(self, command):
-        command.execute()
-    """
+        self._model.check_login(user, psswd) 
