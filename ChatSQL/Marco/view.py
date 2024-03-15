@@ -14,8 +14,6 @@ class View(Observer, Subject):
         self.username = None
         self.password = None
         self.isLogged = False
-    
-
         
     def successLogin(self):
         self.isLogged = True
@@ -41,9 +39,7 @@ class View(Observer, Subject):
                 self.successLogout()
                 print("View: No2")
 
-
     def technician_login(self):
-    
         self.username = st.sidebar.text_input("Username")
         self.password = st.sidebar.text_input("Password", type="password")
     

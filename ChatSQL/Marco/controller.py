@@ -11,8 +11,6 @@ class Controller(Observer):
         #self._view.attach(self)
         self.button_command_map = {}
         
-        
-
     def update(self):
         user, psswd = self._view.getUser()
         self._model.check_login(user, psswd)
