@@ -1,55 +1,61 @@
 import streamlit as st
 from observer import *
-from Subject import *
+from subject import *
 class View(Observer, Subject):
     def __init__(self, model):
         Subject.__init__(self)
         Observer.__init__(self)
         self._model = model
-        #self._model.attach(self)
-        #self.attach(self)
-        st.title("ChatSQL")
-        st.subheader("Type your natural language query in the chat box below and press enter to get the corresponding SQL query.")
-        st.sidebar.title("Login sidebar")
         self.username = None
         self.password = None
         self.isLogged = False
-        
-    def successLogin(self):
-        self.isLogged = True
-        st.success("Login successful!")
+        self.ultimaOperazione = None
+        self.button_command_map = {}
 
-    def erroreLogin(self):
-        st.error("Login NO")
+    def sezioneUtente(self):  
+        st.title("ChatSQL")
+        st.subheader("Type your natural language query in the chat box below and press enter to get the corresponding SQL query.")
+        self.sideBarUtente()
+        self.chatUtente()
 
-    def successLogout(self):
-        self.isLogged = False
-        st.success("Logout successful!")
-
-    def update(self):
-        print("View: Updating view")
-        if self._model.getIsLogedd():   # valore dentro al model                                    
-            self.successLogin()
-            print("View: Login successful")
-        else:
-            if self.isLogged == False: # valore dentro alla view
-                self.erroreLogin()
-                print("View: No1")
-            else: 
-                self.successLogout()
-                print("View: No2")
-
-    def technician_login(self):
+    def sideBarUtente(self):
+        st.sidebar.title("Login sidebar")
         self.username = st.sidebar.text_input("Username")
         self.password = st.sidebar.text_input("Password", type="password")
-    
-        if st.sidebar.button("LoginButton"):
-            #st.success("Login successful!")
-            #if not empty
-            if self.username or self.password:
-                self.notify_observers()
+        clickLogin = st.sidebar.button("Login")
+        if clickLogin: #se viene schiacciato bottone chiamo funzione OperazioneLogin
+            self.operazioneLogin() 
 
-            #st.error("Login failed. Invalid username or password.")
+    def chatUtente(self):
+        pass
+    
+    def initialize_commands(self):  
+        self.button_command_map["login"] = self.esitoLogin   
+
+    def update(self):
+        if self.ultimaOperazione in self.button_command_map:
+            command = self.button_command_map[self.ultimaOperazione]
+            command()
+
+#operazione login
+    def operazioneLogin(self):
+        if self.username != None or self.password != None:
+            self.ultimaOperazione= "login"
+            self.notify_observers()
+
+    def esitoLogin(self):
+        if self._model.getIsLogedd():   # valore dentro al model                                    
+            self.isLogged = True
+            st.success("Login successful!")
+        else:
+            if self.isLogged == False: # valore dentro alla view
+                st.error("Login non avvenuto con successo")
+            else: 
+                self.isLogged = False
+                st.success("Logout successful!")
 
     def getUser(self):
         return [self.username, self.password]
+    
+    def getOperazione(self):
+        return self.ultimaOperazione

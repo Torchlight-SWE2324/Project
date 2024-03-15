@@ -14,7 +14,5 @@ class Subject(ABC):
         self._observers.remove(observer)
 
     def notify_observers(self):
-        print("subject")
         for observer in self._observers:
-            print("1")
             observer.update()
