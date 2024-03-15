@@ -29,18 +29,14 @@ class EmbeddingsHandler:
                 # Create the emb.upsert command
                 dictionary = {"table_name": table_name, "table_description": table_description, "field_name": field_name,
                             "field_type": type, "field_references": references, "field_description": description}
-
                 commands.append(dictionary)
-
         return commands
     
     #upsert
     # Dato un insieme di comandi upsert, crea un indice txtai e lo restituisce
     def load(self, commands):
         emb = Embeddings({"path": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2", "content": True})
-
         emb.index([{"table_name": command["table_name"], "table_description": command["table_description"], "field_name": command["field_name"], "field_type": command["field_type"], "field_references": command["field_references"], "text": command["table_description"]} for command in commands])
-
         return emb
 
 
