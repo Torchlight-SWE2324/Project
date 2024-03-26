@@ -1,0 +1,319 @@
+{
+    "tables": [
+        {
+            "name": "books",
+            "table-description": "Table containing information about books",
+            "columns": [
+                {
+                    "name": "id",
+                    "type": "integer",
+                    "references": null,
+                    "description": "Unique identifier assigned to each book"
+                },
+                {
+                    "name": "title",
+                    "type": "string",
+                    "references": null,
+                    "description": "Title of the book"
+                },
+                {
+                    "name": "author_id",
+                    "type": "integer",
+                    "references": {
+                        "table_name": "authors",
+                        "field_name": "id"
+                    },
+                    "description": "Foreign key referencing the author of the book"
+                },
+                {
+                    "name": "publication_date",
+                    "type": "date",
+                    "references": null,
+                    "description": "Date when the book was published"
+                },
+                {
+                    "name": "genre",
+                    "type": "string",
+                    "references": null,
+                    "description": "Genre or category of the book"
+                }
+            ]
+        },
+        {
+            "name": "authors",
+            "table-description": "Table containing information about authors",
+            "columns": [
+                {
+                    "name": "id",
+                    "type": "integer",
+                    "references": null,
+                    "description": "Unique identifier assigned to each author"
+                },
+                {
+                    "name": "name",
+                    "type": "string",
+                    "references": null,
+                    "description": "Full name of the author"
+                },
+                {
+                    "name": "birth_date",
+                    "type": "date",
+                    "references": null,
+                    "description": "Date of birth of the author"
+                }
+            ]
+        },
+        {
+            "name": "publishers",
+            "table-description": "Table containing information about publishers",
+            "columns": [
+                {
+                    "name": "id",
+                    "type": "integer",
+                    "references": null,
+                    "description": "Unique identifier assigned to each publisher"
+                },
+                {
+                    "name": "name",
+                    "type": "string",
+                    "references": null,
+                    "description": "Name of the publisher"
+                },
+                {
+                    "name": "founding_date",
+                    "type": "date",
+                    "references": null,
+                    "description": "Date when the publisher was founded"
+                }
+            ]
+        },
+        {
+            "name": "library_branches",
+            "table-description": "Table containing information about library branches",
+            "columns": [
+                {
+                    "name": "id",
+                    "type": "integer",
+                    "references": null,
+                    "description": "Unique identifier assigned to each library branch"
+                },
+                {
+                    "name": "name",
+                    "type": "string",
+                    "references": null,
+                    "description": "Name of the library branch"
+                },
+                {
+                    "name": "location",
+                    "type": "string",
+                    "references": null,
+                    "description": "Location or address of the library branch"
+                }
+            ]
+        },
+        {
+            "name": "book_copies",
+            "table-description": "Table containing information about copies of books in the library",
+            "columns": [
+                {
+                    "name": "id",
+                    "type": "integer",
+                    "references": null,
+                    "description": "Unique identifier assigned to each book copy"
+                },
+                {
+                    "name": "book_id",
+                    "type": "integer",
+                    "references": {
+                        "table_name": "books",
+                        "field_name": "id"
+                    },
+                    "description": "Foreign key referencing the book that the copy belongs to"
+                },
+                {
+                    "name": "library_branch_id",
+                    "type": "integer",
+                    "references": {
+                        "table_name": "library_branches",
+                        "field_name": "id"
+                    },
+                    "description": "Foreign key referencing the library branch where the copy is located"
+                },
+                {
+                    "name": "availability_status",
+                    "type": "boolean",
+                    "references": null,
+                    "description": "Status indicating whether the book copy is available for borrowing"
+                }
+            ]
+        },
+        {
+            "name": "members",
+            "table-description": "Table containing information about library members",
+            "columns": [
+                {
+                    "name": "id",
+                    "type": "integer",
+                    "references": null,
+                    "description": "Unique identifier assigned to each library member"
+                },
+                {
+                    "name": "name",
+                    "type": "string",
+                    "references": null,
+                    "description": "Full name of the library member"
+                },
+                {
+                    "name": "membership_start_date",
+                    "type": "date",
+                    "references": null,
+                    "description": "Date when the library member's membership started"
+                }
+            ]
+        },
+        {
+            "name": "borrowed_books",
+            "table-description": "Table containing information about books borrowed by library members",
+            "columns": [
+                {
+                    "name": "id",
+                    "type": "integer",
+                    "references": null,
+                    "description": "Unique identifier assigned to each borrowed book entry"
+                },
+                {
+                    "name": "book_copy_id",
+                    "type": "integer",
+                    "references": {
+                        "table_name": "book_copies",
+                        "field_name": "id"
+                    },
+                    "description": "Foreign key referencing the book copy that is borrowed"
+                },
+                {
+                    "name": "member_id",
+                    "type": "integer",
+                    "references": {
+                        "table_name": "members",
+                        "field_name": "id"
+                    },
+                    "description": "Foreign key referencing the library member who borrowed the book"
+                },
+                {
+                    "name": "borrow_date",
+                    "type": "datetime",
+                    "references": null,
+                    "description": "Date and time when the book was borrowed"
+                },
+                {
+                    "name": "return_date",
+                    "type": "datetime",
+                    "references": null,
+                    "description": "Date and time when the book is due to be returned"
+                }
+            ]
+        },
+        {
+            "name": "book_reviews",
+            "table-description": "Table containing information about reviews for books",
+            "columns": [
+                {
+                    "name": "id",
+                    "type": "integer",
+                    "references": null,
+                    "description": "Unique identifier assigned to each book review"
+                },
+                {
+                    "name": "book_id",
+                    "type": "integer",
+                    "references": {
+                        "table_name": "books",
+                        "field_name": "id"
+                    },
+                    "description": "Foreign key referencing the book being reviewed"
+                },
+                {
+                    "name": "member_id",
+                    "type": "integer",
+                    "references": {
+                        "table_name": "members",
+                        "field_name": "id"
+                    },
+                    "description": "Foreign key referencing the member who wrote the review"
+                },
+                {
+                    "name": "rating",
+                    "type": "integer",
+                    "references": null,
+                    "description": "Rating given to the book in the review"
+                },
+                {
+                    "name": "comment",
+                    "type": "text",
+                    "references": null,
+                    "description": "Comments or feedback provided in the review"
+                }
+            ]
+        },
+        {
+            "name": "library_events",
+            "table-description": "Table containing information about events hosted by the library",
+            "columns": [
+                {
+                    "name": "id",
+                    "type": "integer",
+                    "references": null,
+                    "description": "Unique identifier assigned to each library event"
+                },
+                {
+                    "name": "title",
+                    "type": "string",
+                    "references": null,
+                    "description": "Title of the library event"
+                },
+                {
+                    "name": "event_date",
+                    "type": "datetime",
+                    "references": null,
+                    "description": "Date and time of the library event"
+                },
+                {
+                    "name": "location",
+                    "type": "string",
+                    "references": null,
+                    "description": "Location or venue of the library event"
+                }
+            ]
+        },
+        {
+            "name": "event_attendees",
+            "table-description": "Table containing information about attendees of library events",
+            "columns": [
+                {
+                    "name": "id",
+                    "type": "integer",
+                    "references": null,
+                    "description": "Unique identifier assigned to each event attendee"
+                },
+                {
+                    "name": "event_id",
+                    "type": "integer",
+                    "references": {
+                        "table_name": "library_events",
+                        "field_name": "id"
+                    },
+                    "description": "Foreign key referencing the library event attended"
+                },
+                {
+                    "name": "member_id",
+                    "type": "integer",
+                    "references": {
+                        "table_name": "members",
+                        "field_name": "id"
+                    },
+                    "description": "Foreign key referencing the library member who attended the event"
+                }
+            ]
+        }
+    ]
+}
