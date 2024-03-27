@@ -1,6 +1,8 @@
 import streamlit as st
 from controller import *
 
+
+
 class ViewUtente:
     def __init__(self, controllerAut, controllerSel):
         self._controllerAut = controllerAut
@@ -23,7 +25,8 @@ class ViewUtente:
 
     def selectDictionary(self):
         files = self._controllerSel.getFiles()
-        self.dizionariS.selectbox('Your data dictionary files', files, key="dizionari")
+        file = self.dizionariS.selectbox('Your data dictionary files', files, key="dizionari")
+        self._controllerSel.setDizionario(file)
 
     def login(self):
         self.username = self.usernameS.text_input("Username")
@@ -31,7 +34,6 @@ class ViewUtente:
         self.login_button = self.loginS.button("Login")
         if self.login_button:
             self._controllerAut.updateLoginData(self.username, self.password)
-
 
     def esitoPositivo(self):
         st.success("Login avvenuto")
@@ -103,7 +105,7 @@ class ViewTecnico:
     def deleteFile(self):
         files = self._controllerSel.getFiles()
         file = self.container_delete.selectbox('Your data dictionary files', files, key="dizionari")
-        print(file)
+        self._controllerSel.setDizionario(file)
         # database -> file
         # .join("database", "file")
 
@@ -120,10 +122,12 @@ class ViewTecnico:
 
 
 class ViewChat:
-    def __init__(self, controllerCha, controllerAut):
+    def __init__(self, controllerCha, controllerAut, controllerSel):
         self._controllerChat = controllerCha
         self._controllerAut = controllerAut
+        self._controllerSel = controllerSel
         self.user_input = None
+        self.dizionarioAttuale = None
 
     def display_data(self):
         self.user_input = st.chat_input("Type your query here", key="chat", max_chars=500)
@@ -132,14 +136,15 @@ class ViewChat:
             self.selectChat()
 
     def selectChat(self):
+        self.dizionarioAttuale = self._controllerSel.getDizionario()
         if self._controllerAut.getLoggedState():
             #Tecnico
             print("Accesso come tecnico")
-            self._controllerChat.operazioneDebug(self.user_input)
+            self._controllerChat.operazioneDebug(self.user_input, self.dizionarioAttuale)
         else:
             #Utente
             print("Accesso come utente")
-            self._controllerChat.operazionePrompt(self.user_input)
+            self._controllerChat.operazionePrompt(self.user_input, self.dizionarioAttuale)
 
     def showResponse(self, messaggio):
         st.code(f"Response: {messaggio}", language="markdown")

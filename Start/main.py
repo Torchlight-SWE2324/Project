@@ -23,7 +23,7 @@ if __name__ == "__main__":
     #view
     viewUtente = ViewUtente(controllerAut, controllerSel)
     viewTecnico = ViewTecnico(controllerSel, controllerUp, controllerDel, controllerLog)
-    viewChat = ViewChat(controllerCha, controllerAut)
+    viewChat = ViewChat(controllerCha, controllerAut, controllerSel)
 
     #creazione view dei controller
     controllerAut._view = viewUtente
@@ -45,6 +45,7 @@ if __name__ == "__main__":
         viewTecnico.display_data()
 
     viewChat.display_data()
+
 #CHAT
     #modelChat = ModelAuthentication() #da rifare
     #controllerChat = ControllerTecnico(modelChat, None)  # Pass None temporarily

@@ -32,6 +32,12 @@ class ControllerSelezione:
 
     def getFiles(self):
         return self._model.filesInDB()  
+    
+    def setDizionario(self, dizionario):
+        self._model.setDizionarioAttuale(dizionario)
+#eliminare
+    def getDizionario(self):
+        return (self._model.getDizionarioAttuale())
 
 class ControllerUpload:
     def __init__(self, model, view):
@@ -78,13 +84,13 @@ class ControllerChat:
         self._model = model
         self._view = view  
 
-    def operazionePrompt(self, user_input):
-        self._model.generatePrompt(user_input)
+    def operazionePrompt(self, user_input, dizionario):
+        self._model.generatePrompt(user_input, dizionario)
         messaggio = self._model.getResponse()
         self._view.showResponse(messaggio)
 
-    def operazioneDebug(self, user_input):
-        self._model.generateDebug(user_input)
+    def operazioneDebug(self, user_input, dizionario):
+        self._model.generateDebug(user_input, dizionario)
         messaggio = self._model.getResponse()
         self._view.showResponse(messaggio)
     
