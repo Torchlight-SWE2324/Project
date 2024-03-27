@@ -1,7 +1,7 @@
 import csv
 import os
 
-
+from ResponseGenerator import *
 class ModelAuthentication:
     def __init__(self):
         self.utenteloggato = False
@@ -20,6 +20,12 @@ class ModelAuthentication:
     def logout(self):
         utenteloggato = False
         return utenteloggato
+    
+    def setUtenteLoggato(self, esito):
+        self.utenteloggato = esito
+
+    def getUtenteLoggato(self):
+        return self.utenteloggato
     
     
 class ModelSelezione:
@@ -65,4 +71,36 @@ class ModelDelete:
     
     def getEsitoFileEliminato(self):
         return self.file_deleted
+    
+class ModelChat:
+    def __init__(self):
+        self.response = ""
+
+    def generatePrompt(self, user_input):
+
+        self.response = "Generazione prompt"
+        
+        # emb = embedderFactory()       //crea l'embedder con l'indice corrente dentro
+        # dictionary_name = metodo()    //metodo di classe che si occupa di recuperare il dizionario corrente
+        #promptGen = ResponseUser()
+
+        #self.response = promptGen.generatePrompt(emb, user_input, dictionary_name)
+
+        
+    def generateDebug(self, user_input):
+
+        self.response = "Generazione debug"
+
+        # emb = embedderFactory()       //crea l'embedder con l'indice corrente dentro
+        #debugGen = ResponseTechnician()
+
+        #self.response = debugGen.generateDebug(emb, user_input)
+
+    def getResponse(self):
+        return self.response
+    
+    def setResponse(self, new_response):
+        self.response = new_response
+    
+
     

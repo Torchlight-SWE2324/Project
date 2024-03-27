@@ -19,15 +19,19 @@ class ViewUtente:
         st.subheader("Type your natural language query in the chat box below and press enter to get the corresponding SQL query.")
         self.titleS.title("Login sidebar")
         self.selectDictionary()
+        self.login()
+
+    def selectDictionary(self):
+        files = self._controllerSel.getFiles()
+        self.dizionariS.selectbox('Your data dictionary files', files, key="dizionari")
+
+    def login(self):
         self.username = self.usernameS.text_input("Username")
         self.password = self.passwordS.text_input("Password", type="password")
         self.login_button = self.loginS.button("Login")
         if self.login_button:
             self._controllerAut.updateLoginData(self.username, self.password)
 
-    def selectDictionary(self):
-        files = self._controllerSel.getFiles()
-        self.dizionariS.selectbox('Your data dictionary files', files, key="dizionari")
 
     def esitoPositivo(self):
         st.success("Login avvenuto")
@@ -51,12 +55,16 @@ class ViewTecnico:
         self._controllerLogout = controllerLogout
 
         self.fileUpload = None
+        self.containerNotifiche = st.sidebar.empty()
+        self.containerNotifiche1 = st.sidebar.empty()
         self.titleS = st.sidebar.empty()
         self.container_delete = st.sidebar.empty()
         self.button_delete = st.sidebar.empty()
         self.container_upload = st.sidebar.empty()
         self.button_upload = st.sidebar.empty()
         self.logoutS = st.sidebar.empty()
+
+        
 
     def display_data(self):
         st.title("ChatSQL")
@@ -72,7 +80,6 @@ class ViewTecnico:
         self.button_upload.button("Upload file", type="primary", on_click=lambda:self.operazioneUpload(uploaded_file), disabled=uploaded_file == None)
  
     def operazioneUpload(self, file):
-        print("FILE VIEW PASSATO")
         self.fileUpload = file
         self._controllerUp.updateFileData()
 
@@ -82,44 +89,59 @@ class ViewTecnico:
             self._controllerLogout.logout()
 
     def logoutEsito(self):
-        st.success("🚨LogOut Avvenuto con successo🚨")
+        self.containerNotifiche.success("🚨LogOut Avvenuto con successo🚨")
 
     def getFileUploaded(self):
         return self.fileUpload
     
     def esitoPositivo(self):
-        st.success("Caricamento dizionario avvenuto con successo")
+        self.containerNotifiche.success("Caricamento dizionario avvenuto con successo")
 
     def esitoNegativo(self):
-        st.error("Dizionario non caricato :( ")
+        self.containerNotifiche.error("Dizionario non caricato :( ")
 
     def deleteFile(self):
         files = self._controllerSel.getFiles()
         file = self.container_delete.selectbox('Your data dictionary files', files, key="dizionari")
+        print(file)
+        # database -> file
+        # .join("database", "file")
+
         clickSelectFile = self.button_delete.button("Delete selected file", type="primary", disabled=file == None)
         if clickSelectFile:  
             self._controllerDel.operazioneDelete(file)
 
     def esitoPositivoEliminazione(self):
-        st.success("File eliminato")
+        self.containerNotifiche.success("File eliminato")
 
     def esitoNegativoEliminazione(self):
-        st.error("Eliminazione non avvenuta")
+        self.containerNotifiche.error("Eliminazione non avvenuta")
 
 
-'''
+
 class ViewChat:
-    def __init__(self, controller):
-        self._controllerTecnico = controller
-        self.chatContainer = st.container()
-    
-    def chat(self):
-        self.chatUtente()
+    def __init__(self, controllerCha, controllerAut):
+        self._controllerChat = controllerCha
+        self._controllerAut = controllerAut
+        self.user_input = None
 
-    def chatUtente(self):
-        # Se non ho file nel db, non posso fare nulla e non posso visualizzare la chat
-        if len(self._controllerTecnico.getFiles()) == 0:
-            self.chatContainer.warning("No data dictionary files found. Please upload a file to continue.")
+    def display_data(self):
+        self.user_input = st.chat_input("Type your query here", key="chat", max_chars=500)
+        if self.user_input:
+            st.write(f"User has sent the following prompt: {self.user_input}")
+            self.selectChat()
+
+    def selectChat(self):
+        if self._controllerAut.getLoggedState():
+            #Tecnico
+            print("Accesso come tecnico")
+            self._controllerChat.operazioneDebug(self.user_input)
         else:
-            self.chatContainer.chat_input("Type your query here", key="chat", max_chars=1000)
-'''
+            #Utente
+            print("Accesso come utente")
+            self._controllerChat.operazionePrompt(self.user_input)
+
+    def showResponse(self, messaggio):
+        st.code(f"Response: {messaggio}", language="markdown")
+
+        #st.code(generatePrompt(st.session_state.emb, prompt, st.session_state.option), language='markdown')
