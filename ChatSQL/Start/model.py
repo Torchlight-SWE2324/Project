@@ -11,14 +11,17 @@ class ModelAuthentication:
         self.utenteloggato = False
 
     def check_login(self, username, password):
-        dirPath = os.path.dirname(os.path.realpath(__file__))
-        file_path = os.path.join(dirPath, "pswrd.csv")
-        with open(file_path, "r") as f:
-                reader = csv.reader(f)
-                for row in reader:
-                    if row[0] == username and row[1] == password:
-                        self.utenteloggato = True
-                        return True
+        try:
+            dirPath = os.path.dirname(os.path.realpath(__file__))
+            file_path = os.path.join(dirPath, "pswrd.csv")
+            with open(file_path, "r") as f:
+                    reader = csv.reader(f)
+                    for row in reader:
+                        if row[0] == username and row[1] == password:
+                            self.utenteloggato = True
+                            return True
+        except Exception as e:
+            print(f"An error occurred: {e}")
         return False
     
     def logout(self):
@@ -109,25 +112,18 @@ class ModelChat:
         self.data_path = os.path.join(os.path.dirname(__file__), "indexes")
 
     def generatePrompt(self, user_input, dictionary_name):
-
-        embedder = Embedder(self.model_path, self.data_path)       # crea l'embedder
-        embedder.generareIndex(dictionary_name)   # genera l'index (serve per test)
-        embedder.caricareIndex(dictionary_name)          # carica l'index dentro embedder
-        
-        # dictionary_name = metodo()    //metodo di classe che si occupa di recuperare il dizionario corrente
+        embedder = Embedder(self.model_path, self.data_path) #crea l'embedder
+        embedder.generareIndex(dictionary_name)   #genera l'index (serve per test)
+        embedder.caricareIndex(dictionary_name)   #carica l'index dentro embedder
         promptGen = ResponseUser()
         emb = Embeddings({"path": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2", "content": True})
         self.response = promptGen.generatePrompt(emb, user_input, dictionary_name)
 
     def generateDebug(self, user_input, dictionary_name):
-        
-        emb = Embedder(self.model_path, self.data_path)       # crea l'embedder
-        emb.generareIndex(f"./{dictionary_name}")      # genera l'index (serve per test)
-        emb.caricareIndex(dictionary_name)         # carica l'index dentro embedder
-
-        # emb = embedderFactory()       //crea l'embedder con l'indice corrente dentro
+        emb = Embedder(self.model_path, self.data_path)  #crea l'embedder
+        emb.generareIndex(f"./{dictionary_name}")  #genera l'index (serve per test)
+        emb.caricareIndex(dictionary_name)         #carica l'index dentro embedder
         debugGen = ResponseTechnician()
-
         self.response = debugGen.generateDebug(emb, user_input)
 
     def getResponse(self):
