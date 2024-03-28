@@ -96,10 +96,12 @@ class ModelDelete:
 class ModelChat:
     def __init__(self):
         self.response = ""
+        self.model_path = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
+        self.data_path = os.path.join(os.path.dirname(__file__), "indexes")
 
     def generatePrompt(self, user_input, dictionary_name):
 
-        emb = Embedder()                            # crea l'embedder
+        emb = Embedder(self.model_path, self.data_path)       # crea l'embedder
         emb.generareIndex(dictionary_name)   # genera l'index (serve per test)
         emb.caricareIndex(dictionary_name)          # carica l'index dentro embedder
         
@@ -108,10 +110,9 @@ class ModelChat:
 
         self.response = promptGen.generatePrompt(emb, user_input, dictionary_name)
 
-        
     def generateDebug(self, user_input, dictionary_name):
         
-        emb = Embedder()                            # crea l'embedder
+        emb = Embedder(model_path, data_path)       # crea l'embedder
         emb.generareIndex(f"./{dictionary_name}")      # genera l'index (serve per test)
         emb.caricareIndex(dictionary_name)         # carica l'index dentro embedder
 

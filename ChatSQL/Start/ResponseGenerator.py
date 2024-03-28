@@ -4,9 +4,10 @@ import json
 from txtai import Embeddings
 
 class ResponseUser:
-    def generatePrompt(emb, user_query, dictionary_name):
+    def generatePrompt(self, emb, user_query, dictionary_name):
         #get the dictionary path without using the function getDictionariesFolderPath()
-        dictionary_path = os.path.join("dictionaries", dictionary_name)
+        extraxt_name = dictionary_name.split(".")[0]
+        dictionary_path = os.path.join(os.path.dirname(__file__), "database", dictionary_name)
 
         with open(dictionary_path, 'r') as dictionary_file:
             data = json.load(dictionary_file)
@@ -53,7 +54,7 @@ class ResponseUser:
             return prompt
 
 class ResponseTechnician:
-    def generateDebug(emb, user_query):
+    def generateDebug(self, emb, user_query):
         # Creazione prompt per Admin
         
         embedder_search_result = emb.search(f"SELECT score, text, table_name, field_name, field_description FROM txtai WHERE similar('{user_query}') AND score > 0.01 GROUP BY table_name, field_name", limit=50)
