@@ -1,5 +1,6 @@
 import csv
 import os
+import shutil #per eliminare cartella (è di python)
 
 from uploadServiceTemplate import UploadServiceTemplace
 from ResponseGenerator import *
@@ -81,6 +82,7 @@ class ModelDelete:
     def deleteFile(self, file):
         json_deleted = False
         index_deleted = False
+        print(file)
         if file:
             file_paths_to_try = [os.path.join(self.database_path, file)]
             self.file_deleted = False
@@ -88,10 +90,13 @@ class ModelDelete:
                 if os.path.exists(file_path):
                     os.remove(file_path)
                     json_deleted = True 
-            
-            for index_file in os.listdir(self.indexes_path):
-                if index_file.startswith(file):
-                    os.remove(os.path.join(self.indexes_path, index_file))
+
+            for index_file in os.listdir(self.indexes_path + "\\" + os.path.splitext(file)[0]):
+                file_path = os.path.join(self.indexes_path, os.path.splitext(file)[0], index_file)
+                if os.path.isfile(file_path):
+                    os.remove(file_path) #per eliminare i file nella cartella
+                    #importata per eliminare la cartella
+                    shutil.rmtree(os.path.join(self.indexes_path, os.path.splitext(file)[0]))
                     index_deleted = True
 
         if json_deleted == True and index_deleted == True:
