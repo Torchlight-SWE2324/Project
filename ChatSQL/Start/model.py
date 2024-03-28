@@ -3,6 +3,9 @@ import os
 
 from ResponseGenerator import *
 from embedder import *
+from txtai import Embeddings
+
+
 class ModelAuthentication:
     def __init__(self):
         self.utenteloggato = False
@@ -56,6 +59,12 @@ class ModelUpload:
             file_path = os.path.join(self.database_path, file.name)  # Use file.name instead of file.path
             with open(file_path, "wb") as f:
                 f.write(file_contents)
+
+            #generate indexes
+            model_path = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
+            data_path = os.path.join(os.path.dirname(__file__), "indexes")
+            emb = Embedder(model_path, data_path)
+            emb.generareIndex(file.name)
             return True
         else:
             return False
@@ -101,18 +110,18 @@ class ModelChat:
 
     def generatePrompt(self, user_input, dictionary_name):
 
-        emb = Embedder(self.model_path, self.data_path)       # crea l'embedder
-        emb.generareIndex(dictionary_name)   # genera l'index (serve per test)
-        emb.caricareIndex(dictionary_name)          # carica l'index dentro embedder
+        embedder = Embedder(self.model_path, self.data_path)       # crea l'embedder
+        embedder.generareIndex(dictionary_name)   # genera l'index (serve per test)
+        embedder.caricareIndex(dictionary_name)          # carica l'index dentro embedder
         
         # dictionary_name = metodo()    //metodo di classe che si occupa di recuperare il dizionario corrente
         promptGen = ResponseUser()
-
+        emb = Embeddings({"path": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2", "content": True})
         self.response = promptGen.generatePrompt(emb, user_input, dictionary_name)
 
     def generateDebug(self, user_input, dictionary_name):
         
-        emb = Embedder(model_path, data_path)       # crea l'embedder
+        emb = Embedder(self.model_path, self.data_path)       # crea l'embedder
         emb.generareIndex(f"./{dictionary_name}")      # genera l'index (serve per test)
         emb.caricareIndex(dictionary_name)         # carica l'index dentro embedder
 

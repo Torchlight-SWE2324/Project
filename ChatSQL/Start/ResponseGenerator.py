@@ -11,10 +11,10 @@ class ResponseUser:
 
         with open(dictionary_path, 'r') as dictionary_file:
             data = json.load(dictionary_file)
-
-        embedder_search_result = emb.search(f"select score, text, table_name, table_description, field_name, field_type, field_references, from txtai where similar('{user_query}') and score > 0.25 group by table_name")
-
-        prompt = ""
+        try:
+            embedder_search_result = emb.search(f"select score, text, table_name, table_description, field_name, field_type, field_references, from txtai where similar('{user_query}') and score > 0.25 group by table_name")
+        except Exception as e:
+            print("An error occurred:", e)
         
         tables_with_fields_list = []
         referencies_list = []
