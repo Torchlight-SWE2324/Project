@@ -1,21 +1,24 @@
 import os
 import json
 
-from txtai import Embeddings
+#from txtai import Embeddings
+from embedder import *
 
 class ResponseUser:
-    def generatePrompt(self, emb, user_query, dictionary_name):
+    def generatePrompt(self, user_query, dictionary_name):
+        emb = Embedder()
+        embe = emb.getEmb()
         #get the dictionary path without using the function getDictionariesFolderPath()
         try:
-            extraxt_name = dictionary_name.split(".")[0]
+            #extraxt_name = dictionary_name.split(".")[0]
             dictionary_path = os.path.join(os.path.dirname(__file__), "database", dictionary_name)
 
             with open(dictionary_path, 'r') as dictionary_file:
                 data = json.load(dictionary_file)
             try:
-                embedder_search_result = emb.search(f"select score, text, table_name, table_description, field_name, field_type, field_references, from txtai where similar('{user_query}') and score > 0.25 group by table_name")
+                embedder_search_result = embe.search(f"select score, text, table_name, table_description, field_name, field_type, field_references, from txtai where similar('{user_query}') and score > 0.25 group by table_name")
             except Exception as e:
-                print("An error occurred:", e)
+                print("An error occurred in generatePrompt in ResponseGenerator:", e)
             
             tables_with_fields_list = []
             referencies_list = []
@@ -52,18 +55,26 @@ class ResponseUser:
 
 
                 prompt += f"\nGenerate the SQL query equivalent to: {user_query}"
-                return prompt
+                if prompt:
+                    print("PROMPT:", prompt)
+                else:
+                    print("prompt not existent")
+            emb.generareIndex(dictionary_name)   #genera l'index (serve per test)
+            emb.caricareIndex(dictionary_name)   #carica l'index dentro embedder 
+            return prompt
             
         except FileNotFoundError:
             print(f"Dictionary file '{dictionary_name}' not found.")
         except Exception as e:
-            print(f"An error occurred: {e}")
+            print(f"An error occurred in generatePrompt2 in ResponseGenerator: {e}")
 
 class ResponseTechnician:
-    def generateDebug(self, emb, user_query):
+    def generateDebug(self, user_query, dictionary_name):
+        emb = Embedder()
+        embe = emb.getEmb()
         # Creazione prompt per Admin
         try:
-            embedder_search_result = emb.search(f"SELECT score, text, table_name, field_name, field_description FROM txtai WHERE similar('{user_query}') AND score > 0.01 GROUP BY table_name, field_name", limit=50)
+            embedder_search_result = embe.search(f"SELECT score, text, table_name, field_name, field_description FROM txtai WHERE similar('{user_query}') AND score > 0.01 GROUP BY table_name, field_name", limit=50)
 
             tables_with_fields = {}
 
@@ -88,4 +99,4 @@ class ResponseTechnician:
             return prompt
         
         except Exception as e:
-            print(f"An error occurred: {e}")
+            print(f"An error occurred in ResponseTechnician in ResponseGenarator: {e}")

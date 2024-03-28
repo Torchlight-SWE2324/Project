@@ -3,9 +3,8 @@ import json
 from txtai import Embeddings
 
 class Embedder:
-    def __init__(self, model_path, data_path):
-        self.emb = Embeddings({"path": model_path, "content": True})
-        self.data_path = data_path
+    def __init__(self):
+        self.emb= Embeddings({"path": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2", "content": True})
         self.indexDirectory = os.path.join(os.path.dirname(__file__), "indexes")
         self.databaseDirectory = os.path.join(os.path.dirname(__file__), "database")
 
@@ -48,11 +47,6 @@ class Embedder:
                 os.makedirs(self.indexDirectory)
             
             commands = self.generateUpsertCommands(os.path.join(self.databaseDirectory, dictionary_file_name))
-
-            print("index directory",self.indexDirectory)
-            print("database directory",self.databaseDirectory)
-            print("name dictionary",dictionary_file_name)
-            print("join",os.path.join(self.databaseDirectory, dictionary_file_name))
             
             index_name = os.path.splitext(dictionary_file_name)[0]
             index_path = os.path.join(self.indexDirectory, index_name)
@@ -67,7 +61,7 @@ class Embedder:
         except FileNotFoundError:
             print(f"File '{dictionary_file_name}' or its path not found.")
         except Exception as e:
-            print(f"An error occurred: {e}")
+            print(f"An error occurred in generareIndex in Embedder.py: {e}")
 
     def caricareIndex(self, dictionary_file_name):
         try:
@@ -79,7 +73,7 @@ class Embedder:
         except FileNotFoundError:
             print(f"Index file '{dictionary_file_name}' or its path not found.")
         except Exception as e:
-            print(f"An error occurred: {e}")
+            print(f"An error occurred in caricareIndex in : {e}")
 
     def save(self):
         self.emb.save()

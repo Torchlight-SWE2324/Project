@@ -66,7 +66,7 @@ class ModelUpload:
             #generate indexes
             model_path = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
             data_path = os.path.join(os.path.dirname(__file__), "indexes")
-            emb = Embedder(model_path, data_path)
+            emb = Embedder()
             emb.generareIndex(file.name)
             return True
         else:
@@ -112,19 +112,12 @@ class ModelChat:
         self.data_path = os.path.join(os.path.dirname(__file__), "indexes")
 
     def generatePrompt(self, user_input, dictionary_name):
-        embedder = Embedder(self.model_path, self.data_path) #crea l'embedder
-        embedder.generareIndex(dictionary_name)   #genera l'index (serve per test)
-        embedder.caricareIndex(dictionary_name)   #carica l'index dentro embedder
         promptGen = ResponseUser()
-        emb = Embeddings({"path": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2", "content": True})
-        self.response = promptGen.generatePrompt(emb, user_input, dictionary_name)
+        self.response = promptGen.generatePrompt( user_input, dictionary_name)
 
     def generateDebug(self, user_input, dictionary_name):
-        emb = Embedder(self.model_path, self.data_path)  #crea l'embedder
-        emb.generareIndex(f"./{dictionary_name}")  #genera l'index (serve per test)
-        emb.caricareIndex(dictionary_name)         #carica l'index dentro embedder
         debugGen = ResponseTechnician()
-        self.response = debugGen.generateDebug(emb, user_input)
+        self.response = debugGen.generateDebug(user_input, dictionary_name)
 
     def getResponse(self):
         return self.response
