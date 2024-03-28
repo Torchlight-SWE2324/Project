@@ -1,9 +1,10 @@
 import csv
 import os
 
+from uploadServiceTemplate import UploadServiceTemplace
 from ResponseGenerator import *
-from embedder import *
-from txtai import Embeddings
+#from embedder import *
+#from txtai import Embeddings
 
 
 class ModelAuthentication:
@@ -63,11 +64,9 @@ class ModelUpload:
             with open(file_path, "wb") as f:
                 f.write(file_contents)
 
-            #generate indexes
-            model_path = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
-            data_path = os.path.join(os.path.dirname(__file__), "indexes")
-            emb = Embedder()
+            emb = UploadServiceTemplace()
             emb.generareIndex(file.name)
+
             return True
         else:
             return False
@@ -88,8 +87,7 @@ class ModelDelete:
             for file_path in file_paths_to_try:
                 if os.path.exists(file_path):
                     os.remove(file_path)
-                    json_deleted = True
-                    
+                    json_deleted = True 
             
             for index_file in os.listdir(self.indexes_path):
                 if index_file.startswith(file):
@@ -98,9 +96,6 @@ class ModelDelete:
 
         if json_deleted == True and index_deleted == True:
             self.file_deleted = True
-
-    def getFileDeleted(self):
-        return self.file_deleted
     
     def getEsitoFileEliminato(self):
         return self.file_deleted

@@ -13,6 +13,7 @@ class Embedder:
             with open(dictionary_path, 'r') as file:
                 data = json.load(file)
             commands = []
+            
 
             for table in data["tables"]:
                 table_name = table["name"]
@@ -41,6 +42,43 @@ class Embedder:
             print(f"Error decoding JSON in file '{dictionary_path}'.")
             return []
 
+    def caricareIndex(self, dictionary_file_name):
+        try:
+            index_name = os.path.splitext(dictionary_file_name)[0]
+            index_path = os.path.join(self.indexDirectory, index_name)
+
+            self.emb.load(index_path)
+            
+        except FileNotFoundError:
+            print(f"Index file '{dictionary_file_name}' or its path not found.")
+        except Exception as e:
+            print(f"An error occurred in caricareIndex in : {e}")
+
+    def save(self):
+        self.emb.save(self.indexDirectory)
+
+    def getEmb(self):
+        return self.emb
+
+    def setEmb(self, emb):
+        self.emb = emb
+
+
+
+
+
+        
+'''
+if __name__ == "__main__":
+    model_path = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
+    data_path = os.path.join(os.path.dirname(__file__), "indexes")
+
+    emb = Embedder(model_path, data_path)
+    #emb.generareIndex("swe_music.json")
+    #pass the path indexes/swe_music/embeddings
+    emb.caricareIndex(data_path + "/swe_music")
+'''    
+'''
     def generareIndex(self, dictionary_file_name):
         try:
             if not os.path.exists(self.indexDirectory):
@@ -62,37 +100,4 @@ class Embedder:
             print(f"File '{dictionary_file_name}' or its path not found.")
         except Exception as e:
             print(f"An error occurred in generareIndex in Embedder.py: {e}")
-
-    def caricareIndex(self, dictionary_file_name):
-        try:
-            index_name = os.path.splitext(dictionary_file_name)[0]
-            index_path = os.path.join(self.indexDirectory, index_name)
-            
-            self.emb.load(index_path)
-            
-        except FileNotFoundError:
-            print(f"Index file '{dictionary_file_name}' or its path not found.")
-        except Exception as e:
-            print(f"An error occurred in caricareIndex in : {e}")
-
-    def save(self):
-        self.emb.save()
-
-    def getEmb(self):
-        return self.emb
-
-    def setEmb(self, emb):
-        self.emb = emb
-
-
-        
 '''
-if __name__ == "__main__":
-    model_path = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
-    data_path = os.path.join(os.path.dirname(__file__), "indexes")
-
-    emb = Embedder(model_path, data_path)
-    #emb.generareIndex("swe_music.json")
-    #pass the path indexes/swe_music/embeddings
-    emb.caricareIndex(data_path + "/swe_music")
-'''    

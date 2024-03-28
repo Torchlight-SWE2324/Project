@@ -147,6 +147,7 @@ class ViewChat:
             self._controllerChat.operazionePrompt(self.user_input, self.dizionarioAttuale)
 
     def showResponse(self, messaggio):
+        print("VIEW MESSAGGIO", messaggio)
         st.code(f"Response: {messaggio}", language="markdown")
 
         #st.code(generatePrompt(st.session_state.emb, prompt, st.session_state.option), language='markdown')
