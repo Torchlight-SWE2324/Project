@@ -116,7 +116,7 @@ def generatePrompt(emb, user_query, dictionary_name):
 if __name__ == "__main__":
 
     emb = Embeddings({"path": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2", "content": True})
-
+    
     with open("C:/Users/taore/Documents/Codice/SWE/ChatSQL/ChatSQL/JSON/auction.json", 'r') as file:
         data = json.load(file)
 
@@ -149,12 +149,31 @@ if __name__ == "__main__":
     
     print(generatePrompt(emb, user_query="a", dictionary_name="C:/Users/taore/Documents/Codice/SWE/ChatSQL/ChatSQL/JSON/auction.json"))
 
+    # Selezione nuovo corrente
+    # emb.load(load nuovo index corrente scelto)
+
+    # salvare nuovo file
+    #       - salvare(index salvato dentro)
+    #       - load(caricare index del file appena salvato)
+
+    # eliminare dizionario
+    #       - eliminare(index da eliminare è caricato dentro)
+    #       - load(altro index tra quelli salvati se ci sono)
+
+    # generare prompt
+    # emb.load(load index corrente)
+    # - generare prompt(index corrente)
+
+    # generare debug
+    # emb.load(load index corrente)
+    # - generare debug(index corrente)
 
     # utente può cambiare il dizionario corrente
     # bottone selezione nuovo dizionario corrente
     # controller riceve il segnale di cambio dizionario corrente
     # nel model va cambiato l'index dell'embedding 
     # emb.load(va a recuperare l'index dentro la cartella index)
+
 
 
     # Caricamento
