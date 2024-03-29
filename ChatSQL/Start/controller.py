@@ -2,6 +2,7 @@ import time
 from model import *
 from widgets import *
 from validazione_file import VerificaFileCaricato
+from sanitize_input import SanificaInputInserito
 class ControllerAuthentication:
     def __init__(self, model, view1, view2):
         self._model = model
@@ -97,14 +98,20 @@ class ControllerChat:
         self._view = view
 
     def operazionePrompt(self, user_input, dizionario):
-        self._model.generatePrompt(user_input, dizionario)
+        sanitized_user_query = self.validazione_input(user_input)
+        self._model.generatePrompt(sanitized_user_query, dizionario)
         messaggio = self._model.getResponse()
         self._view.showResponse(messaggio)
 
     def operazioneDebug(self, user_input, dizionario):
-        self._model.generateDebug(user_input, dizionario)
+        sanitized_user_query = self.validazione_input(user_input)
+        self._model.generateDebug(sanitized_user_query, dizionario)
         messaggio = self._model.getResponse()
         self._view.showResponse(messaggio)
+
+    def validazione_input(user_input):
+        input_sanificatore = SanificaInputInserito()
+        return input_sanificatore.sanitize_input(user_input)
     
 
     
