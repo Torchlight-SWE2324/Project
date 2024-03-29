@@ -1,0 +1,203 @@
+{
+    "tables": [
+      {
+        "name": "students",
+        "table-description": "Table containing information about students in the school management system",
+        "columns": [
+          {
+            "name": "student_id",
+            "type": "integer",
+            "references": null,
+            "description": "Unique identifier assigned to each student"
+          },
+          {
+            "name": "first_name",
+            "type": "string",
+            "references": null,
+            "description": "First name of the student"
+          },
+          {
+            "name": "last_name",
+            "type": "string",
+            "references": null,
+            "description": "Last name of the student"
+          },
+          {
+            "name": "date_of_birth",
+            "type": "date",
+            "references": null,
+            "description": "Date of birth of the student"
+          },
+          {
+            "name": "grade",
+            "type": "integer",
+            "references": null,
+            "description": "Current grade or class of the student"
+          },
+          {
+            "name": "guardian_name",
+            "type": "string",
+            "references": null,
+            "description": "Full name of the student's guardian or parent"
+          },
+          {
+            "name": "contact_number",
+            "type": "string",
+            "references": null,
+            "description": "Contact number of the student's guardian or parent"
+          },
+          {
+            "name": "address",
+            "type": "text",
+            "references": null,
+            "description": "Home address of the student"
+          }
+        ]
+      },
+      {
+        "name": "teachers",
+        "table-description": "Table containing information about teachers in the school management system",
+        "columns": [
+          {
+            "name": "teacher_id",
+            "type": "integer",
+            "references": null,
+            "description": "Unique identifier assigned to each teacher"
+          },
+          {
+            "name": "first_name",
+            "type": "string",
+            "references": null,
+            "description": "First name of the teacher"
+          },
+          {
+            "name": "last_name",
+            "type": "string",
+            "references": null,
+            "description": "Last name of the teacher"
+          },
+          {
+            "name": "date_of_birth",
+            "type": "date",
+            "references": null,
+            "description": "Date of birth of the teacher"
+          },
+          {
+            "name": "subject_taught",
+            "type": "string",
+            "references": null,
+            "description": "Subject taught by the teacher"
+          },
+          {
+            "name": "contact_number",
+            "type": "string",
+            "references": null,
+            "description": "Contact number of the teacher"
+          },
+          {
+            "name": "address",
+            "type": "text",
+            "references": null,
+            "description": "Home address of the teacher"
+          }
+        ]
+      },
+      {
+        "name": "courses",
+        "table-description": "Table containing information about courses offered in the school",
+        "columns": [
+          {
+            "name": "course_id",
+            "type": "integer",
+            "references": null,
+            "description": "Unique identifier assigned to each course"
+          },
+          {
+            "name": "course_name",
+            "type": "string",
+            "references": null,
+            "description": "Name or title of the course"
+          },
+          {
+            "name": "course_description",
+            "type": "text",
+            "references": null,
+            "description": "Description of the course"
+          },
+          {
+            "name": "credit_hours",
+            "type": "integer",
+            "references": null,
+            "description": "Number of credit hours assigned to the course"
+          },
+          {
+            "name": "teacher_id",
+            "type": "integer",
+            "references": {"table_name": "teachers", "field_name": "teacher_id"},
+            "description": "Foreign key referencing the teacher responsible for the course"
+          }
+        ]
+      },
+      {
+        "name": "enrollments",
+        "table-description": "Table containing information about student enrollments in courses",
+        "columns": [
+          {
+            "name": "enrollment_id",
+            "type": "integer",
+            "references": null,
+            "description": "Unique identifier assigned to each enrollment"
+          },
+          {
+            "name": "student_id",
+            "type": "integer",
+            "references": {"table_name": "students", "field_name": "student_id"},
+            "description": "Foreign key referencing the student being enrolled"
+          },
+          {
+            "name": "course_id",
+            "type": "integer",
+            "references": {"table_name": "courses", "field_name": "course_id"},
+            "description": "Foreign key referencing the course in which the student is enrolled"
+          },
+          {
+            "name": "enrollment_date",
+            "type": "date",
+            "references": null,
+            "description": "Date when the student was enrolled in the course"
+          }
+        ]
+      },
+      {
+        "name": "grades",
+        "table-description": "Table containing information about student grades in courses",
+        "columns": [
+          {
+            "name": "grade_id",
+            "type": "integer",
+            "references": null,
+            "description": "Unique identifier assigned to each grade entry"
+          },
+          {
+            "name": "enrollment_id",
+            "type": "integer",
+            "references": {"table_name": "enrollments", "field_name": "enrollment_id"},
+            "description": "Foreign key referencing the enrollment for which the grade is assigned"
+          },
+          {
+            "name": "score",
+            "type": "decimal",
+            "references": null,
+            "description": "Numeric score or grade achieved by the student"
+          },
+          {
+            "name": "grade_date",
+            "type": "date",
+            "references": null,
+            "description": "Date when the grade was assigned"
+          }
+        ]
+      }
+    ]
+  }
+  
