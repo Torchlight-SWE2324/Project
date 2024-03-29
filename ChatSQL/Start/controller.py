@@ -109,7 +109,7 @@ class ControllerChat:
         messaggio = self._model.getResponse()
         self._view.showResponse(messaggio)
 
-    def validazione_input(user_input):
+    def validazione_input(self, user_input):
         input_sanificatore = SanificaInputInserito()
         return input_sanificatore.sanitize_input(user_input)
     
