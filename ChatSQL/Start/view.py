@@ -1,8 +1,6 @@
 import streamlit as st
 from controller import *
 
-
-
 class ViewUtente:
     def __init__(self, controllerAut, controllerSel):
         self._controllerAut = controllerAut
@@ -37,9 +35,9 @@ class ViewUtente:
 
     def esitoPositivo(self):
         st.success("Login avvenuto")
-        self.usernameS.empty()
-        self.passwordS.empty()
-        self.loginS.empty()
+        #self.usernameS.empty()
+        #self.passwordS.empty()
+        #self.loginS.empty()
 
     def esitoNegativo(self):
         st.error("Login sbagliato")

@@ -1,6 +1,6 @@
 import time
 from model import *
-from view import *
+from widgets import *
 
 class ControllerAuthentication:
     def __init__(self, model, view):
@@ -24,10 +24,10 @@ class ControllerAuthentication:
         
 
 class ControllerSelezione:
-    def __init__(self, model, view1, view2):
+    def __init__(self, model, view1):
         self._model = model
         self._view1 = view1
-        self._view2 = view2
+        #self._view2 = view2
         #return self._model.filesInDB()
 
     def getFiles(self):
@@ -82,7 +82,7 @@ class ControllerLogout:
 class ControllerChat:
     def __init__(self, model, view):
         self._model = model
-        self._view = view  
+        self._view = view
 
     def operazionePrompt(self, user_input, dizionario):
         self._model.generatePrompt(user_input, dizionario)

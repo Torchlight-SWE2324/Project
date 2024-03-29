@@ -1,6 +1,7 @@
 from model import *
 from view import *
 from controller import *
+from widgets import *
 
 # Usage
 if __name__ == "__main__":
@@ -14,41 +15,61 @@ if __name__ == "__main__":
 
     #controller
     controllerAut = ControllerAuthentication(modelAut, None)
-    controllerSel = ControllerSelezione(modelSel, None, None) #questo widget viene usato in 2 viste diverse
+    controllerSel = ControllerSelezione(modelSel, None) 
     controllerUp = ControllerUpload(modelUp, None)
     controllerDel = ControllerDelete(modelDel, None)
     controllerLog = ControllerLogout(modelAut, None)
     controllerCha = ControllerChat(modelCha, None)
 
-    #view
-    viewUtente = ViewUtente(controllerAut, controllerSel)
-    viewTecnico = ViewTecnico(controllerSel, controllerUp, controllerDel, controllerLog)
-    viewChat = ViewChat(controllerCha, controllerAut, controllerSel)
-
-    #creazione view dei controller
-    controllerAut._view = viewUtente
-    controllerSel._view1 = viewUtente
-    controllerSel._view2 = viewTecnico
-    controllerUp._view = viewTecnico
-    controllerDel._view = viewTecnico
-    controllerLog._view = viewTecnico
-    controllerCha._view = viewChat
-
     if "logged_in" not in st.session_state:
-        st.session_state.logged_in = False
+        st.session_state.logged_in = False 
+
 
     if st.session_state.logged_in == False:
+        # set model UtenteLoggato
         modelAut.setUtenteLoggato(False)
-        viewUtente.display_data()
+        #widget utente
+        loginWidget = LoginWidget(controllerAut)
+        selectWidget = SelectWidget(controllerSel)
+        chatWidget = ChatWidget(controllerCha, controllerAut, controllerSel)
+        
+        #creazione widget utente nei controller
+        controllerAut._view = loginWidget
+        controllerSel._view1 = selectWidget
     else:
+        # set model UtenteLoggato
         modelAut.setUtenteLoggato(True)
-        viewTecnico.display_data()
+        #widget tecnico
+        logoutWidget = LogoutWidget(controllerLog)
+        selectWidget = SelectWidget(controllerSel)
+        uploadWidget = UploadWidget(controllerUp)
+        deleteWidget = DeleteWidget(selectWidget, controllerDel)
+        chatWidget = ChatWidget(controllerCha, controllerAut, controllerSel)
+        #creazione widget tecnico nei controller
+        controllerUp._view = uploadWidget
+        controllerDel._view = deleteWidget
+        controllerLog._view = logoutWidget
+    
+    controllerCha._view = chatWidget
 
-    viewChat.display_data()
 
-#CHAT
-    #modelChat = ModelAuthentication() #da rifare
-    #controllerChat = ControllerTecnico(modelChat, None)  # Pass None temporarily
-    #viewChat = ViewChat(controllerChat)
-    #controllerChat._view = view  # Set view in the controller
-    #viewChat.chatUtente()
+
+    #view
+    #viewUtente = ViewUtente(controllerAut, controllerSel)
+    #viewTecnico = ViewTecnico(controllerSel, controllerUp, controllerDel, controllerLog)
+
+    #creazione widget nei controller
+    # controllerAut._view = loginWidget
+    # controllerSel._view1 = selectWidget
+    # controllerSel._view2 = viewTecnico
+
+    #if st.session_state.logged_in == False:
+    #    modelAut.setUtenteLoggato(False)
+    #    chatWidget.selectChatUtente()
+    #else:
+    #    modelAut.setUtenteLoggato(True)
+    #    chatWidget.selectChatTecnico()
+
+    #viewChat.display_data()
+
+

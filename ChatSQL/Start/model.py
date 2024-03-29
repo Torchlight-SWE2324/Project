@@ -124,6 +124,3 @@ class ModelChat:
     
     def setResponse(self, new_response):
         self.response = new_response
-    
-
-    
