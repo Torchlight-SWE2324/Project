@@ -3,31 +3,33 @@ from model import *
 from widgets import *
 
 class ControllerAuthentication:
-    def __init__(self, model, view):
+    def __init__(self, model, view1, view2):
         self._model = model
-        self._view = view
+        self._view1 = view1
+        self._view2 = view2
 
     def updateLoginData(self, username, password):
         if username == "" and password == "":
-            self._view.esitoMancante()
+            self._view1.esitoMancante()
         else:
             esito = self._model.check_login(username, password)
             if esito:
-                self._view.esitoPositivo()
+                self._view1.esitoPositivo()
+                time.sleep(.5)
                 st.session_state.logged_in = True
                 st.rerun()
             else:
-                self._view.esitoNegativo()
+                self._view1.esitoNegativo()
 
     def getLoggedState(self):
         return self._model.getUtenteLoggato()
         
 
 class ControllerSelezione:
-    def __init__(self, model, view1):
+    def __init__(self, model, view1, view2):
         self._model = model
-        self._view1 = view1
-        #self._view2 = view2
+        self._view1 = view1 #selezione
+        self._view2 = view2 #chat
         #return self._model.filesInDB()
 
     def getFiles(self):
