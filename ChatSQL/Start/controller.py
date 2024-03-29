@@ -50,8 +50,7 @@ class ControllerUpload:
     def updateFileData(self):
         file = self._view.getFileUploaded()
         # validazione formato...
-        file_validatore = VerificaFileCaricato()
-        if file_validatore.verifica_formato(file.name) == False:
+        if self.validazione_formato_file(file.name) == False:
             self._view.validazione_esito_negativo("Formato del file caricaro NON supportato")
         # ... e dimensione
         #                                                                                       ! ! non riesco a farlo qui perchè richiede di salvare prima il file dentro cartella database ! !
@@ -64,6 +63,10 @@ class ControllerUpload:
                 self._view.esitoPositivo()
             else:
                 self._view.esitoNegativo()
+
+    def validazione_formato_file(self, file_name):
+        file_validatore = VerificaFileCaricato()
+        return file_validatore.verifica_formato(file_name)
 
 
 class ControllerDelete:
