@@ -57,7 +57,7 @@ class UploadWidget:
         self._controllerUp = controllerUp
 
     def create(self):
-        uploaded_file = st.sidebar.file_uploader("Upload new data dictionary file", accept_multiple_files=False, type="json")
+        uploaded_file = st.sidebar.file_uploader("Upload new data dictionary file", accept_multiple_files=False)
         st.sidebar.button("Upload file", type="primary", on_click=lambda:self.operazioneUpload(uploaded_file), disabled=uploaded_file == None)
 
     def operazioneUpload(self, file):
@@ -72,6 +72,9 @@ class UploadWidget:
 
     def esitoNegativo(self):
         st.error('Dizionario non caricato!', icon="🚨")
+
+    def validazione_esito_negativo(self, msg_errore):
+        st.error(msg_errore, icon="🚨")
 
 class DeleteWidget:
     def __init__(self, selectionWidget, controllerDel):

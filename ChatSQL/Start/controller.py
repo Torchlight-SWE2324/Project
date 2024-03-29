@@ -1,7 +1,7 @@
 import time
 from model import *
 from widgets import *
-
+from validazione_file import VerificaFileCaricato
 class ControllerAuthentication:
     def __init__(self, model, view1, view2):
         self._model = model
@@ -48,11 +48,21 @@ class ControllerUpload:
 
     def updateFileData(self):
         file = self._view.getFileUploaded()
-        esito = self._model.uploadFileModel(file)
-        if esito:
-            self._view.esitoPositivo()
+        # validazione formato...
+        file_validatore = VerificaFileCaricato()
+        if file_validatore.verifica_formato(file.name) == False:
+            self._view.validazione_esito_negativo("Formato del file caricaro NON supportato")
+        # ... e dimensione
+        #                                                                                       ! ! non riesco a farlo qui perchè richiede di salvare prima il file dentro cartella database ! !
+        #if file_validatore.verifica_dimensione(file.name) == False:
+        #    self._view.validazione_esito_negativo("Dimensione del file superiore al limite")    
+        # procedura di upload
         else:
-            self._view.esitoNegativo()
+            esito = self._model.uploadFileModel(file)
+            if esito:
+                self._view.esitoPositivo()
+            else:
+                self._view.esitoNegativo()
 
 
 class ControllerDelete:
