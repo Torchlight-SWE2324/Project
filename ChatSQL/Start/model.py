@@ -45,7 +45,9 @@ class ModelSelezione:
         dirPath = os.path.dirname(os.path.realpath(__file__))
         database_path = os.path.join(dirPath, "database")
         files = os.listdir(database_path)
-        return files
+        sorted_files = sorted(files, key=lambda x: os.path.getmtime(os.path.join(database_path, x)), reverse=True)
+
+        return sorted_files
     
     def setDizionarioAttuale(self, dizionario):
         self.dizionarioAttuale = dizionario
