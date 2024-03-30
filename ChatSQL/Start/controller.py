@@ -4,33 +4,31 @@ from widgets import *
 from validazione_file import VerificaFileCaricato
 from sanitize_input import SanificaInputInserito
 class ControllerAuthentication:
-    def __init__(self, model, view1, view2):
+    def __init__(self, model, view):
         self._model = model
-        self._view1 = view1
-        self._view2 = view2
+        self._view = view
 
     def updateLoginData(self, username, password):
         if username == "" and password == "":
-            self._view1.esitoMancante()
+            self._view.esitoMancante()
         else:
             esito = self._model.check_login(username, password)
             if esito:
-                self._view1.esitoPositivo()
+                self._view.esitoPositivo()
                 time.sleep(.5)
                 st.session_state.logged_in = True
                 st.rerun()
             else:
-                self._view1.esitoNegativo()
+                self._view.esitoNegativo()
 
     def getLoggedState(self):
         return self._model.getUtenteLoggato()
         
 
 class ControllerSelezione:
-    def __init__(self, model, view1, view2):
+    def __init__(self, model, view):
         self._model = model
-        self._view1 = view1 #selezione
-        self._view2 = view2 #chat
+        self._view = view #selezione
         #return self._model.filesInDB()
 
     def getFiles(self):
