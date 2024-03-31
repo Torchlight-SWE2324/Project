@@ -14,7 +14,6 @@ if __name__ == "__main__":
     modelCha = ModelChat()
 
     #controller
-    
     controllerAut = ControllerAuthentication(modelAut, None, None) #aut e chat
     controllerSel = ControllerSelezione(modelSel, None, None) #selezione & chat 
     controllerUp = ControllerUpload(modelUp, None)
@@ -23,7 +22,6 @@ if __name__ == "__main__":
     controllerCha = ControllerChat(modelCha, None)
 
     #view
-    
     loginWidget = LoginWidget(controllerAut)
     logoutWidget = LogoutWidget(controllerLog)    
     selectWidget = SelectWidget(controllerSel)
@@ -43,9 +41,10 @@ if __name__ == "__main__":
 
 
     if "logged_in" not in st.session_state:
-        st.session_state.logged_in = False 
+        st.session_state.logged_in = False
+    st.session_state.logged_in = True #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-    
+
     if st.session_state.logged_in == False:
         modelAut.setUtenteLoggato(False)
         selectWidget.create() #creazione widget selezione dizionario
@@ -58,6 +57,3 @@ if __name__ == "__main__":
         chatWidget.create() #deve essere messa come ultimo widget (non primo)
         uploadWidget.create()   #creazione widget selezione dizionario
         logoutWidget.create()   #creazione widget selezione dizionario
-
-    
-        

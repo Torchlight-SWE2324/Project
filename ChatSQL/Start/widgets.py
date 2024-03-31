@@ -23,6 +23,7 @@ class LoginWidget:
     def esitoMancante(self):
         st.warning('Inserisci prima username e password!', icon="🔥")
 
+
 class LogoutWidget:
     def __init__(self, controllerLog):
         self._controllerLogout = controllerLog
@@ -35,11 +36,12 @@ class LogoutWidget:
     def logoutEsito(self):
         st.success('LogOut avvenuto con successo!', icon="✅")
 
+
 class SelectWidget:
     def __init__(self, controllerSel):
         self._controllerSel = controllerSel
-
         self._file = None
+
     def create(self):
         files = self._controllerSel.getFiles()
         file = st.sidebar.selectbox('Your data dictionary files', files, key="dizionari")
@@ -52,6 +54,7 @@ class SelectWidget:
     def getFile(self):
         return self._file
 
+
 class UploadWidget:
     def __init__(self, controllerUp):
         self._controllerUp = controllerUp
@@ -60,18 +63,19 @@ class UploadWidget:
         uploaded_file = st.sidebar.file_uploader("Upload new data dictionary file", accept_multiple_files=False, type="json")
         st.sidebar.button("Upload file", type="primary", on_click=lambda:self.operazioneUpload(uploaded_file), disabled=uploaded_file == None)
 
-    def operazioneUpload(self, file):
-        self.fileUpload = file
+    def operazioneUpload(self, uploaded_file):
+        self.fileUpload = uploaded_file
         self._controllerUp.updateFileData()
 
     def getFileUploaded(self):
         return self.fileUpload
 
-    def esitoPositivo(self):
-        st.success('Dizionario caricato con successo!', icon="✅")
+    def esitoPositivo(self, uploaded_file_name):
+        st.success(f'Dizionario "{uploaded_file_name}" caricato con successo!', icon="✅")
 
-    def esitoNegativo(self):
-        st.error('Dizionario non caricato!', icon="🚨")
+    def esitoNegativo(self, dictionary_upload_error):
+        st.error(dictionary_upload_error, icon="🚨")
+
 
 class DeleteWidget:
     def __init__(self, selectionWidget, controllerDel):
