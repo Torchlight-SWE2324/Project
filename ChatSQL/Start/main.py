@@ -8,11 +8,12 @@ from embedder import Embedder
 if __name__ == "__main__":
 
     embedder = Embedder()
+    dictionary_schema_verifier = JsonSchemaVerifierService()
 
     #modelli
     modelAut = ModelAuthentication()
     modelSel = ModelSelezione() 
-    modelUp = ModelUpload(embedder)
+    modelUp = ModelUpload(embedder, dictionary_schema_verifier)
     modelDel = ModelDelete()
     modelCha = ModelChat()
 
@@ -45,7 +46,6 @@ if __name__ == "__main__":
 
     if "logged_in" not in st.session_state:
         st.session_state.logged_in = False
-    st.session_state.logged_in = True #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
     if st.session_state.logged_in == False:

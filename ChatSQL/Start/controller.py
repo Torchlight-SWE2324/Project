@@ -1,3 +1,4 @@
+import os.path
 import time
 from model import *
 from widgets import *
@@ -52,6 +53,9 @@ class ControllerUpload:
             return f'File was not loaded, repeat attempt.'
 
         uploaded_file_name = uploaded_file.name
+        if os.path.splitext(uploaded_file_name)[1] != ".json":
+            return "File must have format JSON"
+
         if self._model.get_loaded_dictionaries_number() > 3:
             return "App cannot contain more than 4 dictionaries."
 
@@ -72,7 +76,7 @@ class ControllerUpload:
             uploaded_file_name = uploaded_file.name
 
             dictionary_upload_result = self._model.upload_dictionary(uploaded_file_name, uploaded_file_content)
-            print("dictionary_upload_result",dictionary_upload_result)
+            #print("dictionary_upload_result",dictionary_upload_result)
             if dictionary_upload_result == "upload_success":
                 self._view.esitoPositivo(uploaded_file_name)
             else:

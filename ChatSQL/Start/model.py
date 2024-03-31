@@ -35,10 +35,9 @@ class JsonSchemaVerifierService(DictionarySchemaVerifierService):
 
 
 class ModelUpload:
-    #def __init__(self, dictionary_schema_verifier):
-    def __init__(self, embedder):
+    def __init__(self, embedder, dictionary_schema_verifier):
         self.database_path = self.__get_dictionaries_folder_path()
-        self.dictionary_schema_verifier = JsonSchemaVerifierService()
+        self.dictionary_schema_verifier = dictionary_schema_verifier
         self.embedder = embedder
 
     def __dictionary_schema_check(self, uploaded_file_name, uploaded_file_content):
@@ -47,22 +46,6 @@ class ModelUpload:
     def __get_dictionaries_folder_path(self) -> str:
         return os.path.join(os.path.dirname(os.path.realpath(__file__)), "database")
 
-
-    '''    
-    def upload_dictionary(self, file):
-        if file:
-            file_contents = file.getvalue()
-            file_path = os.path.join(self.database_path, file.name)  # Use file.name instead of file.path
-            with open(file_path, "wb") as f:
-                f.write(file_contents)
-
-            emb = UploadServiceTemplace()
-            emb.generareIndex(file.name)
-
-            return True
-        else:
-            return False
-    '''
     def upload_dictionary(self, uploaded_file_name, uploaded_file_content) -> str:
         dictionary_check = self.__dictionary_schema_check(uploaded_file_name, uploaded_file_content)
 
