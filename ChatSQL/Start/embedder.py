@@ -4,9 +4,36 @@ from txtai import Embeddings
 
 class Embedder:
     def __init__(self):
-        self.emb= Embeddings({"path": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2", "content": True})
+        self.emb = Embeddings({"path": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2", "content": True})
         self.indexDirectory = os.path.join(os.path.dirname(__file__), "indexes")
         self.databaseDirectory = os.path.join(os.path.dirname(__file__), "database")
+
+    def generateIndex(self, dictionary_file_name):
+        try:
+            if not os.path.exists(self.indexDirectory):
+                os.makedirs(self.indexDirectory)
+
+            commands = self.generateUpsertCommands(os.path.join(self.databaseDirectory, dictionary_file_name))
+            index_name = os.path.splitext(dictionary_file_name)[0]
+            index_path = os.path.join(self.indexDirectory, index_name)
+
+            self.emb.index([{"table_name": command["table_name"],
+                              "table_description": command["table_description"],
+                              "field_name": command["field_name"],
+                              "field_type": command["field_type"],
+                              "field_references": command["field_references"],
+                              "field_description": command["field_description"],
+                              "text": command["field_description"]} for command in commands])
+
+            self.emb.save(index_path)
+            print("index path", index_path)
+            self.emb.close()
+            return "index_created"
+
+        except FileNotFoundError:
+            return f"File '{dictionary_file_name}' or its path not found."
+        except Exception as e:
+            return f"An error occurred in generateIndex in embedder.py: {e}"
 
     def generateUpsertCommands(self, dictionary_path):
         try:
@@ -56,12 +83,15 @@ class Embedder:
 
     def save(self):
         self.emb.save(self.indexDirectory)
+    def close(self):
+        self.emb.close(self.indexDirectory)
 
     def getEmb(self):
         return self.emb
 
     def setEmb(self, emb):
         self.emb = emb
+
 
 
 

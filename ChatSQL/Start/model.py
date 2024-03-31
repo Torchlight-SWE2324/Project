@@ -2,7 +2,7 @@ import csv
 import os
 import shutil #per eliminare cartella (è di python)
 
-from uploadServiceTemplate import UploadServiceTemplace
+
 from ResponseGenerator import *
 #from embedder import *
 #from txtai import Embeddings
@@ -36,9 +36,10 @@ class JsonSchemaVerifierService(DictionarySchemaVerifierService):
 
 class ModelUpload:
     #def __init__(self, dictionary_schema_verifier):
-    def __init__(self):
+    def __init__(self, embedder):
         self.database_path = self.__get_dictionaries_folder_path()
         self.dictionary_schema_verifier = JsonSchemaVerifierService()
+        self.embedder = embedder
 
     def __dictionary_schema_check(self, uploaded_file_name, uploaded_file_content):
         return self.dictionary_schema_verifier.check_dictionary_schema(uploaded_file_name, uploaded_file_content)
@@ -62,11 +63,10 @@ class ModelUpload:
         else:
             return False
     '''
-    def upload_dictionary(self, uploaded_file_name, uploaded_file_content):
+    def upload_dictionary(self, uploaded_file_name, uploaded_file_content) -> str:
         dictionary_check = self.__dictionary_schema_check(uploaded_file_name, uploaded_file_content)
 
         if dictionary_check == "schema_check_success":
-            print("if dictionary_check == \"schema_check_success\":")
             dictionary_folder_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "database")
             dictionary_path = os.path.join(dictionary_folder_path, uploaded_file_name)
 
@@ -74,10 +74,11 @@ class ModelUpload:
                 file_content = uploaded_file_content.encode()
                 destination_file.write(file_content)
 
-            emb = UploadServiceTemplace()
-            emb.generareIndex(uploaded_file_name)
-
-            return 'upload_success'
+            index_creation_result = self.embedder.generateIndex(uploaded_file_name)
+            if index_creation_result == "index_created":
+                return 'upload_success'
+            else:
+                return index_creation_result
 
         else:
             return dictionary_check
@@ -102,12 +103,6 @@ class ModelSelezione:
         return os.path.join(os.path.dirname(os.path.realpath(__file__)), "database")
 
     def filesInDB(self):
-        '''
-        dirPath = os.path.dirname(os.path.realpath(__file__))
-        database_path = os.path.join(dirPath, "database")
-        files = os.listdir(database_path)
-        return files
-        '''
         dictionary_folder_path = self.__get_dictionaries_folder_path()
         list = []
         for name in os.listdir(dictionary_folder_path):

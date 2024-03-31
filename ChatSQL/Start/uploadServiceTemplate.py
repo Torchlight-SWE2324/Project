@@ -26,8 +26,9 @@ class UploadServiceTemplace:
             self.embe.save(index_path)
             print("index path", index_path)
             self.embe.close()
+            return "index_created"
 
         except FileNotFoundError:
-            print(f"File '{dictionary_file_name}' or its path not found.")
+            return f"File '{dictionary_file_name}' or its path not found."
         except Exception as e:
-            print(f"An error occurred in generareIndex in UploadServiceTemplace.py: {e}")
+            return f"An error occurred in generareIndex in UploadServiceTemplace.py: {e}"

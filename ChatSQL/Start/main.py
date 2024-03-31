@@ -2,14 +2,17 @@ from model import *
 #from view import *
 from controller import *
 from widgets import *
+from embedder import Embedder
 
 # Usage
 if __name__ == "__main__":
 
+    embedder = Embedder()
+
     #modelli
     modelAut = ModelAuthentication()
     modelSel = ModelSelezione() 
-    modelUp = ModelUpload() 
+    modelUp = ModelUpload(embedder)
     modelDel = ModelDelete()
     modelCha = ModelChat()
 
