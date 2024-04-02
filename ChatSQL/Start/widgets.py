@@ -125,11 +125,11 @@ class ChatWidget:
 
     def selectChatUtente(self):
         self.dizionarioAttuale = self._controllerSel.getDizionario()
-        self._controllerChat.operazioneDebug(self.user_input, self.dizionarioAttuale)
+        self._controllerChat.operazionePrompt(self.user_input, self.dizionarioAttuale)
 
     def selectChatTecnico(self):
         self.dizionarioAttuale = self._controllerSel.getDizionario()
-        self._controllerChat.operazionePrompt(self.user_input, self.dizionarioAttuale)
+        self._controllerChat.operazioneDebug(self.user_input, self.dizionarioAttuale)
 
     def showResponse(self, messaggio):
         print("RISPOSTA")
