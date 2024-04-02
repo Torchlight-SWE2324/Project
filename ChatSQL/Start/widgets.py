@@ -60,7 +60,7 @@ class UploadWidget:
         self._controllerUp = controllerUp
 
     def create(self):
-        uploaded_file = st.sidebar.file_uploader("Upload new data dictionary file", accept_multiple_files=False, type="json")
+        uploaded_file = st.sidebar.file_uploader("Upload new data dictionary file", accept_multiple_files=False)
         st.sidebar.button("Upload file", type="primary", on_click=lambda:self.operazioneUpload(uploaded_file), disabled=uploaded_file == None)
 
     def operazioneUpload(self, uploaded_file):
