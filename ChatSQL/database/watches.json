@@ -1,0 +1,88 @@
+{
+  "tables": [
+    {
+      "name": "watches",
+      "table-description": "Table containing information about watches",
+      "columns": [
+        {
+          "name": "id",
+          "type": "integer",
+          "references": null,
+          "description": "Unique identifier for the watch"
+        },
+        {
+          "name": "brand",
+          "type": "string",
+          "references": null,
+          "description": "Brand of the watch"
+        },
+        {
+          "name": "model",
+          "type": "string",
+          "references": null,
+          "description": "Model name of the watch"
+        },
+        {
+          "name": "movement",
+          "type": "string",
+          "references": null,
+          "description": "Type of movement in the watch"
+        }
+      ]
+    },
+    {
+      "name": "owners",
+      "table-description": "Table containing information about owners",
+      "columns": [
+        {
+          "name": "id",
+          "type": "integer",
+          "references": null,
+          "description": "Unique identifier for the watch owner"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "references": null,
+          "description": "Owner's full name"
+        },
+        {
+          "name": "email",
+          "type": "string",
+          "references": null,
+          "description": "Owner's email address"
+        }
+      ]
+    },
+    {
+      "name": "watch_collection",
+      "table-description": "Table containing information about watch collections",
+      "columns": [
+        {
+          "name": "id",
+          "type": "integer",
+          "references": null,
+          "description": "Unique identifier for the watch collection entry"
+        },
+        {
+          "name": "watch_id",
+          "type": "integer",
+          "references": "watches",
+          "description": "Foreign key referencing the watch"
+        },
+        {
+          "name": "owner_id",
+          "type": "integer",
+          "references": "owners",
+          "description": "Foreign key referencing the owner of the watch"
+        },
+        {
+          "name": "purchase_date",
+          "type": "date",
+          "references": null,
+          "description": "Date when the watch was purchased"
+        }
+      ]
+    }
+  ]
+}
