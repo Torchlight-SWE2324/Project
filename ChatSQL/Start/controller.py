@@ -1,5 +1,6 @@
 import os.path
 import time
+import re
 from model import *
 from widgets import *
 
@@ -118,14 +119,19 @@ class ControllerChat:
         self._view = view
 
     def operazionePrompt(self, user_input, dizionario):
-        self._model.generatePrompt(user_input, dizionario)
+        sanitized_user_input = self.sanifica_input(user_input)
+        self._model.generatePrompt(user_input, sanitized_user_input, dizionario)
         messaggio = self._model.getResponse()
         self._view.showResponse(messaggio)
 
     def operazioneDebug(self, user_input, dizionario):
-        self._model.generateDebug(user_input, dizionario)
+        sanitized_user_input = self.sanifica_input(user_input)
+        self._model.generateDebug(user_input, sanitized_user_input, dizionario)
         messaggio = self._model.getResponse()
         self._view.showResponse(messaggio)
+
+    def sanifica_input(self, user_input):
+        return re.sub(r"['']", " ", user_input)
     
 
     

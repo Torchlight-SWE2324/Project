@@ -139,13 +139,13 @@ class ModelChat:
         self.model_path = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
         self.data_path = os.path.join(os.path.dirname(__file__), "indexes")
 
-    def generatePrompt(self, user_input, dictionary_name):
+    def generatePrompt(self, user_input, sanitized_user_input, dictionary_name):
         promptGen = ResponseUser()
-        self.response = promptGen.generatePrompt( user_input, dictionary_name)
+        self.response = promptGen.generatePrompt(user_input, sanitized_user_input, dictionary_name)
 
-    def generateDebug(self, user_input, dictionary_name):
+    def generateDebug(self, user_input, sanitized_user_input, dictionary_name):
         debugGen = ResponseTechnician()
-        self.response = debugGen.generateDebug(user_input, dictionary_name)
+        self.response = debugGen.generateDebug(user_input, sanitized_user_input, dictionary_name)
 
     def getResponse(self):
         return self.response
