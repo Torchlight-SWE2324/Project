@@ -9,8 +9,9 @@ if __name__ == "__main__":
 
     embedder = Embedder()
     dictionary_schema_verifier = JsonSchemaVerifierService()
-    responseUser = ResponseUser()
-    responseTechnician = ResponseTechnician()
+    responseUser = ResponseUser(embedder)
+    responseTechnician = ResponseTechnician(embedder)
+    
     #modelli
     modelAut = ModelAuthentication()
     modelSel = ModelSelezione() 

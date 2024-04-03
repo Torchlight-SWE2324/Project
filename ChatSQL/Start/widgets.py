@@ -4,10 +4,6 @@ from controller import *
 class LoginWidget:
     def __init__(self, controllerAut):
         self._controllerAut = controllerAut
-        
-        #self.usernameS = st.sidebar.empty()
-        #self.passwordS = st.sidebar.empty()
-        #self.loginS = st.sidebar.empty()
 
     def create(self):
         st.sidebar.header('Login in sezione tecnico', divider='grey')
