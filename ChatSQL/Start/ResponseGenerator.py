@@ -4,7 +4,7 @@ import json
 #from txtai import Embeddings
 from embedder import *
 class ResponseUser:
-    def generatePrompt(self, user_query, dictionary_name):
+    def generatePrompt(self, user_query, sanitized_user_input, dictionary_name):
         emb = Embedder()
         embe = emb.getEmb()
         emb.caricareIndex(dictionary_name)
@@ -13,7 +13,7 @@ class ResponseUser:
             print("FILE:", file)
 
             data = json.load(file)
-            embedder_search_result = embe.search(f"select score, text, table_name, table_description, field_name, field_type, field_references, from txtai where similar('{user_query}') and score > 0.01 group by table_name")
+            embedder_search_result = embe.search(f"select score, text, table_name, table_description, field_name, field_type, field_references, from txtai where similar('{sanitized_user_input}') and score > 0.30 group by table_name")
             
             tables_with_fields_list = []
             referencies_list = []
@@ -57,12 +57,12 @@ class ResponseUser:
 
 
 class ResponseTechnician:
-    def generateDebug(self, user_query, dictionary_name):
+    def generateDebug(self, user_query, sanitized_user_input, dictionary_name):
         emb = Embedder()
         embe = emb.getEmb()
         emb.caricareIndex(dictionary_name)
         
-        embedder_search_result = embe.search(f"SELECT score, text, table_name, field_name, field_description FROM txtai WHERE similar('{user_query}') AND score > 0.01 GROUP BY table_name, field_name", limit=50)
+        embedder_search_result = embe.search(f"SELECT score, text, table_name, field_name, field_description FROM txtai WHERE similar('{sanitized_user_input}') AND score > 0.01 GROUP BY table_name, field_name", limit=50)
 
         tables_with_fields = {}
 
@@ -77,7 +77,7 @@ class ResponseTechnician:
 
             tables_with_fields[table_name].append((field_name, field_description, score))
 
-        prompt = "Similarity score with the user interrogation of each field in the database:\n\n"
+        prompt = f"Similarity score with [{user_query}] of each field in the database:\n\n"
 
         for table_name, fields in tables_with_fields.items():
             prompt += f"TABLE '{table_name}':\n"

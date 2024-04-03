@@ -1,36 +1,35 @@
 import os.path
 import time
+import re
 from model import *
 from widgets import *
 
 class ControllerAuthentication:
-    def __init__(self, model, view1, view2):
+    def __init__(self, model, view):
         self._model = model
-        self._view1 = view1
-        self._view2 = view2
+        self._view = view
 
     def updateLoginData(self, username, password):
         if username == "" and password == "":
-            self._view1.esitoMancante()
+            self._view.esitoMancante()
         else:
             esito = self._model.check_login(username, password)
             if esito:
-                self._view1.esitoPositivo()
+                self._view.esitoPositivo()
                 time.sleep(.5)
                 st.session_state.logged_in = True
                 st.rerun()
             else:
-                self._view1.esitoNegativo()
+                self._view.esitoNegativo()
 
     def getLoggedState(self):
         return self._model.getUtenteLoggato()
         
 
 class ControllerSelezione:
-    def __init__(self, model, view1, view2):
+    def __init__(self, model, view):
         self._model = model
-        self._view1 = view1 #selezione
-        self._view2 = view2 #chat
+        self._view = view #selezione
         #return self._model.filesInDB()
 
     def getFiles(self):
@@ -95,11 +94,11 @@ class ControllerDelete:
         self._model.deleteFile(file)
         esito = self._model.getEsitoFileEliminato()
         if esito:
-            self._view.esitoPositivoEliminazione()
+            self._view.esitoPositivoEliminazione(file)
             time.sleep(.5)
             st.rerun()
         else:
-            self._view.esitoNegativoEliminazione()
+            self._view.esitoNegativoEliminazione(file)
 
 
 class ControllerLogout:
@@ -120,14 +119,19 @@ class ControllerChat:
         self._view = view
 
     def operazionePrompt(self, user_input, dizionario):
-        self._model.generatePrompt(user_input, dizionario)
+        sanitized_user_input = self.sanifica_input(user_input)
+        self._model.generatePrompt(user_input, sanitized_user_input, dizionario)
         messaggio = self._model.getResponse()
         self._view.showResponse(messaggio)
 
     def operazioneDebug(self, user_input, dizionario):
-        self._model.generateDebug(user_input, dizionario)
+        sanitized_user_input = self.sanifica_input(user_input)
+        self._model.generateDebug(user_input, sanitized_user_input, dizionario)
         messaggio = self._model.getResponse()
         self._view.showResponse(messaggio)
+
+    def sanifica_input(self, user_input):
+        return re.sub(r"['']", " ", user_input)
     
 
     

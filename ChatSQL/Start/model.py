@@ -91,7 +91,8 @@ class ModelSelezione:
         for name in os.listdir(dictionary_folder_path):
             if os.path.isfile(os.path.join(dictionary_folder_path, name)):
                 list.append(name)
-        return list
+        sorted_list = sorted(list, key=lambda x: os.path.getmtime(os.path.join(dictionary_folder_path, x)), reverse=True)
+        return sorted_list
 
     def setDizionarioAttuale(self, dictionary_name):
         self.dizionarioAttuale = dictionary_name
@@ -138,13 +139,13 @@ class ModelChat:
         self.model_path = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
         self.data_path = os.path.join(os.path.dirname(__file__), "indexes")
 
-    def generatePrompt(self, user_input, dictionary_name):
+    def generatePrompt(self, user_input, sanitized_user_input, dictionary_name):
         promptGen = ResponseUser()
-        self.response = promptGen.generatePrompt( user_input, dictionary_name)
+        self.response = promptGen.generatePrompt(user_input, sanitized_user_input, dictionary_name)
 
-    def generateDebug(self, user_input, dictionary_name):
+    def generateDebug(self, user_input, sanitized_user_input, dictionary_name):
         debugGen = ResponseTechnician()
-        self.response = debugGen.generateDebug(user_input, dictionary_name)
+        self.response = debugGen.generateDebug(user_input, sanitized_user_input, dictionary_name)
 
     def getResponse(self):
         return self.response
