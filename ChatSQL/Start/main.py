@@ -18,8 +18,8 @@ if __name__ == "__main__":
     modelCha = ModelChat()
 
     #controller
-    controllerAut = ControllerAuthentication(modelAut, None, None) #aut e chat
-    controllerSel = ControllerSelezione(modelSel, None, None) #selezione & chat 
+    controllerAut = ControllerAuthentication(modelAut, None) #aut
+    controllerSel = ControllerSelezione(modelSel, None) #selezione 
     controllerUp = ControllerUpload(modelUp, None)
     controllerDel = ControllerDelete(modelDel, None)
     controllerLog = ControllerLogout(modelAut, None)
@@ -34,10 +34,8 @@ if __name__ == "__main__":
     chatWidget = ChatWidget(controllerCha, controllerSel, controllerAut)
 
     #controller imposto view
-    controllerAut._view1 = loginWidget
-    controllerAut._view2 = chatWidget
-    controllerSel._view1 = selectWidget
-    controllerSel._view2 = chatWidget
+    controllerAut._view = loginWidget
+    controllerSel._view = selectWidget
     controllerUp._view = uploadWidget
     controllerDel._view = deleteWidget
     controllerLog._view = logoutWidget
