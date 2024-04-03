@@ -11,14 +11,14 @@ from jsonschema import validate, ValidationError
 
 class DictionarySchemaVerifierService(ABC):
     @abstractmethod
-    def check_dictionary_schema(self, uploaded_file_name, uploaded_file_content) -> str: pass
+    def check_dictionary_schema(self, uploaded_file_content) -> str: pass
 
 class JsonSchemaVerifierService(DictionarySchemaVerifierService):
     def __get_schema_file_path(self) -> str:
         dictionary_schema_folder_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "dicitionary_schemas")
         return os.path.join(dictionary_schema_folder_path, "json_schema.json")
 
-    def check_dictionary_schema(self, uploaded_file_name, uploaded_file_content) -> str:
+    def check_dictionary_schema(self, uploaded_file_content) -> str:
         schema_file_path = self.__get_schema_file_path()
 
         try:
@@ -40,14 +40,14 @@ class ModelUpload:
         self.dictionary_schema_verifier = dictionary_schema_verifier
         self.embedder = embedder
 
-    def __dictionary_schema_check(self, uploaded_file_name, uploaded_file_content):
-        return self.dictionary_schema_verifier.check_dictionary_schema(uploaded_file_name, uploaded_file_content)
+    def __dictionary_schema_check(self, uploaded_file_content):
+        return self.dictionary_schema_verifier.check_dictionary_schema(uploaded_file_content)
 
     def __get_dictionaries_folder_path(self) -> str:
         return os.path.join(os.path.dirname(os.path.realpath(__file__)), "database")
 
     def upload_dictionary(self, uploaded_file_name, uploaded_file_content) -> str:
-        dictionary_check = self.__dictionary_schema_check(uploaded_file_name, uploaded_file_content)
+        dictionary_check = self.__dictionary_schema_check(uploaded_file_content)
 
         if dictionary_check == "schema_check_success":
             dictionary_folder_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "database")
