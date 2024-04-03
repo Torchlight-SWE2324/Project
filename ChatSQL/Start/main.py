@@ -9,13 +9,14 @@ if __name__ == "__main__":
 
     embedder = Embedder()
     dictionary_schema_verifier = JsonSchemaVerifierService()
-
+    responseUser = ResponseUser()
+    responseTechnician = ResponseTechnician()
     #modelli
     modelAut = ModelAuthentication()
     modelSel = ModelSelezione() 
     modelUp = ModelUpload(embedder, dictionary_schema_verifier)
     modelDel = ModelDelete()
-    modelCha = ModelChat()
+    modelCha = ModelChat(responseUser, responseTechnician)
 
     #controller
     controllerAut = ControllerAuthentication(modelAut, None) #aut

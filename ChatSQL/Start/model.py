@@ -134,18 +134,18 @@ class ModelDelete:
         return self.file_deleted
     
 class ModelChat:
-    def __init__(self):
+    def __init__(self, responseUser, responseTechnician):
         self.response = ""
         self.model_path = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
         self.data_path = os.path.join(os.path.dirname(__file__), "indexes")
+        self.responseUser = responseUser
+        self.responseTechnician = responseTechnician
 
     def generatePrompt(self, user_input, sanitized_user_input, dictionary_name):
-        promptGen = ResponseUser()
-        self.response = promptGen.generatePrompt(user_input, sanitized_user_input, dictionary_name)
+        self.response = self.responseUser.generatePrompt(user_input, sanitized_user_input, dictionary_name)
 
     def generateDebug(self, user_input, sanitized_user_input, dictionary_name):
-        debugGen = ResponseTechnician()
-        self.response = debugGen.generateDebug(user_input, sanitized_user_input, dictionary_name)
+        self.response =  self.responseTechnician.generateDebug(user_input, sanitized_user_input, dictionary_name)
 
     def getResponse(self):
         return self.response
