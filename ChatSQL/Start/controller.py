@@ -93,11 +93,11 @@ class ControllerDelete:
         self._model.deleteFile(file)
         esito = self._model.getEsitoFileEliminato()
         if esito:
-            self._view.esitoPositivoEliminazione()
+            self._view.esitoPositivoEliminazione(file)
             time.sleep(.5)
             st.rerun()
         else:
-            self._view.esitoNegativoEliminazione()
+            self._view.esitoNegativoEliminazione(file)
 
 
 class ControllerLogout:

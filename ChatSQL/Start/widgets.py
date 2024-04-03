@@ -4,10 +4,13 @@ from controller import *
 class LoginWidget:
     def __init__(self, controllerAut):
         self._controllerAut = controllerAut
+        
         #self.usernameS = st.sidebar.empty()
         #self.passwordS = st.sidebar.empty()
         #self.loginS = st.sidebar.empty()
+
     def create(self):
+        st.sidebar.header('Login in sezione tecnico', divider='grey')
         self.username = st.sidebar.text_input("Username")
         self.password = st.sidebar.text_input("Password", type="password")
         self.login_button = st.sidebar.button("Login")
@@ -29,6 +32,7 @@ class LogoutWidget:
         self._controllerLogout = controllerLog
 
     def create(self):
+        st.sidebar.header('Lougout da sezione tecnico', divider='grey')
         bottone_logout = st.sidebar.button("Logout")
         if bottone_logout:
             self._controllerLogout.logout()
@@ -60,7 +64,6 @@ class UploadWidget:
         self._controllerUp = controllerUp
         if "file_uploader_key" not in st.session_state:
             st.session_state["file_uploader_key"] = 0
-
 
     def create(self):
         uploaded_file = st.sidebar.file_uploader("Upload new data dictionary file", accept_multiple_files=False, key = st.session_state["file_uploader_key"])
@@ -97,11 +100,11 @@ class DeleteWidget:
     def getSelWidget(self):
         return self._selectionWidget
     
-    def esitoPositivoEliminazione(self):
-        st.success('File eliminato con successo!', icon="✅")
+    def esitoPositivoEliminazione(self, file_name):
+        st.success(f'Dizionario "{file_name}" eliminato con successo!', icon="🗑️")
 
-    def esitoNegativoEliminazione(self):
-        st.error('Eliminazione non avvenuta!', icon="🚨")
+    def esitoNegativoEliminazione(self, file_name):
+        st.error(f'Eliminazione di "{file_name}" non avvenuta!', icon="🚨")
 
 class ChatWidget:
     def __init__(self, controllerCha, controllerSel, controllerAut):
