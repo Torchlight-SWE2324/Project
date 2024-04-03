@@ -58,9 +58,12 @@ class SelectWidget:
 class UploadWidget:
     def __init__(self, controllerUp):
         self._controllerUp = controllerUp
+        if "file_uploader_key" not in st.session_state:
+            st.session_state["file_uploader_key"] = 0
+
 
     def create(self):
-        uploaded_file = st.sidebar.file_uploader("Upload new data dictionary file", accept_multiple_files=False)
+        uploaded_file = st.sidebar.file_uploader("Upload new data dictionary file", accept_multiple_files=False, key = st.session_state["file_uploader_key"])
         st.sidebar.button("Upload file", type="primary", on_click=lambda:self.operazioneUpload(uploaded_file), disabled=uploaded_file == None)
 
     def operazioneUpload(self, uploaded_file):
@@ -72,6 +75,7 @@ class UploadWidget:
 
     def esitoPositivo(self, uploaded_file_name):
         st.success(f'Dizionario "{uploaded_file_name}" caricato con successo!', icon="✅")
+        st.session_state["file_uploader_key"] += 1
 
     def esitoNegativo(self, dictionary_upload_error):
         st.error(dictionary_upload_error, icon="🚨")
