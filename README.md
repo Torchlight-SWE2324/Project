@@ -1,6 +1,6 @@
 <p align="center">
-  <img width="350" src="rsc/chat_light.svg#gh-dark-mode-only">
-  <img width="350" src="rsc/chat_dark.svg#gh-light-mode-only">
+  <img width="350" src="repo_rsc/chat_light.svg#gh-dark-mode-only">
+  <img width="350" src="repo_rsc/chat_dark.svg#gh-light-mode-only">
 </p>
 
 <br>
