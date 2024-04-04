@@ -42,29 +42,29 @@ class AuthenticationController:
 
 class SelectionController:
     def __init__(self, model, view):
-        self._model = model
-        self._view = view
+        self.__model = model
+        self.__view = view
 
     def operationGetAllDictionaries(self):
-        return self._model.getFilesInDB()  
+        return self.__model.getFilesInDB()
     
     def operationGetCurrentDictionary(self):
-        return (self._model.getCurrentDictionary())
+        return (self.__model.getCurrentDictionary())
 
     def operationSetCurrentDictionary(self, dictionary):
-        self._model.setCurrentDictionary(dictionary)
+        self.__model.setCurrentDictionary(dictionary)
 
     def getView(self):
-        return self._view
+        return self.__view
 
     def setView(self, view):
-        self._view = view
+        self.__view = view
     
     def getModel(self):
-        return self._model
+        return self.__model
     
     def setModel(self, model):
-        self._model = model
+        self.__model = model
 
 
 class UploadController:
