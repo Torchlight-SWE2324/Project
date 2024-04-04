@@ -154,7 +154,8 @@ class LogoutController:
         self._view = view  
     
     def operationLogout(self):
-        st.session_state.logged_in = self._model.setLoggedStatus(False)
+        self._model.setLoggedStatus(False)
+        st.session_state.logged_in = self._model.getLoggedStatus()
         st.session_state.chat = []
         self._view.positiveLogoutOutcome()
         time.sleep(.5)
@@ -174,21 +175,24 @@ class LogoutController:
 
 
 class ChatController:
-    def __init__(self, model, view):
-        self._model = model
+    def __init__(self, chat_model, select_model, auth_model, view):  # chatModel, selModel, authModel
+        self._chat_model = chat_model
+        self._select_model = select_model
+        self._auth_model = auth_model
         self._view = view
 
-    def operationPrompt(self, user_input, dictionary):
+    def operationGenerateResponse(self, user_input):
+        current_dictionary = self._select_model.getCurrentDictionary()
         sanitized_user_input = self.sanitizeInput(user_input)
-        self._model.generatePrompt(user_input, sanitized_user_input, dictionary)
-        gen_response = self._model.getResponse()
+        if self._auth_model.getLoggedStatus():
+            self._chat_model.generateDebug(user_input, sanitized_user_input, current_dictionary)
+        else :
+            self._chat_model.generatePrompt(user_input, sanitized_user_input, current_dictionary)
+        gen_response = self._chat_model.getResponse()    
         self._view.showResponse(gen_response)
 
-    def operationDebug(self, user_input, dictionary):
-        sanitized_user_input = self.sanitizeInput(user_input)
-        self._model.generateDebug(user_input, sanitized_user_input, dictionary)
-        gen_response = self._model.getResponse()
-        self._view.showResponse(gen_response)
+    def operationGetAllDictionaries(self):
+        return self._select_model.getFilesInDB()
 
     def sanitizeInput(self, user_input):
         return re.sub(r"['']", " ", user_input)
