@@ -15,7 +15,7 @@ class ResponseUser:
             print("FILE:", file)
 
             data = json.load(file)
-            embedder_search_result = embe.search(f"select score, text, table_name, table_description, field_name, field_type, field_references, from txtai where similar('{sanitized_user_input}') and score > 0.30 group by table_name")
+            embedder_search_result = embe.search(f"select score, text, table_name, table_description, field_name, field_type, field_references, from txtai where similar('{sanitized_user_input}') and score > 0.25 group by table_name")
             print(embedder_search_result)
             tables_with_fields_list = []
             referencies_list = []
