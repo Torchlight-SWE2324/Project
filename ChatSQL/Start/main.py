@@ -9,13 +9,15 @@ if __name__ == "__main__":
 
     embedder = Embedder()
     dictionary_schema_verifier = JsonSchemaVerifierService()
-
+    responseUser = ResponseUser(embedder)
+    responseTechnician = ResponseTechnician(embedder)
+    
     #modelli
     modelAut = ModelAuthentication()
     modelSel = ModelSelezione() 
     modelUp = ModelUpload(embedder, dictionary_schema_verifier)
     modelDel = ModelDelete()
-    modelCha = ModelChat()
+    modelCha = ModelChat(responseUser, responseTechnician)
 
     #controller
     controllerAut = ControllerAuthentication(modelAut, None) #aut
@@ -44,6 +46,9 @@ if __name__ == "__main__":
 
     if "logged_in" not in st.session_state:
         st.session_state.logged_in = False
+
+    if "chat" not in st.session_state:
+        st.session_state.chat = []
 
 
     if st.session_state.logged_in == False:

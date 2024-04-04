@@ -4,10 +4,6 @@ from controller import *
 class LoginWidget:
     def __init__(self, controllerAut):
         self._controllerAut = controllerAut
-        
-        #self.usernameS = st.sidebar.empty()
-        #self.passwordS = st.sidebar.empty()
-        #self.loginS = st.sidebar.empty()
 
     def create(self):
         st.sidebar.header('Login in sezione tecnico', divider='grey')
@@ -117,10 +113,14 @@ class ChatWidget:
     def create(self):
         st.title("ChatSQL")
         st.subheader("Type your natural language query in the chat box below and press enter to get the corresponding SQL query.")
+        for message in st.session_state.chat:
+            with st.chat_message(message["role"]):
+                st.write(f'<div style="white-space: pre-line;">{message["content"]}</div>', unsafe_allow_html=True)
+
         if (self._controllerSel.getFiles() == []):
             st.chat_input(disabled=True)
         else:
-            self.user_input = st.chat_input("Type your query here", key="chat", max_chars=500)
+            self.user_input = st.chat_input("Type your query here", max_chars=500)
             if self.user_input:
                 st.write(f"User has sent the following prompt: {self.user_input}")
                 if (self._controllerAut.getLoggedState() == False):
@@ -139,5 +139,5 @@ class ChatWidget:
         self._controllerChat.operazioneDebug(self.user_input, self.dizionarioAttuale)
 
     def showResponse(self, messaggio):
-        print("RISPOSTA")
+        st.session_state.chat.append({"role": "user", "content": messaggio})
         st.code(f"Response: {messaggio}", language="markdown")

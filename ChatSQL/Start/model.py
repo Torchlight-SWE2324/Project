@@ -119,33 +119,36 @@ class ModelDelete:
                     os.remove(file_path)
                     json_deleted = True 
 
-            for index_file in os.listdir(self.indexes_path + "\\" + os.path.splitext(file)[0]):
-                file_path = os.path.join(self.indexes_path, os.path.splitext(file)[0], index_file)
-                if os.path.isfile(file_path):
-                    os.remove(file_path) #per eliminare i file nella cartella
-                    #importata per eliminare la cartella
-                    shutil.rmtree(os.path.join(self.indexes_path, os.path.splitext(file)[0]))
-                    index_deleted = True
+            filename_without_extension = os.path.splitext(file)[0]
+            indexes_directory = os.path.join(self.indexes_path, filename_without_extension)
+            if os.path.isdir(indexes_directory):
+                for index_file in os.listdir(indexes_directory):
+                    file_path = os.path.join(indexes_directory, index_file)
+                    if os.path.isfile(file_path):
+                        os.remove(file_path)
+                shutil.rmtree(indexes_directory)
+                index_deleted = True
 
-        if json_deleted == True and index_deleted == True:
+        if json_deleted and index_deleted:
             self.file_deleted = True
+
     
     def getEsitoFileEliminato(self):
         return self.file_deleted
     
 class ModelChat:
-    def __init__(self):
+    def __init__(self, responseUser, responseTechnician):
         self.response = ""
         self.model_path = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
         self.data_path = os.path.join(os.path.dirname(__file__), "indexes")
+        self.responseUser = responseUser
+        self.responseTechnician = responseTechnician
 
     def generatePrompt(self, user_input, sanitized_user_input, dictionary_name):
-        promptGen = ResponseUser()
-        self.response = promptGen.generatePrompt(user_input, sanitized_user_input, dictionary_name)
+        self.response = self.responseUser.generatePrompt(user_input, sanitized_user_input, dictionary_name)
 
     def generateDebug(self, user_input, sanitized_user_input, dictionary_name):
-        debugGen = ResponseTechnician()
-        self.response = debugGen.generateDebug(user_input, sanitized_user_input, dictionary_name)
+        self.response =  self.responseTechnician.generateDebug(user_input, sanitized_user_input, dictionary_name)
 
     def getResponse(self):
         return self.response

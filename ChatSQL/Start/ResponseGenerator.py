@@ -4,20 +4,25 @@ import json
 #from txtai import Embeddings
 from embedder import *
 class ResponseUser:
+    def __init__(self, embedder):
+        self.emb = embedder
+
     def generatePrompt(self, user_query, sanitized_user_input, dictionary_name):
-        emb = Embedder()
-        embe = emb.getEmb()
-        emb.caricareIndex(dictionary_name)
+        embe = self.emb.getEmb()
+        self.emb.caricareIndex(dictionary_name)
         
         with open(os.path.join(os.path.dirname(__file__), "database", dictionary_name), 'r') as file:
             print("FILE:", file)
 
             data = json.load(file)
-            embedder_search_result = embe.search(f"select score, text, table_name, table_description, field_name, field_type, field_references, from txtai where similar('{sanitized_user_input}') and score > 0.30 group by table_name")
-            
+            embedder_search_result = embe.search(f"select score, text, table_name, table_description, field_name, field_type, field_references, from txtai where similar('{sanitized_user_input}') and score > 0.25 group by table_name")
+            print(embedder_search_result)
             tables_with_fields_list = []
             referencies_list = []
 
+            if embedder_search_result == []:
+                return "No relevant information was found regarding your request. \nPlease try again with a different query. \nPlease note that this application is designed to handle requests that \ncan be translated into a SQL query."
+            
             for result in embedder_search_result:
                 for table in data["tables"]:
                     if table["name"] == result['table_name']:
@@ -53,14 +58,17 @@ class ResponseUser:
                     pass
                 else:
                     print("prompt not existent")
+                embe.close()
                 return prompt
 
 
 class ResponseTechnician:
+    def __init__(self, embedder):
+        self.emb = embedder
+
     def generateDebug(self, user_query, sanitized_user_input, dictionary_name):
-        emb = Embedder()
-        embe = emb.getEmb()
-        emb.caricareIndex(dictionary_name)
+        embe = self.emb.getEmb()
+        self.emb.caricareIndex(dictionary_name)
         
         embedder_search_result = embe.search(f"SELECT score, text, table_name, field_name, field_description FROM txtai WHERE similar('{sanitized_user_input}') AND score > 0.01 GROUP BY table_name, field_name", limit=50)
 
@@ -83,5 +91,5 @@ class ResponseTechnician:
             prompt += f"TABLE '{table_name}':\n"
             for field, description, score in fields:
                 prompt += f"- FIELD: {field} {' '*(max(len(field), 12) - len(field))} | SCORE: {score:.5f} | DESCRIPTION: {description}\n"
-
+        embe.close()
         return prompt
