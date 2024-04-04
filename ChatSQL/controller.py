@@ -49,10 +49,11 @@ class ControllerUpload:
         self._view = view
 
     def __dictionary_check(self, uploaded_file) -> str:
+        uploaded_file_name = uploaded_file.name
+        
         if uploaded_file is None:
             return f'File was not loaded, repeat attempt.'
-
-        uploaded_file_name = uploaded_file.name
+        
         if os.path.splitext(uploaded_file_name)[1] != ".json":
             return "File must have format JSON"
 
@@ -70,17 +71,15 @@ class ControllerUpload:
         dictionary_check_result = self.__dictionary_check(uploaded_file)
 
         if dictionary_check_result == "successful_check":
-
             dictionary_content = uploaded_file.read()
             uploaded_file_content = dictionary_content.decode('utf-8')
             uploaded_file_name = uploaded_file.name
-
             dictionary_upload_result = self._model.upload_dictionary(uploaded_file_name, uploaded_file_content)
+            
             if dictionary_upload_result == "upload_success":
                 self._view.esitoPositivo(uploaded_file_name)
             else:
                 self._view.esitoNegativo(dictionary_upload_result)
-
         else:
             self._view.esitoNegativo(dictionary_check_result)
 

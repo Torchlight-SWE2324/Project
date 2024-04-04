@@ -69,6 +69,7 @@ class ModelUpload:
     def get_all_dictionaries_names(self):
         dictionary_folder_path = self.__get_dictionaries_folder_path()
         list = []
+        
         for name in os.listdir(dictionary_folder_path):
             if os.path.isfile(os.path.join(dictionary_folder_path, name)):
                 list.append(name)
@@ -85,6 +86,7 @@ class ModelSelezione:
     def filesInDB(self):
         dictionary_folder_path = self.__get_dictionaries_folder_path()
         list = []
+        
         for name in os.listdir(dictionary_folder_path):
             if os.path.isfile(os.path.join(dictionary_folder_path, name)):
                 list.append(name)
@@ -108,7 +110,7 @@ class ModelDelete:
     def deleteFile(self, file):
         json_deleted = False
         index_deleted = False
-        print(file)
+        
         if file:
             file_paths_to_try = [os.path.join(self.database_path, file)]
             self.file_deleted = False

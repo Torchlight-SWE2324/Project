@@ -50,7 +50,6 @@ class ViewTecnico:
         self._controllerUp = controllerUp
         self._controllerDel = controllerDel
         self._controllerLogout = controllerLogout
-
         self.fileUpload = None
         self.containerNotifiche = st.sidebar.empty()
         self.containerNotifiche1 = st.sidebar.empty()
@@ -79,6 +78,7 @@ class ViewTecnico:
 
     def logout(self):    
         bottone_logout = self.logoutS.button("Logout")
+        
         if bottone_logout:
             self._controllerLogout.logout()
 
@@ -98,8 +98,8 @@ class ViewTecnico:
         files = self._controllerSel.getFiles()
         file = self.container_delete.selectbox('Your data dictionary files', files, key="dizionari")
         self._controllerSel.setDizionario(file)
-
         clickSelectFile = self.button_delete.button("Delete selected file", type="primary", disabled=file == None)
+        
         if clickSelectFile:  
             self._controllerDel.operazioneDelete(file)
 
@@ -120,12 +120,14 @@ class ViewChat:
 
     def display_data(self):
         self.user_input = st.chat_input("Type your query here", key="chat", max_chars=500)
+        
         if self.user_input:
             st.write(f"User has sent the following prompt: {self.user_input}")
             self.selectChat()
 
     def selectChat(self):
         self.dizionarioAttuale = self._controllerSel.getDizionario()
+        
         if self._controllerAut.getLoggedState():
             print("Logged as technician")
             self._controllerChat.operazioneDebug(self.user_input, self.dizionarioAttuale)

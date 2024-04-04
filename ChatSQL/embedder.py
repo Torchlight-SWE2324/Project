@@ -27,12 +27,12 @@ class Embedder:
                               "text": command["field_description"]} for command in commands])
 
             self.getEmb().save(index_path)
-            print("index path", index_path)
             self.getEmb().close()
             return "index_created"
 
         except FileNotFoundError:
             return f"File '{dictionary_file_name}' or its path not found."
+        
         except Exception as e:
             return f"An error occurred in generateIndex in embedder.py: {e}"
 
@@ -59,7 +59,6 @@ class Embedder:
                                 "field_description": description}
 
                     commands.append(dictionary)
-
             return commands
         
         except FileNotFoundError:
@@ -74,7 +73,6 @@ class Embedder:
         try:
             index_name = os.path.splitext(dictionary_file_name)[0]
             index_path = os.path.join(self.indexDirectory, index_name)
-
             self.getEmb().load(index_path)
             
         except FileNotFoundError:
