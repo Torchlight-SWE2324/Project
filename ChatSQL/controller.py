@@ -1,6 +1,7 @@
 import os.path
 import time
 import re
+
 from model import *
 from widgets import *
 
@@ -30,15 +31,14 @@ class ControllerAuthentication:
 class ControllerSelezione:
     def __init__(self, model, view):
         self._model = model
-        self._view = view #selezione
-        #return self._model.filesInDB()
+        self._view = view
 
     def getFiles(self):
         return self._model.filesInDB()  
     
     def setDizionario(self, dizionario):
         self._model.setDizionarioAttuale(dizionario)
-#eliminare
+
     def getDizionario(self):
         return (self._model.getDizionarioAttuale())
 
@@ -76,7 +76,6 @@ class ControllerUpload:
             uploaded_file_name = uploaded_file.name
 
             dictionary_upload_result = self._model.upload_dictionary(uploaded_file_name, uploaded_file_content)
-            #print("dictionary_upload_result",dictionary_upload_result)
             if dictionary_upload_result == "upload_success":
                 self._view.esitoPositivo(uploaded_file_name)
             else:
@@ -109,7 +108,7 @@ class ControllerLogout:
     
     def logout(self):
         st.session_state.logged_in = self._model.logout()
-        st.session_state.chat = [] #per chat
+        st.session_state.chat = []
         self._view.logoutEsito()
         time.sleep(.5)
         st.rerun()
