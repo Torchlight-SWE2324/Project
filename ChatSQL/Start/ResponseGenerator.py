@@ -16,10 +16,13 @@ class ResponseUser:
 
             data = json.load(file)
             embedder_search_result = embe.search(f"select score, text, table_name, table_description, field_name, field_type, field_references, from txtai where similar('{sanitized_user_input}') and score > 0.30 group by table_name")
-            
+            print(embedder_search_result)
             tables_with_fields_list = []
             referencies_list = []
 
+            if embedder_search_result == []:
+                return "No relevant information was found regarding your request. \nPlease try again with a different query. \nPlease note that this application is designed to handle requests that \ncan be translated into a SQL query."
+            
             for result in embedder_search_result:
                 for table in data["tables"]:
                     if table["name"] == result['table_name']:
