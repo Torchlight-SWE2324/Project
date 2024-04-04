@@ -1,12 +1,9 @@
 from model import *
-#from view import *
 from controller import *
 from widgets import *
 from embedder import Embedder
 
-# Usage
 if __name__ == "__main__":
-
     embedder = Embedder()
     dictionary_schema_verifier = JsonSchemaVerifierService()
     responseUser = ResponseUser(embedder)
@@ -43,23 +40,21 @@ if __name__ == "__main__":
     controllerLog._view = logoutWidget
     controllerCha._view = chatWidget
 
-
     if "logged_in" not in st.session_state:
         st.session_state.logged_in = False
 
     if "chat" not in st.session_state:
         st.session_state.chat = []
 
-
     if st.session_state.logged_in == False:
         modelAut.setUtenteLoggato(False)
-        selectWidget.create() #creazione widget selezione dizionario
-        chatWidget.create() #deve essere messa come ultimo widget (non primo)
-        loginWidget.create()  #creazione widget login
+        selectWidget.create()   #creazione widget selezione dizionario
+        chatWidget.create()     #deve essere messa come ultimo widget (non primo)
+        loginWidget.create()    #creazione widget login
         
     else:
         modelAut.setUtenteLoggato(True)
         deleteWidget.create()   #creazione widget delete (crea in automatico anche la selezione diz)
-        chatWidget.create() #deve essere messa come ultimo widget (non primo)
+        chatWidget.create()     #deve essere messa come ultimo widget (non primo)
         uploadWidget.create()   #creazione widget selezione dizionario
         logoutWidget.create()   #creazione widget selezione dizionario
