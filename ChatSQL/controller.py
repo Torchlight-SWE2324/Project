@@ -47,32 +47,33 @@ class SelectionController:
 
     def operationGetAllDictionaries(self):
         return self.__model.getFilesInDB()
-    
-    def operationGetCurrentDictionary(self):
-        return (self.__model.getCurrentDictionary())
 
     def operationSetCurrentDictionary(self, dictionary):
         self.__model.setCurrentDictionary(dictionary)
 
-    def getView(self):
-        return self.__view
-
     def setView(self, view):
         self.__view = view
+    '''
+    def operationGetCurrentDictionary(self):
+        return (self.__model.getCurrentDictionary())
+
+    def getView(self):
+        return self.__view
     
     def getModel(self):
         return self.__model
     
     def setModel(self, model):
         self.__model = model
+    '''
 
 
 class UploadController:
     def __init__(self, model, view):
-        self._model = model
-        self._view = view
+        self.__model = model
+        self.__view = view
 
-    def __dictionary_check(self, uploaded_file) -> str:
+    def __dictionaryCheck(self, uploaded_file) -> str:
         uploaded_file_name = uploaded_file.name
         
         if uploaded_file is None:
@@ -81,43 +82,45 @@ class UploadController:
         if os.path.splitext(uploaded_file_name)[1] != ".json":
             return "File must have format JSON"
 
-        if self._model.getLoadedDictionariesNumber() > 3:
+        if self.__model.getLoadedDictionariesNumber() > 3:
             return "App cannot contain more than 4 dictionaries."
 
-        for dictionary in self._model.getAllDictionariesNames():
+        for dictionary in self.__model.getAllDictionariesNames():
             if uploaded_file_name == dictionary:
                 return f'File with name "{uploaded_file_name}" already present.'
 
         return "successful_check"
 
     def operationUpdateFileData(self):
-        uploaded_file = self._view.getFileUploaded()
-        dictionary_check_result = self.__dictionary_check(uploaded_file)
+        uploaded_file = self.__view.getFileUploaded()
+        dictionary_check_result = self.__dictionaryCheck(uploaded_file)
 
         if dictionary_check_result == "successful_check":
             dictionary_content = uploaded_file.read()
             uploaded_file_content = dictionary_content.decode('utf-8')
             uploaded_file_name = uploaded_file.name
-            dictionary_upload_result = self._model.uploadDictionary(uploaded_file_name, uploaded_file_content)
+            dictionary_upload_result = self.__model.uploadDictionary(uploaded_file_name, uploaded_file_content)
             
             if dictionary_upload_result == "upload_success":
-                self._view.positiveUploadOutcome(uploaded_file_name)
+                self.__view.positiveUploadOutcome(uploaded_file_name)
             else:
-                self._view.negativeUploadOutcome(dictionary_upload_result)
+                self.__view.negativeUploadOutcome(dictionary_upload_result)
         else:
-            self._view.negativeUploadOutcome(dictionary_check_result)
-    
-    def getView(self):
-        return self._view
+            self.__view.negativeUploadOutcome(dictionary_check_result)
 
     def setView(self, view):
-        self._view = view
+        self.__view = view
+
+    '''
+    def getView(self):
+        return self._view
     
     def getModel(self):
-        return self._model
+        return self.__model
     
     def setModel(self, model):
-        self._model = model
+        self.__model = model
+    '''
 
 
 class DeleteController:
