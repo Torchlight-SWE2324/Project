@@ -17,6 +17,7 @@ class ControllerAuthentication:
             if esito:
                 self._view.esitoPositivo()
                 time.sleep(.5)
+                st.session_state.chat = []
                 st.session_state.logged_in = True
                 st.rerun()
             else:
@@ -108,6 +109,7 @@ class ControllerLogout:
     
     def logout(self):
         st.session_state.logged_in = self._model.logout()
+        st.session_state.chat = [] #per chat
         self._view.logoutEsito()
         time.sleep(.5)
         st.rerun()
