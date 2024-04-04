@@ -81,10 +81,10 @@ class UploadController:
         if os.path.splitext(uploaded_file_name)[1] != ".json":
             return "File must have format JSON"
 
-        if self._model.get_loaded_dictionaries_number() > 3:
+        if self._model.getLoadedDictionariesNumber() > 3:
             return "App cannot contain more than 4 dictionaries."
 
-        for dictionary in self._model.get_all_dictionaries_names():
+        for dictionary in self._model.getAllDictionariesNames():
             if uploaded_file_name == dictionary:
                 return f'File with name "{uploaded_file_name}" already present.'
 
@@ -98,7 +98,7 @@ class UploadController:
             dictionary_content = uploaded_file.read()
             uploaded_file_content = dictionary_content.decode('utf-8')
             uploaded_file_name = uploaded_file.name
-            dictionary_upload_result = self._model.upload_dictionary(uploaded_file_name, uploaded_file_content)
+            dictionary_upload_result = self._model.uploadDictionary(uploaded_file_name, uploaded_file_content)
             
             if dictionary_upload_result == "upload_success":
                 self._view.positiveUploadOutcome(uploaded_file_name)

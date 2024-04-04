@@ -8,14 +8,14 @@ from jsonschema import validate, ValidationError
 
 class DictionarySchemaVerifierService(ABC):
     @abstractmethod
-    def check_dictionary_schema(self, uploaded_file_content) -> str: pass
+    def checkDictionarySchema(self, uploaded_file_content) -> str: pass
 
 class JsonSchemaVerifierService(DictionarySchemaVerifierService):
     def __get_schema_file_path(self) -> str:
         dictionary_schema_folder_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "dicitionary_schemas")
         return os.path.join(dictionary_schema_folder_path, "json_schema.json")
 
-    def check_dictionary_schema(self, uploaded_file_content) -> str:
+    def checkDictionarySchema(self, uploaded_file_content) -> str:
         schema_file_path = self.__get_schema_file_path()
 
         try:
@@ -33,18 +33,17 @@ class JsonSchemaVerifierService(DictionarySchemaVerifierService):
 
 class UploadService:
     def __init__(self, embedder, dictionary_schema_verifier):
-        self._database_path = self.__get_dictionaries_folder_path()
-        self._dictionary_schema_verifier = dictionary_schema_verifier
-        self.embedder = embedder
+        self.__dictionary_schema_verifier = dictionary_schema_verifier
+        self.__embedder = embedder
 
-    def __dictionary_schema_check(self, uploaded_file_content):
-        return self._dictionary_schema_verifier.check_dictionary_schema(uploaded_file_content)
+    def __dictionarySchemaCheck(self, uploaded_file_content):
+        return self.__dictionary_schema_verifier.checkDictionarySchema(uploaded_file_content)
 
-    def __get_dictionaries_folder_path(self) -> str:
+    def __getDictionariesFolderPath(self) -> str:
         return os.path.join(os.path.dirname(os.path.realpath(__file__)), "database")
 
-    def upload_dictionary(self, uploaded_file_name, uploaded_file_content) -> str:
-        dictionary_check = self.__dictionary_schema_check(uploaded_file_content)
+    def uploadDictionary(self, uploaded_file_name, uploaded_file_content) -> str:
+        dictionary_check = self.__dictionarySchemaCheck(uploaded_file_content)
 
         if dictionary_check == "schema_check_success":
             dictionary_folder_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "database")
@@ -54,7 +53,7 @@ class UploadService:
                 file_content = uploaded_file_content.encode()
                 destination_file.write(file_content)
 
-            index_creation_result = self.embedder.generateIndex(uploaded_file_name)
+            index_creation_result = self.__embedder.generateIndex(uploaded_file_name)
             if index_creation_result == "index_created":
                 return 'upload_success'
             else:
@@ -63,11 +62,11 @@ class UploadService:
         else:
             return dictionary_check
 
-    def get_loaded_dictionaries_number(self) -> int:
-        return len(self.get_all_dictionaries_names())
+    def getLoadedDictionariesNumber(self) -> int:
+        return len(self.getAllDictionariesNames())
 
-    def get_all_dictionaries_names(self):
-        dictionary_folder_path = self.__get_dictionaries_folder_path()
+    def getAllDictionariesNames(self):
+        dictionary_folder_path = self.__getDictionariesFolderPath()
         list = []
         
         for name in os.listdir(dictionary_folder_path):
@@ -78,13 +77,13 @@ class UploadService:
 
 class SelectionService:
     def __init__(self):
-        self.current_dictionary = None
+        self.__current_dictionary = None
 
-    def __get_dictionaries_folder_path(self) -> str:
+    def __getDictionariesFolderPath(self) -> str:
         return os.path.join(os.path.dirname(os.path.realpath(__file__)), "database")
 
     def getFilesInDB(self):
-        dictionary_folder_path = self.__get_dictionaries_folder_path()
+        dictionary_folder_path = self.__getDictionariesFolderPath()
         list = []
         
         for name in os.listdir(dictionary_folder_path):
@@ -94,10 +93,10 @@ class SelectionService:
         return sorted_list
 
     def setCurrentDictionary(self, dictionary_name):
-        self.current_dictionary = dictionary_name
+        self.__current_dictionary = dictionary_name
 
     def getCurrentDictionary(self):
-        return self.current_dictionary
+        return self.__current_dictionary
 
 
 class DeleteService:
