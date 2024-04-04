@@ -74,7 +74,7 @@ class UploadWidget:
         return self.fileUpload
 
     def esitoPositivo(self, uploaded_file_name):
-        st.success(f'Dizionario "{uploaded_file_name}" caricato con successo!', icon="✅")
+        st.success(f'Dictionary "{uploaded_file_name}" uploaded.', icon="✅")
         st.session_state["file_uploader_key"] += 1
 
     def esitoNegativo(self, dictionary_upload_error):
@@ -87,7 +87,7 @@ class DeleteWidget:
         self._controllerDel = controllerDel
 
     def create(self):
-        self._selectionWidget.create() #creo widget di selezione dentro al widget di delete
+        self._selectionWidget.create()
         file = self._selectionWidget.getFile()
         
         clickSelectFile = st.sidebar.button("Delete selected file", type="primary", disabled=file == None)
