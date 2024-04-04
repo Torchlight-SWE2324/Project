@@ -5,11 +5,11 @@ from embedder import *
 
 class ResponseUser:
     def __init__(self, embedder):
-        self.emb = embedder
+        self._emb = embedder
 
     def generatePrompt(self, user_query, sanitized_user_input, dictionary_name):
-        embe = self.emb.getEmb()
-        self.emb.caricareIndex(dictionary_name)
+        embe = self._emb.getEmb()
+        self._emb.caricareIndex(dictionary_name)
         
         with open(os.path.join(os.path.dirname(__file__), "database", dictionary_name), 'r') as file:
             data = json.load(file)
@@ -51,16 +51,17 @@ class ResponseUser:
                 if prompt:
                     pass
                 embe.close()
+                print(prompt)
                 return prompt
 
 
 class ResponseTechnician:
     def __init__(self, embedder):
-        self.emb = embedder
+        self._emb = embedder
 
     def generateDebug(self, user_query, sanitized_user_input, dictionary_name):
-        embe = self.emb.getEmb()
-        self.emb.caricareIndex(dictionary_name)
+        embe = self._emb.getEmb()
+        self._emb.caricareIndex(dictionary_name)
         embedder_search_result = embe.search(f"SELECT score, text, table_name, field_name, field_description FROM txtai WHERE similar('{sanitized_user_input}') AND score > 0.01 GROUP BY table_name, field_name", limit=50)
         tables_with_fields = {}
 

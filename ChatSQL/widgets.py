@@ -3,8 +3,8 @@ import streamlit as st
 from controller import *
 
 class LoginWidget:
-    def __init__(self, controllerAut):
-        self._controllerAut = controllerAut
+    def __init__(self, controller_aut):
+        self._controller_aut = controller_aut
 
     def create(self):
          st.sidebar.header('Login in the technician section', divider='grey')
@@ -13,106 +13,132 @@ class LoginWidget:
          self.login_button = st.sidebar.button("Login")
          
          if self.login_button:
-             self._controllerAut.updateLoginData(self.username, self.password)
+             self._controller_aut.operationLogin(self.username, self.password)
 
-    def esitoPositivo(self):
+    def positiveLoginOutcome(self):
         st.success('Login successfull!', icon="✅")
 
-    def esitoNegativo(self):
+    def negativeLoginOutcome(self):
         st.error('Wrong credentials. Please try again.', icon="🚨")
 
-    def esitoMancante(self):
-        st.warning('Please write username and password')
+    def missingCredentialOutcome(self):
+        st.warning('Please write both username and password')
+
+    def getController(self):
+        return self._controller_aut
+    
+    def setController(self, controller):
+        self._controller_aut = controller
 
 
 class LogoutWidget:
-    def __init__(self, controllerLog):
-        self._controllerLogout = controllerLog
+    def __init__(self, controller_log):
+        self._controller_logout = controller_log
 
     def create(self):
         st.sidebar.header('Leave the technician section', divider='grey')
         bottone_logout = st.sidebar.button("Logout")
         
         if bottone_logout:
-            self._controllerLogout.logout()
+            self._controller_logout.operationLogout()
 
     def logoutEsito(self):
         st.success('Logged out', icon="✅")
 
+    def getController(self):
+        return self._controller_logout
+    
+    def setController(self, controller):
+        self._controller_logout = controller
+
 
 class SelectWidget:
-    def __init__(self, controllerSel):
-        self._controllerSel = controllerSel
+    def __init__(self, controller_sel):
+        self._controller_sel = controller_sel
         self._file = None
 
     def create(self):
-        files = self._controllerSel.getFiles()
+        files = self._controller_sel.operationGetAllDictionaries()
         file = st.sidebar.selectbox('Your data dictionary files', files, key="dizionari")
-        self._controllerSel.setDizionario(file)
+        self._controller_sel.operationSetCurrentDictionary(file)
         self._file = file
     
     def getController(self):
-        return self._controllerSel
+        return self._controller_sel
     
+    def setController(self, controller):
+        self._controller_sel = controller
+
     def getFile(self):
         return self._file
 
 
 class UploadWidget:
-    def __init__(self, controllerUp):
-        self._controllerUp = controllerUp
+    def __init__(self, controller_up):
+        self._controller_up = controller_up
+        self.file_uploaded = None
         if "file_uploader_key" not in st.session_state:
             st.session_state["file_uploader_key"] = 0
 
     def create(self):
-        uploaded_file = st.sidebar.file_uploader("Upload new data dictionary file", accept_multiple_files=False, key = st.session_state["file_uploader_key"])
-        st.sidebar.button("Upload file", type="primary", on_click=lambda:self.operazioneUpload(uploaded_file), disabled=uploaded_file == None)
+        upload_this_file = st.sidebar.file_uploader("Upload new data dictionary file", accept_multiple_files=False, key = st.session_state["file_uploader_key"])
+        st.sidebar.button("Upload file", type="primary", on_click=lambda:self.operazioneUpload(upload_this_file), disabled=upload_this_file == None)
 
-    def operazioneUpload(self, uploaded_file):
-        self.fileUpload = uploaded_file
-        self._controllerUp.updateFileData()
+    def operazioneUpload(self, upload_this_file):
+        self.file_uploaded = upload_this_file
+        self._controller_up.operationUpdateFileData()
 
     def getFileUploaded(self):
-        return self.fileUpload
+        return self.file_uploaded
 
-    def esitoPositivo(self, uploaded_file_name):
+    def positiveUploadOutcome(self, uploaded_file_name):
         st.success(f'Dictionary "{uploaded_file_name}" uploaded.', icon="✅")
         st.session_state["file_uploader_key"] += 1
 
-    def esitoNegativo(self, dictionary_upload_error):
+    def negativeUploadOutcome(self, dictionary_upload_error):
         st.error(dictionary_upload_error, icon="🚨")
+        st.session_state["file_uploader_key"] += 1
 
 
 class DeleteWidget:
-    def __init__(self, selectionWidget, controllerDel):
-        self._selectionWidget = selectionWidget
-        self._controllerDel = controllerDel
+    def __init__(self, selection_widget, controller_del):
+        self._selection_widget = selection_widget
+        self._controller_del = controller_del
 
     def create(self):
-        self._selectionWidget.create()
-        file = self._selectionWidget.getFile()
-        clickSelectFile = st.sidebar.button("Delete selected file", type="primary", disabled=file == None)
+        self._selection_widget.create()
+        delete_file_name = self._selection_widget.getFile()
+        click_select_file = st.sidebar.button("Delete selected file", type="primary", disabled=delete_file_name == None)
         
-        if clickSelectFile:  
-            self._controllerDel.operazioneDelete(file)
+        if click_select_file:  
+            self._controller_del.operationDelete(delete_file_name)
     
-    def getSelWidget(self):
-        return self._selectionWidget
-    
-    def esitoPositivoEliminazione(self, file_name):
-        st.success(f'Dictionary "{file_name}" deleted successfully.', icon="✅")
+    def positiveDeleteOutcome(self, deleted_file_name):
+        st.success(f'Dictionary "{deleted_file_name}" deleted successfully.', icon="✅")
 
-    def esitoNegativoEliminazione(self, file_name):
+    def negativeDeleteOutcome(self, file_name):
         st.error(f'Deletion of dictionary "{file_name}" failed.', icon="🚨")
+
+    def getSelWidget(self):
+        return self._selection_widget
+    
+    def setSelWidget(self, sel_widget):
+        self._selection_widget = sel_widget
+
+    def getController(self):
+        return self._controller_del
+    
+    def setController(self, controller):
+        self._controller_del = controller
 
 
 class ChatWidget:
-    def __init__(self, controllerCha, controllerSel, controllerAut):
-        self._controllerChat = controllerCha
-        self._controllerSel = controllerSel
-        self._controllerAut = controllerAut
-        self.user_input = None
-        self.dizionarioAttuale = None
+    def __init__(self, controller_cha, controller_sel, controller_aut):
+        self._controller_chat = controller_cha
+        self._controller_sel = controller_sel
+        self._controller_aut = controller_aut
+        self._user_input = None
+        self._current_dictionary = None
 
     def create(self):
         st.title("ChatSQL")
@@ -122,28 +148,45 @@ class ChatWidget:
             with st.chat_message(message["role"]):
                 st.write(f'<div style="white-space: pre-line;">{message["content"]}</div>', unsafe_allow_html=True)
 
-        if (self._controllerSel.getFiles() == []):
+        if (self._controller_sel.operationGetAllDictionaries() == []):
             st.chat_input(disabled=True)
         else:
-            self.user_input = st.chat_input("Type your query here", max_chars=500)
+            self._user_input = st.chat_input("Type your query here", max_chars=500)
             
-            if self.user_input:
-                st.write(f"User has sent the following prompt: {self.user_input}")
-                if (self._controllerAut.getLoggedState() == False):
-                    print("USER")
+            if self._user_input:
+                st.write(f"User has sent the following prompt: {self._user_input}")
+                if (self._controller_aut.operationGetLoggedState() == False):
                     self.selectChatUtente()
                 else:
-                    print("TECHNICIAN")
                     self.selectChatTecnico()
 
     def selectChatUtente(self):
-        self.dizionarioAttuale = self._controllerSel.getDizionario()
-        self._controllerChat.operazionePrompt(self.user_input, self.dizionarioAttuale)
+        self._current_dictionary = self._controller_sel.operationGetCurrentDictionary()
+        self._controller_chat.operationPrompt(self._user_input, self._current_dictionary)
 
     def selectChatTecnico(self):
-        self.dizionarioAttuale = self._controllerSel.getDizionario()
-        self._controllerChat.operazioneDebug(self.user_input, self.dizionarioAttuale)
+        self._current_dictionary = self._controller_sel.operationGetCurrentDictionary()
+        self._controller_chat.operationDebug(self._user_input, self._current_dictionary)
 
-    def showResponse(self, messaggio):
-        st.session_state.chat.append({"role": "user", "content": messaggio})
-        st.code(f"Response: {messaggio}", language="markdown")
+    def showResponse(self, gen_response):
+        st.session_state.chat.append({"role": "user", "content": gen_response})
+        st.code(f"Response: {gen_response}", language="markdown")
+
+
+    def getChatController(self):
+        return self._controller_chat
+    
+    def setChatController(self, controller):
+        self._controller_chat = controller
+
+    def getSelectionController(self):
+        return self._controller_sel
+    
+    def setSelectionController(self, controller):
+        self._controller_sel = controller
+
+    def getAuthenticationController(self):
+        return self._controller_aut
+    
+    def setAuthenticationController(self, controller):
+        self._controller_aut = controller    

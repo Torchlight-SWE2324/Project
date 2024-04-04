@@ -5,45 +5,69 @@ import re
 from model import *
 from widgets import *
 
-class ControllerAuthentication:
+class AuthenticationController:
     def __init__(self, model, view):
         self._model = model
         self._view = view
 
-    def updateLoginData(self, username, password):
-        if username == "" and password == "":
-            self._view.esitoMancante()
+    def operationLogin(self, username, password):
+        if username == "" or password == "":
+            self._view.missingCredentialOutcome()
         else:
-            esito = self._model.check_login(username, password)
+            esito = self._model.checkLogin(username, password)
             if esito:
-                self._view.esitoPositivo()
+                self._view.positiveLoginOutcome()
                 time.sleep(.5)
                 st.session_state.chat = []
                 st.session_state.logged_in = True
                 st.rerun()
             else:
-                self._view.esitoNegativo()
+                self._view.negativeLoginOutcome()
 
-    def getLoggedState(self):
-        return self._model.getUtenteLoggato()
+    def operationGetLoggedState(self):
+        return self._model.getLoggedStatus()
+    
+    def getView(self):
+        return self._view
+
+    def setView(self, view):
+        self._view = view
+    
+    def getModel(self):
+        return self._model
+    
+    def setModel(self, model):
+        self._model = model
         
 
-class ControllerSelezione:
+class SelectionController:
     def __init__(self, model, view):
         self._model = model
         self._view = view
 
-    def getFiles(self):
-        return self._model.filesInDB()  
+    def operationGetAllDictionaries(self):
+        return self._model.getFilesInDB()  
     
-    def setDizionario(self, dizionario):
-        self._model.setDizionarioAttuale(dizionario)
+    def operationGetCurrentDictionary(self):
+        return (self._model.getCurrentDictionary())
 
-    def getDizionario(self):
-        return (self._model.getDizionarioAttuale())
+    def operationSetCurrentDictionary(self, dictionary):
+        self._model.setCurrentDictionary(dictionary)
+
+    def getView(self):
+        return self._view
+
+    def setView(self, view):
+        self._view = view
+    
+    def getModel(self):
+        return self._model
+    
+    def setModel(self, model):
+        self._model = model
 
 
-class ControllerUpload:
+class UploadController:
     def __init__(self, model, view):
         self._model = model
         self._view = view
@@ -66,7 +90,7 @@ class ControllerUpload:
 
         return "successful_check"
 
-    def updateFileData(self):
+    def operationUpdateFileData(self):
         uploaded_file = self._view.getFileUploaded()
         dictionary_check_result = self.__dictionary_check(uploaded_file)
 
@@ -77,58 +101,106 @@ class ControllerUpload:
             dictionary_upload_result = self._model.upload_dictionary(uploaded_file_name, uploaded_file_content)
             
             if dictionary_upload_result == "upload_success":
-                self._view.esitoPositivo(uploaded_file_name)
+                self._view.positiveUploadOutcome(uploaded_file_name)
             else:
-                self._view.esitoNegativo(dictionary_upload_result)
+                self._view.negativeUploadOutcome(dictionary_upload_result)
         else:
-            self._view.esitoNegativo(dictionary_check_result)
+            self._view.negativeUploadOutcome(dictionary_check_result)
+    
+    def getView(self):
+        return self._view
+
+    def setView(self, view):
+        self._view = view
+    
+    def getModel(self):
+        return self._model
+    
+    def setModel(self, model):
+        self._model = model
 
 
-class ControllerDelete:
+class DeleteController:
     def __init__(self, model, view):
         self._model = model
         self._view = view  
 
-    def operazioneDelete(self, file):
-        self._model.deleteFile(file)
-        esito = self._model.getEsitoFileEliminato()
+    def operationDelete(self, delete_file_name):
+        self._model.deleteFile(delete_file_name)
+        esito = self._model.getEliminationOutcome()
         if esito:
-            self._view.esitoPositivoEliminazione(file)
+            self._view.positiveDeleteOutcome(delete_file_name)
             time.sleep(.5)
             st.rerun()
         else:
-            self._view.esitoNegativoEliminazione(file)
+            self._view.negativeDeleteOutcome(delete_file_name)
+    
+    def getView(self):
+        return self._view
+
+    def setView(self, view):
+        self._view = view
+    
+    def getModel(self):
+        return self._model
+    
+    def setModel(self, model):
+        self._model = model
 
 
-class ControllerLogout:
+class LogoutController:
     def __init__(self, model, view):
         self._model = model
         self._view = view  
     
-    def logout(self):
-        st.session_state.logged_in = self._model.logout()
+    def operationLogout(self):
+        st.session_state.logged_in = self._model.setLoggedStatus(False)
         st.session_state.chat = []
-        self._view.logoutEsito()
+        self._view.positiveLogoutOutcome()
         time.sleep(.5)
         st.rerun()
 
+    def getView(self):
+        return self._view
 
-class ControllerChat:
+    def setView(self, view):
+        self._view = view
+    
+    def getModel(self):
+        return self._model
+    
+    def setModel(self, model):
+        self._model = model
+
+
+class ChatController:
     def __init__(self, model, view):
         self._model = model
         self._view = view
 
-    def operazionePrompt(self, user_input, dizionario):
-        sanitized_user_input = self.sanifica_input(user_input)
-        self._model.generatePrompt(user_input, sanitized_user_input, dizionario)
-        messaggio = self._model.getResponse()
-        self._view.showResponse(messaggio)
+    def operationPrompt(self, user_input, dictionary):
+        sanitized_user_input = self.sanitizeInput(user_input)
+        self._model.generatePrompt(user_input, sanitized_user_input, dictionary)
+        gen_response = self._model.getResponse()
+        self._view.showResponse(gen_response)
 
-    def operazioneDebug(self, user_input, dizionario):
-        sanitized_user_input = self.sanifica_input(user_input)
-        self._model.generateDebug(user_input, sanitized_user_input, dizionario)
-        messaggio = self._model.getResponse()
-        self._view.showResponse(messaggio)
+    def operationDebug(self, user_input, dictionary):
+        sanitized_user_input = self.sanitizeInput(user_input)
+        self._model.generateDebug(user_input, sanitized_user_input, dictionary)
+        gen_response = self._model.getResponse()
+        self._view.showResponse(gen_response)
 
-    def sanifica_input(self, user_input):
+    def sanitizeInput(self, user_input):
         return re.sub(r"['']", " ", user_input)
+    
+    def getView(self):
+        return self._view
+
+    def setView(self, view):
+        self._view = view
+    
+    def getModel(self):
+        return self._model
+    
+    def setModel(self, model):
+        self._model = model

@@ -8,14 +8,14 @@ from jsonschema import validate, ValidationError
 
 class DictionarySchemaVerifierService(ABC):
     @abstractmethod
-    def check_dictionary_schema(self, uploaded_file_name, uploaded_file_content) -> str: pass
+    def check_dictionary_schema(self, uploaded_file_content) -> str: pass
 
 class JsonSchemaVerifierService(DictionarySchemaVerifierService):
     def __get_schema_file_path(self) -> str:
         dictionary_schema_folder_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "dicitionary_schemas")
         return os.path.join(dictionary_schema_folder_path, "json_schema.json")
 
-    def check_dictionary_schema(self, uploaded_file_name, uploaded_file_content) -> str:
+    def check_dictionary_schema(self, uploaded_file_content) -> str:
         schema_file_path = self.__get_schema_file_path()
 
         try:
@@ -31,20 +31,20 @@ class JsonSchemaVerifierService(DictionarySchemaVerifierService):
             return f"The file is not compliant with the schema. Please upload a valid file."
 
 
-class ModelUpload:
+class UploadService:
     def __init__(self, embedder, dictionary_schema_verifier):
-        self.database_path = self.__get_dictionaries_folder_path()
-        self.dictionary_schema_verifier = dictionary_schema_verifier
+        self._database_path = self.__get_dictionaries_folder_path()
+        self._dictionary_schema_verifier = dictionary_schema_verifier
         self.embedder = embedder
 
-    def __dictionary_schema_check(self, uploaded_file_name, uploaded_file_content):
-        return self.dictionary_schema_verifier.check_dictionary_schema(uploaded_file_name, uploaded_file_content)
+    def __dictionary_schema_check(self, uploaded_file_content):
+        return self._dictionary_schema_verifier.check_dictionary_schema(uploaded_file_content)
 
     def __get_dictionaries_folder_path(self) -> str:
         return os.path.join(os.path.dirname(os.path.realpath(__file__)), "database")
 
     def upload_dictionary(self, uploaded_file_name, uploaded_file_content) -> str:
-        dictionary_check = self.__dictionary_schema_check(uploaded_file_name, uploaded_file_content)
+        dictionary_check = self.__dictionary_schema_check(uploaded_file_content)
 
         if dictionary_check == "schema_check_success":
             dictionary_folder_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "database")
@@ -76,14 +76,14 @@ class ModelUpload:
         return list
 
 
-class ModelSelezione:
+class SelectionService:
     def __init__(self):
-        self.dizionarioAttuale = None
+        self.current_dictionary = None
 
     def __get_dictionaries_folder_path(self) -> str:
         return os.path.join(os.path.dirname(os.path.realpath(__file__)), "database")
 
-    def filesInDB(self):
+    def getFilesInDB(self):
         dictionary_folder_path = self.__get_dictionaries_folder_path()
         list = []
         
@@ -93,94 +93,93 @@ class ModelSelezione:
         sorted_list = sorted(list, key=lambda x: os.path.getmtime(os.path.join(dictionary_folder_path, x)), reverse=True)
         return sorted_list
 
-    def setDizionarioAttuale(self, dictionary_name):
-        self.dizionarioAttuale = dictionary_name
+    def setCurrentDictionary(self, dictionary_name):
+        self.current_dictionary = dictionary_name
 
-    def getDizionarioAttuale(self):
-        return self.dizionarioAttuale
+    def getCurrentDictionary(self):
+        return self.current_dictionary
 
 
-class ModelDelete:
+class DeleteService:
     def __init__(self):
-        dirPath = os.path.dirname(os.path.realpath(__file__))
-        self.database_path = os.path.join(dirPath, "database")
-        self.indexes_path = os.path.join(dirPath, "indexes")
-        self.file_deleted = False
+        _dir_path = os.path.dirname(os.path.realpath(__file__))
+        self._database_path = os.path.join(_dir_path, "database")
+        self._indexes_path = os.path.join(_dir_path, "indexes")
+        self._was_file_deleted = False
         
     def deleteFile(self, file):
-        json_deleted = False
-        index_deleted = False
+        was_json_deleted = False
+        was_index_deleted = False
         
         if file:
-            file_paths_to_try = [os.path.join(self.database_path, file)]
-            self.file_deleted = False
+            file_paths_to_try = [os.path.join(self._database_path, file)]
+            self._was_file_deleted = False
             for file_path in file_paths_to_try:
                 if os.path.exists(file_path):
                     os.remove(file_path)
-                    json_deleted = True 
+                    was_json_deleted = True 
 
             filename_without_extension = os.path.splitext(file)[0]
-            indexes_directory = os.path.join(self.indexes_path, filename_without_extension)
+            indexes_directory = os.path.join(self._indexes_path, filename_without_extension)
             if os.path.isdir(indexes_directory):
                 for index_file in os.listdir(indexes_directory):
                     file_path = os.path.join(indexes_directory, index_file)
                     if os.path.isfile(file_path):
                         os.remove(file_path)
                 shutil.rmtree(indexes_directory)
-                index_deleted = True
+                was_index_deleted = True
 
-        if json_deleted and index_deleted:
-            self.file_deleted = True
+        if was_json_deleted and was_index_deleted:
+            self._was_file_deleted = True
     
     def getEsitoFileEliminato(self):
-        return self.file_deleted
+        return self._was_file_deleted
     
 
-class ModelChat:
-    def __init__(self, responseUser, responseTechnician):
-        self.response = ""
-        self.model_path = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
-        self.data_path = os.path.join(os.path.dirname(__file__), "indexes")
-        self.responseUser = responseUser
-        self.responseTechnician = responseTechnician
+class ChatService:
+    def __init__(self, response_user, response_technician):
+        self._response = ""
+        #self._model_path = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
+        self._data_path = os.path.join(os.path.dirname(__file__), "indexes")
+        self._response_user = response_user
+        self._response_technician = response_technician
 
     def generatePrompt(self, user_input, sanitized_user_input, dictionary_name):
-        self.response = self.responseUser.generatePrompt(user_input, sanitized_user_input, dictionary_name)
+        self._response = self._response_user.generatePrompt(user_input, sanitized_user_input, dictionary_name)
 
     def generateDebug(self, user_input, sanitized_user_input, dictionary_name):
-        self.response =  self.responseTechnician.generateDebug(user_input, sanitized_user_input, dictionary_name)
+        self._response =  self._response_technician.generateDebug(user_input, sanitized_user_input, dictionary_name)
 
     def getResponse(self):
-        return self.response
+        return self._response
     
     def setResponse(self, new_response):
-        self.response = new_response
+        self._response = new_response
 
 
-class ModelAuthentication:
+class AuthenticationService:
     def __init__(self):
-        self.utenteloggato = False
+        self._is_technician_logged = False
 
-    def check_login(self, username, password):
+    # used by the controller, sets the status of "self._is_technician_logged" to True and returns True only if inserted credentials(username and password) are correct
+    # otherwise returns false
+    def checkLogin(self, username, password):
         try:
-            dirPath = os.path.dirname(os.path.realpath(__file__))
-            file_path = os.path.join(dirPath, "pswrd.csv")
+            _dir_path = os.path.dirname(os.path.realpath(__file__))
+            file_path = os.path.join(_dir_path, "pswrd.csv")
             with open(file_path, "r") as f:
                 reader = csv.reader(f)
                 for row in reader:
                     if row[0] == username and row[1] == password:
-                        self.utenteloggato = True
+                        self._is_technician_logged = True
                         return True
         except Exception as e:
             print(f"An error occurred: {e}")
         return False
 
-    def logout(self):
-        utenteloggato = False
-        return utenteloggato
+    # used by the controller, sets the status of "self._is_technician_logged" to the value of "status" (in this case False)
+    def setLoggedStatus(self, status):
+        self._is_technician_logged = status
 
-    def setUtenteLoggato(self, esito):
-        self.utenteloggato = esito
-
-    def getUtenteLoggato(self):
-        return self.utenteloggato
+    def getLoggedStatus(self):
+        return self._is_technician_logged

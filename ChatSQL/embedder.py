@@ -5,18 +5,18 @@ from txtai import Embeddings
 
 class Embedder:
     def __init__(self):
-        self.emb = None
-        self.indexDirectory = os.path.join(os.path.dirname(__file__), "indexes")
-        self.databaseDirectory = os.path.join(os.path.dirname(__file__), "database")
-
+        self._emb = None
+        self._index_directory = os.path.join(os.path.dirname(__file__), "indexes")
+        self._database_directory = os.path.join(os.path.dirname(__file__), "database")
+        self._load_index_flag=False
     def generateIndex(self, dictionary_file_name):
         try:
-            if not os.path.exists(self.indexDirectory):
-                os.makedirs(self.indexDirectory)
+            if not os.path.exists(self._index_directory):
+                os.makedirs(self._index_directory)
 
-            commands = self.generateUpsertCommands(os.path.join(self.databaseDirectory, dictionary_file_name))
+            commands = self.generateUpsertCommands(os.path.join(self._database_directory, dictionary_file_name))
             index_name = os.path.splitext(dictionary_file_name)[0]
-            index_path = os.path.join(self.indexDirectory, index_name)
+            index_path = os.path.join(self._index_directory, index_name)
 
             self.getEmb().index([{"table_name": command["table_name"],
                               "table_description": command["table_description"],
@@ -72,22 +72,28 @@ class Embedder:
     def caricareIndex(self, dictionary_file_name):
         try:
             index_name = os.path.splitext(dictionary_file_name)[0]
-            index_path = os.path.join(self.indexDirectory, index_name)
+            index_path = os.path.join(self._index_directory, index_name)
             self.getEmb().load(index_path)
-            
+            self._load_index_flag=True
+        
         except FileNotFoundError:
             print(f"Index file '{dictionary_file_name}' or its path not found.")
-        
+            self._load_index_flag=False
         except Exception as e:
             print(f"An error occurred in caricareIndex in : {e}")
-
+            self._load_index_flag=False
+        
     def save(self):
-        self.getEmb().save(self.indexDirectory)
+        self.getEmb().save(self._index_directory)
 
     def close(self):
-        self.getEmb().close(self.indexDirectory)
+        self.getEmb().close(self._index_directory)
 
     def getEmb(self):
-        if self.emb == None:
-            self.emb = Embeddings({"path": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2", "content": True})
-        return self.emb
+        if self._emb == None:
+            emb = Embeddings({"path": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2", "content": True})
+            self.setEmb(emb)
+        return self._emb
+    
+    def setEmb(self, emb):
+        self._emb = emb

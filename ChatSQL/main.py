@@ -10,19 +10,19 @@ if __name__ == "__main__":
     responseTechnician = ResponseTechnician(embedder)
     
     #modelli
-    modelAut = ModelAuthentication()
-    modelSel = ModelSelezione() 
-    modelUp = ModelUpload(embedder, dictionary_schema_verifier)
-    modelDel = ModelDelete()
-    modelCha = ModelChat(responseUser, responseTechnician)
+    modelAut = AuthenticationService()
+    modelSel = SelectionService() 
+    modelUp = UploadService(embedder, dictionary_schema_verifier)
+    modelDel = DeleteService()
+    modelCha = ChatService(responseUser, responseTechnician)
 
     #controller
-    controllerAut = ControllerAuthentication(modelAut, None) #aut
-    controllerSel = ControllerSelezione(modelSel, None) #selezione 
-    controllerUp = ControllerUpload(modelUp, None)
-    controllerDel = ControllerDelete(modelDel, None)
-    controllerLog = ControllerLogout(modelAut, None)
-    controllerCha = ControllerChat(modelCha, None)
+    controllerAut = AuthenticationController(modelAut, None) #aut
+    controllerSel = SelectionController(modelSel, None) #selezione 
+    controllerUp = UploadController(modelUp, None)
+    controllerDel = DeleteController(modelDel, None)
+    controllerLog = LogoutController(modelAut, None)
+    controllerCha = ChatController(modelCha, None)
 
     #view
     loginWidget = LoginWidget(controllerAut)
@@ -33,12 +33,13 @@ if __name__ == "__main__":
     chatWidget = ChatWidget(controllerCha, controllerSel, controllerAut)
 
     #controller imposto view
-    controllerAut._view = loginWidget
-    controllerSel._view = selectWidget
-    controllerUp._view = uploadWidget
-    controllerDel._view = deleteWidget
-    controllerLog._view = logoutWidget
-    controllerCha._view = chatWidget
+    controllerAut.setView(loginWidget) 
+    controllerSel.setView(selectWidget)
+    controllerUp.setView(uploadWidget)
+    controllerDel.setView(deleteWidget)
+    controllerLog.setView(logoutWidget)
+    controllerCha.setView(chatWidget)
+    
 
     if "logged_in" not in st.session_state:
         st.session_state.logged_in = False
@@ -47,13 +48,13 @@ if __name__ == "__main__":
         st.session_state.chat = []
 
     if st.session_state.logged_in == False:
-        modelAut.setUtenteLoggato(False)
+        modelAut.setLoggedStatus(False)
         selectWidget.create()   #creazione widget selezione dizionario
         chatWidget.create()     #deve essere messa come ultimo widget (non primo)
         loginWidget.create()    #creazione widget login
         
     else:
-        modelAut.setUtenteLoggato(True)
+        modelAut.setLoggedStatus(True)
         deleteWidget.create()   #creazione widget delete (crea in automatico anche la selezione diz)
         chatWidget.create()     #deve essere messa come ultimo widget (non primo)
         uploadWidget.create()   #creazione widget selezione dizionario
