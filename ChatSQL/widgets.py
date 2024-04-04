@@ -144,10 +144,10 @@ class ChatWidget:
         
         for message in st.session_state.chat:
             with st.chat_message(message["role"]):
-                st.write(f'<div style="white-space: pre-line;">{message["content"]}</div>', unsafe_allow_html=True)
+                st.code(message["content"], language="markdown")
 
-        if (self._controller_sel.operationGetAllDictionaries() == []):
-            st.chat_input(disabled=True)
+        if (self._controller_chat.operationGetAllDictionaries() == []):
+            st.chat_input("A data dictionary has not been uploaded. Please log in as a technician to upload one.", disabled=True)  
         else:
             self._user_input = st.chat_input("Type your query here", max_chars=500)
             
