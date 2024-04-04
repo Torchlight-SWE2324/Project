@@ -54,42 +54,44 @@ class LogoutWidget:
 
 class SelectWidget:
     def __init__(self, controller_sel):
-        self._controller_sel = controller_sel
-        self._file = None
+        self.__controller_sel = controller_sel
+        self.__file = None
 
     def create(self):
-        files = self._controller_sel.operationGetAllDictionaries()
+        files = self.__controller_sel.operationGetAllDictionaries()
         file = st.sidebar.selectbox('Your data dictionary files', files, key="dizionari")
-        self._controller_sel.operationSetCurrentDictionary(file)
-        self._file = file
-    
-    def getController(self):
-        return self._controller_sel
-    
-    def setController(self, controller):
-        self._controller_sel = controller
+        self.__controller_sel.operationSetCurrentDictionary(file)
+        self.__file = file
 
     def getFile(self):
-        return self._file
+        return self.__file
+
+    '''
+    def getController(self):
+        return self.__controller_sel
+    
+    def setController(self, controller):
+        self.__controller_sel = controller
+    '''
 
 
 class UploadWidget:
     def __init__(self, controller_up):
-        self._controller_up = controller_up
-        self.file_uploaded = None
+        self.__controller_up = controller_up
+        self.__file_uploaded = None
         if "file_uploader_key" not in st.session_state:
             st.session_state["file_uploader_key"] = 0
 
     def create(self):
         upload_this_file = st.sidebar.file_uploader("Upload new data dictionary file", accept_multiple_files=False, key = st.session_state["file_uploader_key"])
-        st.sidebar.button("Upload file", type="primary", on_click=lambda:self.operazioneUpload(upload_this_file), disabled=upload_this_file == None)
+        st.sidebar.button("Upload file", type="primary", on_click=lambda:self.__operazioneUpload(upload_this_file), disabled=upload_this_file == None)
 
-    def operazioneUpload(self, upload_this_file):
-        self.file_uploaded = upload_this_file
-        self._controller_up.operationUpdateFileData()
+    def __operazioneUpload(self, upload_this_file):
+        self.__file_uploaded = upload_this_file
+        self.__controller_up.operationUpdateFileData()
 
     def getFileUploaded(self):
-        return self.file_uploaded
+        return self.__file_uploaded
 
     def positiveUploadOutcome(self, uploaded_file_name):
         st.success(f'Dictionary "{uploaded_file_name}" uploaded.', icon="✅")
