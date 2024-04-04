@@ -1,5 +1,6 @@
 import os
 import json
+
 from txtai import Embeddings
 
 class Embedder:
@@ -26,12 +27,12 @@ class Embedder:
                               "text": command["field_description"]} for command in commands])
 
             self.getEmb().save(index_path)
-            print("index path", index_path)
             self.getEmb().close()
             return "index_created"
 
         except FileNotFoundError:
             return f"File '{dictionary_file_name}' or its path not found."
+        
         except Exception as e:
             return f"An error occurred in generateIndex in embedder.py: {e}"
 
@@ -41,7 +42,6 @@ class Embedder:
                 data = json.load(file)
             commands = []
             
-
             for table in data["tables"]:
                 table_name = table["name"]
                 table_description = table["table-description"]
@@ -59,12 +59,12 @@ class Embedder:
                                 "field_description": description}
 
                     commands.append(dictionary)
-
             return commands
         
         except FileNotFoundError:
             print(f"File '{dictionary_path}' not found.")
             return []
+        
         except json.JSONDecodeError:
             print(f"Error decoding JSON in file '{dictionary_path}'.")
             return []
@@ -73,16 +73,17 @@ class Embedder:
         try:
             index_name = os.path.splitext(dictionary_file_name)[0]
             index_path = os.path.join(self.indexDirectory, index_name)
-
             self.getEmb().load(index_path)
             
         except FileNotFoundError:
             print(f"Index file '{dictionary_file_name}' or its path not found.")
+        
         except Exception as e:
             print(f"An error occurred in caricareIndex in : {e}")
 
     def save(self):
         self.getEmb().save(self.indexDirectory)
+
     def close(self):
         self.getEmb().close(self.indexDirectory)
 
@@ -90,5 +91,3 @@ class Embedder:
         if self.emb == None:
             self.emb = Embeddings({"path": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2", "content": True})
         return self.emb
-
-

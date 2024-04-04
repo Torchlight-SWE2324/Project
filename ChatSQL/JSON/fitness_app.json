@@ -1,181 +1,173 @@
 {
-  "tables": [
-    {
-      "name": "users",
-      "table-description": "Table containing information about users in the fitness tracking application",
-      "columns": [
-        {
-          "name": "id",
-          "type": "integer",
-          "references": null,
-          "description": "Unique identifier assigned to each user"
-        },
-        {
-          "name": "username",
-          "type": "string",
-          "references": null,
-          "description": "Username chosen by the user for the application"
-        },
-        {
-          "name": "email",
-          "type": "string",
-          "references": null,
-          "description": "Email address of the user"
-        },
-        {
-          "name": "password",
-          "type": "string",
-          "references": null,
-          "description": "Encrypted password for user authentication"
-        },
-        {
-          "name": "date_of_birth",
-          "type": "date",
-          "references": null,
-          "description": "Date of birth of the user"
-        },
-        {
-          "name": "height",
-          "type": "decimal",
-          "references": null,
-          "description": "Height of the user in centimeters"
-        },
-        {
-          "name": "weight",
-          "type": "decimal",
-          "references": null,
-          "description": "Weight of the user in kilograms"
-        }
-      ]
-    },
-    {
-      "name": "workouts",
-      "table-description": "Table containing information about user workouts",
-      "columns": [
-        {
-          "name": "id",
-          "type": "integer",
-          "references": null,
-          "description": "Unique identifier assigned to each workout"
-        },
-        {
-          "name": "user_id",
-          "type": "integer",
-          "references": {
-            "table_name": "users",
-            "field_name": "id"
+    "tables": [
+      {
+        "name": "users",
+        "table-description": "Table containing information about users in the fitness tracking application",
+        "columns": [
+          {
+            "name": "id",
+            "type": "integer",
+            "references": null,
+            "description": "Unique identifier assigned to each user"
           },
-          "description": "Foreign key referencing the user performing the workout"
-        },
-        {
-          "name": "workout_type",
-          "type": "string",
-          "references": null,
-          "description": "Type of workout (e.g., cardio, strength training)"
-        },
-        {
-          "name": "duration",
-          "type": "integer",
-          "references": null,
-          "description": "Duration of the workout in minutes"
-        },
-        {
-          "name": "calories_burned",
-          "type": "decimal",
-          "references": null,
-          "description": "Estimated calories burned during the workout"
-        },
-        {
-          "name": "date",
-          "type": "date",
-          "references": null,
-          "description": "Date when the workout was performed"
-        }
-      ]
-    },
-    {
-      "name": "nutrition_logs",
-      "table-description": "Table containing information about user nutrition logs",
-      "columns": [
-        {
-          "name": "id",
-          "type": "integer",
-          "references": null,
-          "description": "Unique identifier assigned to each nutrition log"
-        },
-        {
-          "name": "user_id",
-          "type": "integer",
-          "references": {
-            "table_name": "users",
-            "field_name": "id"
+          {
+            "name": "username",
+            "type": "string",
+            "references": null,
+            "description": "Username chosen by the user for the application"
           },
-          "description": "Foreign key referencing the user maintaining the nutrition log"
-        },
-        {
-          "name": "meal_type",
-          "type": "string",
-          "references": null,
-          "description": "Type of meal (e.g., breakfast, lunch, dinner)"
-        },
-        {
-          "name": "food_items",
-          "type": "text",
-          "references": null,
-          "description": "List of food items consumed during the meal"
-        },
-        {
-          "name": "calories_consumed",
-          "type": "decimal",
-          "references": null,
-          "description": "Total calories consumed during the meal"
-        },
-        {
-          "name": "date",
-          "type": "date",
-          "references": null,
-          "description": "Date when the nutrition log was created"
-        }
-      ]
-    },
-    {
-      "name": "sleep_logs",
-      "table-description": "Table containing information about user sleep logs",
-      "columns": [
-        {
-          "name": "id",
-          "type": "integer",
-          "references": null,
-          "description": "Unique identifier assigned to each sleep log"
-        },
-        {
-          "name": "user_id",
-          "type": "integer",
-          "references": {
-            "table_name": "users",
-            "field_name": "id"
+          {
+            "name": "email",
+            "type": "string",
+            "references": null,
+            "description": "Email address of the user"
           },
-          "description": "Foreign key referencing the user maintaining the sleep log"
-        },
-        {
-          "name": "hours_slept",
-          "type": "decimal",
-          "references": null,
-          "description": "Number of hours the user slept"
-        },
-        {
-          "name": "sleep_quality",
-          "type": "integer",
-          "references": null,
-          "description": "Quality of sleep rated by the user (e.g., on a scale of 1 to 10)"
-        },
-        {
-          "name": "date",
-          "type": "date",
-          "references": null,
-          "description": "Date when the sleep log was created"
-        }
-      ]
-    }
-  ]
-}
+          {
+            "name": "password",
+            "type": "string",
+            "references": null,
+            "description": "Encrypted password for user authentication"
+          },
+          {
+            "name": "date_of_birth",
+            "type": "date",
+            "references": null,
+            "description": "Date of birth of the user"
+          },
+          {
+            "name": "height",
+            "type": "decimal",
+            "references": null,
+            "description": "Height of the user in centimeters"
+          },
+          {
+            "name": "weight",
+            "type": "decimal",
+            "references": null,
+            "description": "Weight of the user in kilograms"
+          }
+        ]
+      },
+      {
+        "name": "workouts",
+        "table-description": "Table containing information about user workouts",
+        "columns": [
+          {
+            "name": "id",
+            "type": "integer",
+            "references": null,
+            "description": "Unique identifier assigned to each workout"
+          },
+          {
+            "name": "user_id",
+            "type": "integer",
+            "references": {"table_name": "users", "field_name": "id"},
+            "description": "Foreign key referencing the user performing the workout"
+          },
+          {
+            "name": "workout_type",
+            "type": "string",
+            "references": null,
+            "description": "Type of workout (e.g., cardio, strength training)"
+          },
+          {
+            "name": "duration",
+            "type": "integer",
+            "references": null,
+            "description": "Duration of the workout in minutes"
+          },
+          {
+            "name": "calories_burned",
+            "type": "decimal",
+            "references": null,
+            "description": "Estimated calories burned during the workout"
+          },
+          {
+            "name": "date",
+            "type": "date",
+            "references": null,
+            "description": "Date when the workout was performed"
+          }
+        ]
+      },
+      {
+        "name": "nutrition_logs",
+        "table-description": "Table containing information about user nutrition logs",
+        "columns": [
+          {
+            "name": "id",
+            "type": "integer",
+            "references": null,
+            "description": "Unique identifier assigned to each nutrition log"
+          },
+          {
+            "name": "user_id",
+            "type": "integer",
+            "references": {"table_name": "users", "field_name": "id"},
+            "description": "Foreign key referencing the user maintaining the nutrition log"
+          },
+          {
+            "name": "meal_type",
+            "type": "string",
+            "references": null,
+            "description": "Type of meal (e.g., breakfast, lunch, dinner)"
+          },
+          {
+            "name": "food_items",
+            "type": "text",
+            "references": null,
+            "description": "List of food items consumed during the meal"
+          },
+          {
+            "name": "calories_consumed",
+            "type": "decimal",
+            "references": null,
+            "description": "Total calories consumed during the meal"
+          },
+          {
+            "name": "date",
+            "type": "date",
+            "references": null,
+            "description": "Date when the nutrition log was created"
+          }
+        ]
+      },
+      {
+        "name": "sleep_logs",
+        "table-description": "Table containing information about user sleep logs",
+        "columns": [
+          {
+            "name": "id",
+            "type": "integer",
+            "references": null,
+            "description": "Unique identifier assigned to each sleep log"
+          },
+          {
+            "name": "user_id",
+            "type": "integer",
+            "references": {"table_name": "users", "field_name": "id"},
+            "description": "Foreign key referencing the user maintaining the sleep log"
+          },
+          {
+            "name": "hours_slept",
+            "type": "decimal",
+            "references": null,
+            "description": "Number of hours the user slept"
+          },
+          {
+            "name": "sleep_quality",
+            "type": "integer",
+            "references": null,
+            "description": "Quality of sleep rated by the user (e.g., on a scale of 1 to 10)"
+          },
+          {
+            "name": "date",
+            "type": "date",
+            "references": null,
+            "description": "Date when the sleep log was created"
+          }
+        ]
+      }
+    ]
+  }
+  

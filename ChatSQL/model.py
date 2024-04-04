@@ -1,11 +1,8 @@
 import csv
 import os
-import shutil #per eliminare cartella (è di python)
-
+import shutil
 
 from ResponseGenerator import *
-#from embedder import *
-#from txtai import Embeddings
 from abc import ABC, abstractmethod
 from jsonschema import validate, ValidationError
 
@@ -72,6 +69,7 @@ class ModelUpload:
     def get_all_dictionaries_names(self):
         dictionary_folder_path = self.__get_dictionaries_folder_path()
         list = []
+        
         for name in os.listdir(dictionary_folder_path):
             if os.path.isfile(os.path.join(dictionary_folder_path, name)):
                 list.append(name)
@@ -88,6 +86,7 @@ class ModelSelezione:
     def filesInDB(self):
         dictionary_folder_path = self.__get_dictionaries_folder_path()
         list = []
+        
         for name in os.listdir(dictionary_folder_path):
             if os.path.isfile(os.path.join(dictionary_folder_path, name)):
                 list.append(name)
@@ -100,6 +99,7 @@ class ModelSelezione:
     def getDizionarioAttuale(self):
         return self.dizionarioAttuale
 
+
 class ModelDelete:
     def __init__(self):
         dirPath = os.path.dirname(os.path.realpath(__file__))
@@ -110,7 +110,7 @@ class ModelDelete:
     def deleteFile(self, file):
         json_deleted = False
         index_deleted = False
-        print(file)
+        
         if file:
             file_paths_to_try = [os.path.join(self.database_path, file)]
             self.file_deleted = False
@@ -131,11 +131,11 @@ class ModelDelete:
 
         if json_deleted and index_deleted:
             self.file_deleted = True
-
     
     def getEsitoFileEliminato(self):
         return self.file_deleted
     
+
 class ModelChat:
     def __init__(self, responseUser, responseTechnician):
         self.response = ""
@@ -155,6 +155,7 @@ class ModelChat:
     
     def setResponse(self, new_response):
         self.response = new_response
+
 
 class ModelAuthentication:
     def __init__(self):
