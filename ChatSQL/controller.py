@@ -133,6 +133,3 @@ class ControllerChat:
 
     def sanifica_input(self, user_input):
         return re.sub(r"['']", " ", user_input)
-    
-
-    
