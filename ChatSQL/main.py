@@ -22,7 +22,7 @@ if __name__ == "__main__":
     controllerUp = UploadController(modelUp, None)
     controllerDel = DeleteController(modelDel, None)
     controllerLog = LogoutController(modelAut, None)
-    controllerCha = ChatController(modelCha, None)
+    controllerCha = ChatController(modelCha, modelSel, modelAut, None) # chatModel, selModel, authModel
 
     #view
     loginWidget = LoginWidget(controllerAut)
@@ -30,7 +30,7 @@ if __name__ == "__main__":
     selectWidget = SelectWidget(controllerSel)
     uploadWidget = UploadWidget(controllerUp)
     deleteWidget = DeleteWidget(selectWidget, controllerDel)
-    chatWidget = ChatWidget(controllerCha, controllerSel, controllerAut)
+    chatWidget = ChatWidget(controllerCha)
 
     #controller imposto view
     controllerAut.setView(loginWidget) 

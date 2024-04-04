@@ -133,10 +133,8 @@ class DeleteWidget:
 
 
 class ChatWidget:
-    def __init__(self, controller_cha, controller_sel, controller_aut):
+    def __init__(self, controller_cha):
         self._controller_chat = controller_cha
-        self._controller_sel = controller_sel
-        self._controller_aut = controller_aut
         self._user_input = None
         self._current_dictionary = None
 
@@ -155,38 +153,16 @@ class ChatWidget:
             
             if self._user_input:
                 st.write(f"User has sent the following prompt: {self._user_input}")
-                if (self._controller_aut.operationGetLoggedState() == False):
-                    self.selectChatUtente()
-                else:
-                    self.selectChatTecnico()
-
-    def selectChatUtente(self):
-        self._current_dictionary = self._controller_sel.operationGetCurrentDictionary()
-        self._controller_chat.operationPrompt(self._user_input, self._current_dictionary)
-
-    def selectChatTecnico(self):
-        self._current_dictionary = self._controller_sel.operationGetCurrentDictionary()
-        self._controller_chat.operationDebug(self._user_input, self._current_dictionary)
+                
+                self._controller_chat.operationGenerateResponse(self._user_input)
 
     def showResponse(self, gen_response):
         st.session_state.chat.append({"role": "user", "content": gen_response})
         st.code(f"Response: {gen_response}", language="markdown")
 
 
-    def getChatController(self):
+    def getController(self):
         return self._controller_chat
     
-    def setChatController(self, controller):
+    def setController(self, controller):
         self._controller_chat = controller
-
-    def getSelectionController(self):
-        return self._controller_sel
-    
-    def setSelectionController(self, controller):
-        self._controller_sel = controller
-
-    def getAuthenticationController(self):
-        return self._controller_aut
-    
-    def setAuthenticationController(self, controller):
-        self._controller_aut = controller    

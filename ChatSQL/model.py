@@ -132,7 +132,7 @@ class DeleteService:
         if was_json_deleted and was_index_deleted:
             self._was_file_deleted = True
     
-    def getEsitoFileEliminato(self):
+    def getEliminationOutcome(self):
         return self._was_file_deleted
     
 
