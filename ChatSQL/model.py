@@ -1,11 +1,8 @@
 import csv
 import os
-import shutil #per eliminare cartella (è di python)
-
+import shutil
 
 from ResponseGenerator import *
-#from embedder import *
-#from txtai import Embeddings
 from abc import ABC, abstractmethod
 from jsonschema import validate, ValidationError
 
@@ -100,6 +97,7 @@ class ModelSelezione:
     def getDizionarioAttuale(self):
         return self.dizionarioAttuale
 
+
 class ModelDelete:
     def __init__(self):
         dirPath = os.path.dirname(os.path.realpath(__file__))
@@ -131,11 +129,11 @@ class ModelDelete:
 
         if json_deleted and index_deleted:
             self.file_deleted = True
-
     
     def getEsitoFileEliminato(self):
         return self.file_deleted
     
+
 class ModelChat:
     def __init__(self, responseUser, responseTechnician):
         self.response = ""
@@ -155,6 +153,7 @@ class ModelChat:
     
     def setResponse(self, new_response):
         self.response = new_response
+
 
 class ModelAuthentication:
     def __init__(self):
