@@ -1,8 +1,8 @@
 import os
 import json
 
-#from txtai import Embeddings
 from embedder import *
+
 class ResponseUser:
     def __init__(self, embedder):
         self.emb = embedder
