@@ -42,7 +42,7 @@ class LogoutWidget:
         if bottone_logout:
             self._controller_logout.operationLogout()
 
-    def logoutEsito(self):
+    def positiveLogoutOutcome(self):
         st.success('Logged out', icon="✅")
 
     def getController(self):

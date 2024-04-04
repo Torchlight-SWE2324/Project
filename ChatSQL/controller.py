@@ -154,7 +154,8 @@ class LogoutController:
         self._view = view  
     
     def operationLogout(self):
-        st.session_state.logged_in = self._model.setLoggedStatus(False)
+        self._model.setLoggedStatus(False)
+        st.session_state.logged_in = self._model.getLoggedStatus()
         st.session_state.chat = []
         self._view.positiveLogoutOutcome()
         time.sleep(.5)
