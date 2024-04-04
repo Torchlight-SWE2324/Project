@@ -1,6 +1,8 @@
-# ChatSQL Proof of Concept (POC)
+# ChatSQL MVP (Minimum Viable Product)
 
-## Instructions for testing the PoC locally
+## How to run the program
+
+To run the program, you need to follow these steps:
 
 ### Step One
 
@@ -8,14 +10,14 @@ Ensure that you have Python 3.11 installed on your computer. You can download it
 
 > [!NOTE]
 > The program has been tested with python 3.11. Versions lower than that may not be compatible.
-> Tests w'ere also conducted with Python 3.9 and 3.10, but the program did not work properly, due to problems with the libraries.
+> Tests w'ere also conducted with Python 3.9 and 3.10, but the program did not work properly, due to cross-compatibility issues with the libraries used.
 > The latest version of Python, 3.12, has been tested but is not recommended for use with the current version of *txtai*, as it is not yet compatible with the library.
 
 ### Step Two
 
-To download the project, click on the green button labeled ```Code``` on the GitHub project page and select ```Download ZIP```. Unzip the archive into any folder.
+To download the project, just click the ```Code``` button on the GitHub project page and select ```Download ZIP```. Unzip the archive into any folder.
 
-Alternatively, use *git* from the terminal by running the following command:
+Alternatively, you can use *git* from the terminal by running the following command:
 
 ```shell
 git clone https://github.com/Torchlight-SWE2324/ChatSQL.git
@@ -23,7 +25,7 @@ git clone https://github.com/Torchlight-SWE2324/ChatSQL.git
 
 ### Step Three
 
-Now you need to install the necessary libraries. To do this, go to the ```ChatSQL`` folder and run the following command in a terminal
+Now you need to install the necessary libraries. To do this, go to the ```ChatSQL``` folder and run the following command in the terminal:
 
 ```shell
 pip install -r requirements.txt

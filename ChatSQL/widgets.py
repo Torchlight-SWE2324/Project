@@ -29,7 +29,7 @@ class LogoutWidget:
         self._controllerLogout = controllerLog
 
     def create(self):
-        st.sidebar.header('leave the technician section', divider='grey')
+        st.sidebar.header('Leave the technician section', divider='grey')
         bottone_logout = st.sidebar.button("Logout")
         if bottone_logout:
             self._controllerLogout.logout()
