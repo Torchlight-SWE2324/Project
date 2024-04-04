@@ -1,5 +1,6 @@
 import os
 import json
+
 from txtai import Embeddings
 
 class Embedder:
@@ -41,7 +42,6 @@ class Embedder:
                 data = json.load(file)
             commands = []
             
-
             for table in data["tables"]:
                 table_name = table["name"]
                 table_description = table["table-description"]
@@ -65,6 +65,7 @@ class Embedder:
         except FileNotFoundError:
             print(f"File '{dictionary_path}' not found.")
             return []
+        
         except json.JSONDecodeError:
             print(f"Error decoding JSON in file '{dictionary_path}'.")
             return []
@@ -78,11 +79,13 @@ class Embedder:
             
         except FileNotFoundError:
             print(f"Index file '{dictionary_file_name}' or its path not found.")
+        
         except Exception as e:
             print(f"An error occurred in caricareIndex in : {e}")
 
     def save(self):
         self.getEmb().save(self.indexDirectory)
+
     def close(self):
         self.getEmb().close(self.indexDirectory)
 
@@ -90,5 +93,3 @@ class Embedder:
         if self.emb == None:
             self.emb = Embeddings({"path": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2", "content": True})
         return self.emb
-
-
