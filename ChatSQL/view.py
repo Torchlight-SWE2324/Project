@@ -1,4 +1,5 @@
 import streamlit as st
+
 from controller import *
 
 class ViewUtente:
@@ -17,7 +18,7 @@ class ViewUtente:
     def display_data(self):
         st.title("ChatSQL")
         st.subheader("Type your natural language query in the chat box below and press enter to get the corresponding SQL query.")
-        self.titleS.title("Login sidebar")
+        self.titleS.title("Login as a Technician")
         self.selectDictionary()
         self.login()
 
@@ -34,17 +35,13 @@ class ViewUtente:
             self._controllerAut.updateLoginData(self.username, self.password)
 
     def esitoPositivo(self):
-        st.success("Login avvenuto")
-        #self.usernameS.empty()
-        #self.passwordS.empty()
-        #self.loginS.empty()
+        st.success("Login successfull.")
 
     def esitoNegativo(self):
-        st.error("Login sbagliato")
+        st.error("The login was not successful.")
 
     def esitoMancante(self):
-        st.warning("Inserisci Username e Password")
-
+        st.warning("Please write username and password.")
 
 
 class ViewTecnico:
@@ -64,16 +61,13 @@ class ViewTecnico:
         self.button_upload = st.sidebar.empty()
         self.logoutS = st.sidebar.empty()
 
-        
-
     def display_data(self):
         st.title("ChatSQL")
         st.subheader("Type your natural language query in the chat box below and press enter to get the corresponding SQL query.")
-        self.titleS.title("Sidebar Tecnico")
+        self.titleS.title("Technician section")
         self.uploadFile()
         self.deleteFile()
         self.logout()
-            
 
     def uploadFile(self):
         uploaded_file = self.container_upload.file_uploader("Upload new data dictionary file", accept_multiple_files=False, type="json")
@@ -89,34 +83,31 @@ class ViewTecnico:
             self._controllerLogout.logout()
 
     def logoutEsito(self):
-        self.containerNotifiche.success("🚨LogOut Avvenuto con successo🚨")
+        self.containerNotifiche.success("Successfully logged out")
 
     def getFileUploaded(self):
         return self.fileUpload
     
     def esitoPositivo(self):
-        self.containerNotifiche.success("Caricamento dizionario avvenuto con successo")
+        self.containerNotifiche.success("Dictionary loaded successfully")
 
     def esitoNegativo(self):
-        self.containerNotifiche.error("Dizionario non caricato :( ")
+        self.containerNotifiche.error("Dictionary not uploaded")
 
     def deleteFile(self):
         files = self._controllerSel.getFiles()
         file = self.container_delete.selectbox('Your data dictionary files', files, key="dizionari")
         self._controllerSel.setDizionario(file)
-        # database -> file
-        # .join("database", "file")
 
         clickSelectFile = self.button_delete.button("Delete selected file", type="primary", disabled=file == None)
         if clickSelectFile:  
             self._controllerDel.operazioneDelete(file)
 
     def esitoPositivoEliminazione(self):
-        self.containerNotifiche.success("File eliminato")
+        self.containerNotifiche.success("File deleted successfully")
 
     def esitoNegativoEliminazione(self):
-        self.containerNotifiche.error("Eliminazione non avvenuta")
-
+        self.containerNotifiche.error("The file has not been deleted")
 
 
 class ViewChat:
@@ -136,16 +127,12 @@ class ViewChat:
     def selectChat(self):
         self.dizionarioAttuale = self._controllerSel.getDizionario()
         if self._controllerAut.getLoggedState():
-            #Tecnico
-            print("Accesso come tecnico")
+            print("Logged as technician")
             self._controllerChat.operazioneDebug(self.user_input, self.dizionarioAttuale)
         else:
-            #Utente
-            print("Accesso come utente")
+            print("Logged as user")
             self._controllerChat.operazionePrompt(self.user_input, self.dizionarioAttuale)
 
     def showResponse(self, messaggio):
         print("VIEW MESSAGGIO", messaggio)
         st.code(f"Response: {messaggio}", language="markdown")
-
-        #st.code(generatePrompt(st.session_state.emb, prompt, st.session_state.option), language='markdown')
