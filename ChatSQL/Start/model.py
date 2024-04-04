@@ -119,20 +119,19 @@ class ModelDelete:
                     os.remove(file_path)
                     json_deleted = True 
 
-            #for index_file in os.listdir(self.indexes_path + "\\" + os.path.splitext(file)[0]):
-            for filename in os.listdir(self.indexes_path):
-                filename_without_extension = os.path.splitext(filename)[0]
-                for index_file in os.listdir(os.path.join(self.indexes_path, filename)):
-
-                    file_path = os.path.join(self.indexes_path, os.path.splitext(file)[0], index_file)
+            filename_without_extension = os.path.splitext(file)[0]
+            indexes_directory = os.path.join(self.indexes_path, filename_without_extension)
+            if os.path.isdir(indexes_directory):
+                for index_file in os.listdir(indexes_directory):
+                    file_path = os.path.join(indexes_directory, index_file)
                     if os.path.isfile(file_path):
-                        os.remove(file_path) #per eliminare i file nella cartella
-                        #importata per eliminare la cartella
-                        shutil.rmtree(os.path.join(self.indexes_path, os.path.splitext(file)[0]))
-                        index_deleted = True
+                        os.remove(file_path)
+                shutil.rmtree(indexes_directory)
+                index_deleted = True
 
-        if json_deleted == True and index_deleted == True:
+        if json_deleted and index_deleted:
             self.file_deleted = True
+
     
     def getEsitoFileEliminato(self):
         return self.file_deleted
