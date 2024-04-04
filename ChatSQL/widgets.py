@@ -1,16 +1,13 @@
 import streamlit as st
+
 from controller import *
 
 class LoginWidget:
     def __init__(self, controllerAut):
         self._controllerAut = controllerAut
-        
-        #self.usernameS = st.sidebar.empty()
-        #self.passwordS = st.sidebar.empty()
-        #self.loginS = st.sidebar.empty()
 
     def create(self):
-        st.sidebar.header('Login in sezione tecnico', divider='grey')
+        st.sidebar.header('Login in the technician section', divider='grey')
         self.username = st.sidebar.text_input("Username")
         self.password = st.sidebar.text_input("Password", type="password")
         self.login_button = st.sidebar.button("Login")
@@ -18,13 +15,13 @@ class LoginWidget:
             self._controllerAut.updateLoginData(self.username, self.password)
     
     def esitoPositivo(self):
-        st.success('LogIn avvenuto con successo!', icon="✅")
+        st.success('Login successfull!', icon="✅")
 
     def esitoNegativo(self):
-        st.error('Credenziali sbagliate. Si prega di riprovare!', icon="🚨")
+        st.error('Wrong credentials. Please try again.', icon="🚨")
 
     def esitoMancante(self):
-        st.warning('Inserisci prima username e password!', icon="🔥")
+        st.warning('Please write username and password', icon="🔥")
 
 
 class LogoutWidget:
@@ -32,13 +29,13 @@ class LogoutWidget:
         self._controllerLogout = controllerLog
 
     def create(self):
-        st.sidebar.header('Lougout da sezione tecnico', divider='grey')
+        st.sidebar.header('leave the technician section', divider='grey')
         bottone_logout = st.sidebar.button("Logout")
         if bottone_logout:
             self._controllerLogout.logout()
     
     def logoutEsito(self):
-        st.success('LogOut avvenuto con successo!', icon="✅")
+        st.success('Logged out', icon="✅")
 
 
 class SelectWidget:
@@ -105,6 +102,7 @@ class DeleteWidget:
 
     def esitoNegativoEliminazione(self, file_name):
         st.error(f'Eliminazione di "{file_name}" non avvenuta!', icon="🚨")
+
 
 class ChatWidget:
     def __init__(self, controllerCha, controllerSel, controllerAut):

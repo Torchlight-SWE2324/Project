@@ -1,4 +1,5 @@
 import streamlit as st
+
 from controller import *
 
 class ViewUtente:
@@ -34,17 +35,13 @@ class ViewUtente:
             self._controllerAut.updateLoginData(self.username, self.password)
 
     def esitoPositivo(self):
-        st.success("Login avvenuto")
-        #self.usernameS.empty()
-        #self.passwordS.empty()
-        #self.loginS.empty()
+        st.success("You are logged in")
 
     def esitoNegativo(self):
-        st.error("Login sbagliato")
+        st.error("Login not successful")
 
     def esitoMancante(self):
-        st.warning("Inserisci Username e Password")
-
+        st.warning("Write username and password")
 
 
 class ViewTecnico:
@@ -64,16 +61,13 @@ class ViewTecnico:
         self.button_upload = st.sidebar.empty()
         self.logoutS = st.sidebar.empty()
 
-        
-
     def display_data(self):
         st.title("ChatSQL")
         st.subheader("Type your natural language query in the chat box below and press enter to get the corresponding SQL query.")
-        self.titleS.title("Sidebar Tecnico")
+        self.titleS.title("Technican sidebar")
         self.uploadFile()
         self.deleteFile()
         self.logout()
-            
 
     def uploadFile(self):
         uploaded_file = self.container_upload.file_uploader("Upload new data dictionary file", accept_multiple_files=False, type="json")
@@ -89,34 +83,31 @@ class ViewTecnico:
             self._controllerLogout.logout()
 
     def logoutEsito(self):
-        self.containerNotifiche.success("🚨LogOut Avvenuto con successo🚨")
+        self.containerNotifiche.success("Logged out", icon="✅")
 
     def getFileUploaded(self):
         return self.fileUpload
     
     def esitoPositivo(self):
-        self.containerNotifiche.success("Caricamento dizionario avvenuto con successo")
+        self.containerNotifiche.success("Dictionary uploaded", icon="✅")
 
     def esitoNegativo(self):
-        self.containerNotifiche.error("Dizionario non caricato :( ")
+        self.containerNotifiche.error("Dictionary not uploaded", icon="🚨")
 
     def deleteFile(self):
         files = self._controllerSel.getFiles()
         file = self.container_delete.selectbox('Your data dictionary files', files, key="dizionari")
         self._controllerSel.setDizionario(file)
-        # database -> file
-        # .join("database", "file")
 
         clickSelectFile = self.button_delete.button("Delete selected file", type="primary", disabled=file == None)
         if clickSelectFile:  
             self._controllerDel.operazioneDelete(file)
 
     def esitoPositivoEliminazione(self):
-        self.containerNotifiche.success("File eliminato")
+        self.containerNotifiche.success("File deleted", icon="✅")
 
     def esitoNegativoEliminazione(self):
-        self.containerNotifiche.error("Eliminazione non avvenuta")
-
+        self.containerNotifiche.error("The file was not deleted", icon="⚠️")
 
 
 class ViewChat:
@@ -130,7 +121,7 @@ class ViewChat:
     def display_data(self):
         self.user_input = st.chat_input("Type your query here", key="chat", max_chars=500)
         if self.user_input:
-            st.write(f"User has sent the following prompt: {self.user_input}")
+            st.write(f"User has written the following prompt: {self.user_input}")
             self.selectChat()
 
     def selectChat(self):
@@ -147,5 +138,3 @@ class ViewChat:
     def showResponse(self, messaggio):
         print("VIEW MESSAGGIO", messaggio)
         st.code(f"Response: {messaggio}", language="markdown")
-
-        #st.code(generatePrompt(st.session_state.emb, prompt, st.session_state.option), language='markdown')

@@ -1,11 +1,8 @@
 import csv
 import os
-import shutil #per eliminare cartella (è di python)
-
+import shutil
 
 from ResponseGenerator import *
-#from embedder import *
-#from txtai import Embeddings
 from abc import ABC, abstractmethod
 from jsonschema import validate, ValidationError
 
@@ -62,7 +59,6 @@ class ModelUpload:
                 return 'upload_success'
             else:
                 return index_creation_result
-
         else:
             return dictionary_check
 
@@ -100,6 +96,7 @@ class ModelSelezione:
     def getDizionarioAttuale(self):
         return self.dizionarioAttuale
 
+
 class ModelDelete:
     def __init__(self):
         dirPath = os.path.dirname(os.path.realpath(__file__))
@@ -122,8 +119,7 @@ class ModelDelete:
             for index_file in os.listdir(self.indexes_path + "\\" + os.path.splitext(file)[0]):
                 file_path = os.path.join(self.indexes_path, os.path.splitext(file)[0], index_file)
                 if os.path.isfile(file_path):
-                    os.remove(file_path) #per eliminare i file nella cartella
-                    #importata per eliminare la cartella
+                    os.remove(file_path)
                     shutil.rmtree(os.path.join(self.indexes_path, os.path.splitext(file)[0]))
                     index_deleted = True
 

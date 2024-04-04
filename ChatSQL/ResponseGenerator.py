@@ -1,8 +1,8 @@
 import os
 import json
 
-#from txtai import Embeddings
 from embedder import *
+
 class ResponseUser:
     def generatePrompt(self, user_query, sanitized_user_input, dictionary_name):
         emb = Embedder()
