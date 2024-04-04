@@ -120,9 +120,10 @@ class ModelDelete:
                     json_deleted = True 
 
             #for index_file in os.listdir(self.indexes_path + "\\" + os.path.splitext(file)[0]):
-            for file in os.listdir(self.indexes_path):
-                filename = os.path.splitext(file) # , file_extension =
+            for filename in os.listdir(self.indexes_path):
+                filename_without_extension = os.path.splitext(filename)[0]
                 for index_file in os.listdir(os.path.join(self.indexes_path, filename)):
+
                     file_path = os.path.join(self.indexes_path, os.path.splitext(file)[0], index_file)
                     if os.path.isfile(file_path):
                         os.remove(file_path) #per eliminare i file nella cartella
