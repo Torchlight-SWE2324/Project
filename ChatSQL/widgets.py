@@ -71,22 +71,6 @@ class LoginWidget:
         """
         st.warning('Please write both username and password')
 
-    def get_controller(self):
-        """
-        Get the associated controller.
-
-        @return: The controller object associated with this widget.
-        """
-        return self._controller_aut
-
-    def set_controller(self, controller):
-        """
-        Set the associated controller.
-
-        @param controller: The new controller object to be associated with this widget.
-        """
-        self._controller_aut = controller
-
     def get_username(self):
         """
         Get the username inputted by user.
@@ -136,22 +120,6 @@ class LogoutWidget:
         This method displays a success message when the logout operation is successful.
         """
         st.success('Logged out', icon="✅")
-
-    def get_controller(self):
-        """
-        Get the associated controller.
-
-        @return: The controller object associated with this widget.
-        """
-        return self._controller_logout
-
-    def set_controller(self, controller):
-        """
-        Set the associated controller.
-
-        @param controller: The new controller object to be associated with this widget.
-        """
-        self._controller_logout = controller
 
 class SelectWidget:
     """
@@ -303,22 +271,6 @@ class DeleteWidget:
         """
         st.error(f'Deletion of dictionary "{file_name}" failed.', icon="🚨")
 
-    def get_controller(self):
-        """
-        Get the associated controller.
-
-        @return: The controller object associated with this widget.
-        """
-        return self.__controller_del
-
-    def set_controller(self, controller):
-        """
-        Set the associated controller.
-
-        @param controller: The new controller object to be associated with this widget.
-        """
-        self.__controller_del = controller
-
 class ChatWidget:
     """
     Widget for handling chat interactions.
@@ -374,22 +326,6 @@ class ChatWidget:
         """
         st.session_state.chat.append({"role": "user", "content": gen_response})
         st.code(f"Response: {gen_response}", language="markdown")
-
-    def get_controller(self):
-        """
-        Get the associated controller.
-
-        @return: The controller object associated with this widget.
-        """
-        return self.__controller_chat
-
-    def set_controller(self, controller):
-        """
-        Set the associated controller.
-
-        @param controller: The new controller object to be associated with this widget.
-        """
-        self.__controller_chat = controller
 
     def get_user_input(self):
         """
