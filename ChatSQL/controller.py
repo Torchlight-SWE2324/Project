@@ -74,7 +74,7 @@ class SelectionController:
         """
         Gets all dictionaries.
 
-        @return: all dictionaries
+        @return: all dictionaries as a list of Strings
         """
         return self._model.getFilesInDB()
 
@@ -109,7 +109,7 @@ class UploadController:
 
     def __dictionary_check(self, uploaded_file) -> str:
         """
-        Checks the uploaded file.
+        Checks if the uploaded file is None, it's format and if it respects the schema defined by us.
 
         @param uploaded_file: the uploaded file
         @return: the result of the check
@@ -131,7 +131,7 @@ class UploadController:
 
     def operation_update_file_data(self):
         """
-        Updates file data.
+        Does the upload process, will update the view with the result
 
         @return: None
         """
