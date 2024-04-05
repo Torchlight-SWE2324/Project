@@ -65,7 +65,7 @@ class TestModel(unittest.TestCase):
 '''
 class TestResponseGenerator(unittest.TestCase): 
     def test_generatePrompt(self):
-        response_user=ResponseUser()
+        response_user=UserResponse()
         generatePrompt(self, user_query, sanitized_user_input, dictionary_name)
 '''
 

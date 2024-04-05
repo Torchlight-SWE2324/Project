@@ -3,7 +3,7 @@ import json
 
 from embedder import *
 
-class ResponseUser:
+class UserResponse:
     def __init__(self, embedder):
         self._emb = embedder
 
@@ -55,7 +55,7 @@ class ResponseUser:
                 return prompt
 
 
-class ResponseTechnician:
+class TechnicianResponse:
     def __init__(self, embedder):
         self._emb = embedder
 

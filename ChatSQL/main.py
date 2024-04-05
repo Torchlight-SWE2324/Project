@@ -6,39 +6,39 @@ from embedder import Embedder
 if __name__ == "__main__":
     embedder = Embedder()
     dictionary_schema_verifier = JsonSchemaVerifierService()
-    responseUser = ResponseUser(embedder)
-    responseTechnician = ResponseTechnician(embedder)
+    user_response = UserResponse(embedder)
+    technician_response = TechnicianResponse(embedder)
     
     #modelli
-    modelAut = AuthenticationService()
-    modelSel = SelectionService() 
-    modelUp = UploadService(embedder, dictionary_schema_verifier)
-    modelDel = DeleteService()
-    modelCha = ChatService(responseUser, responseTechnician)
+    aut_model = AuthenticationService()
+    sel_model = SelectionService() 
+    up_model = UploadService(embedder, dictionary_schema_verifier)
+    del_model = DeleteService()
+    cha_model = ChatService(user_response, technician_response)
 
     #controller
-    controllerAut = AuthenticationController(modelAut, None) #aut
-    controllerSel = SelectionController(modelSel, None) #selezione 
-    controllerUp = UploadController(modelUp, None)
-    controllerDel = DeleteController(modelDel, None)
-    controllerLog = LogoutController(modelAut, None)
-    controllerCha = ChatController(modelCha, modelSel, modelAut, None) # chatModel, selModel, authModel
+    aut_controller = AuthenticationController(aut_model, None) #aut
+    sel_controller = SelectionController(sel_model, None) #selezione 
+    up_controller = UploadController(up_model, None)
+    del_controller = DeleteController(del_model, None)
+    log_controller = LogoutController(aut_model, None)
+    cha_controller = ChatController(cha_model, sel_model, aut_model, None) # chatModel, selModel, authModel
 
     #view
-    loginWidget = LoginWidget(controllerAut)
-    logoutWidget = LogoutWidget(controllerLog)    
-    selectWidget = SelectWidget(controllerSel)
-    uploadWidget = UploadWidget(controllerUp)
-    deleteWidget = DeleteWidget(selectWidget, controllerDel)
-    chatWidget = ChatWidget(controllerCha)
+    login_widget = LoginWidget(aut_controller)
+    logout_widget = LogoutWidget(log_controller)    
+    select_widget = SelectWidget(sel_controller)
+    upload_widget = UploadWidget(up_controller)
+    delete_widget = DeleteWidget(select_widget, del_controller)
+    chat_widget = ChatWidget(cha_controller)
 
     #controller imposto view
-    controllerAut.set_view(loginWidget) 
-    controllerSel.set_view(selectWidget)
-    controllerUp.set_view(uploadWidget)
-    controllerDel.set_view(deleteWidget)
-    controllerLog.set_view(logoutWidget)
-    controllerCha.set_view(chatWidget)
+    aut_controller.set_view(login_widget) 
+    sel_controller.set_view(select_widget)
+    up_controller.set_view(upload_widget)
+    del_controller.set_view(delete_widget)
+    log_controller.set_view(logout_widget)
+    cha_controller.set_view(chat_widget)
     
 
     if "logged_in" not in st.session_state:
@@ -48,14 +48,14 @@ if __name__ == "__main__":
         st.session_state.chat = []
 
     if st.session_state.logged_in == False:
-        modelAut.setLoggedStatus(False)
-        selectWidget.create()   #creazione widget selezione dizionario
-        chatWidget.create()     #deve essere messa come ultimo widget (non primo)
-        loginWidget.create()    #creazione widget login
+        aut_model.setLoggedStatus(False)
+        select_widget.create()   #creazione widget selezione dizionario
+        chat_widget.create()     #deve essere messa come ultimo widget (non primo)
+        login_widget.create()    #creazione widget login
         
     else:
-        modelAut.setLoggedStatus(True)
-        deleteWidget.create()   #creazione widget delete (crea in automatico anche la selezione diz)
-        chatWidget.create()     #deve essere messa come ultimo widget (non primo)
-        uploadWidget.create()   #creazione widget selezione dizionario
-        logoutWidget.create()   #creazione widget selezione dizionario
+        aut_model.setLoggedStatus(True)
+        delete_widget.create()   #creazione widget delete (crea in automatico anche la selezione diz)
+        chat_widget.create()     #deve essere messa come ultimo widget (non primo)
+        upload_widget.create()   #creazione widget selezione dizionario
+        logout_widget.create()   #creazione widget selezione dizionario
