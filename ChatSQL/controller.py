@@ -121,8 +121,8 @@ class UploadController:
         if os.path.splitext(uploaded_file_name)[1] != ".json":
             return "File must have format JSON"
 
-        if self._model.get_loaded_dictionaries_number() > 3:
-            return "App cannot contain more than 4 dictionaries."
+        if self._model.get_loaded_dictionaries_number() > 4:
+            return "App cannot contain more than 5 dictionaries."
 
         for dictionary in self._model.get_all_dictionaries_names():
             if uploaded_file_name == dictionary:
