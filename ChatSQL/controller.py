@@ -1,16 +1,32 @@
+"""
+This module defines the controllers of the application.
+"""
+
 import os.path
 import time
 import re
 
-#from model import *
-from widgets import *
+from widgets import st
 
 class AuthenticationController:
+    """
+    Manages authentication operations.
+
+    @param model: the model object
+    @param view: the view object
+    """
     def __init__(self, model, view):
         self._model = model
         self._view = view
 
     def operation_login(self, username, password):
+        """
+        Performs login operation.
+
+        @param username: the username
+        @param password: the password
+        @return: None
+        """
         if username == "" or password == "":
             self._view.missing_credential_outcome()
         else:
@@ -25,40 +41,77 @@ class AuthenticationController:
                 self._view.negative_login_outcome()
 
     def operation_get_logged_tate(self):
+        """
+        Gets the logged-in state.
+
+        @return: the logged-in state
+        """
         return self._model.getLoggedStatus()
 
-    def get_view(self):
-        return self._view
-
     def set_view(self, view):
+        """
+        Sets the view object.
+
+        @param view: the view object
+        @return: None
+        """
         self._view = view
 
-    def get_model(self):
-        return self._model
-
-    def set_model(self, model):
-        self._model = model
-
 class SelectionController:
+    """
+    Manages selection operations.
+
+    @param model: the model object
+    @param view: the view object
+    """
     def __init__(self, model, view):
         self.__model = model
         self.__view = view
 
     def operation_get_all_dictionaries(self):
+        """
+        Gets all dictionaries.
+
+        @return: all dictionaries
+        """
         return self.__model.getFilesInDB()
 
     def operation_set_current_dictionary(self, dictionary):
+        """
+        Sets the current dictionary.
+
+        @param dictionary: the dictionary to set
+        @return: None
+        """
         self.__model.setCurrentDictionary(dictionary)
 
     def set_view(self, view):
+        """
+        Sets the view object.
+
+        @param view: the view object
+        @return: None
+        """
         self.__view = view
 
 class UploadController:
+    """
+    Manages file upload operations.
+
+    @param model: the model object
+    @param view: the view object
+    """
     def __init__(self, model, view):
         self.__model = model
         self.__view = view
 
     def __dictionary_check(self, uploaded_file) -> str:
+        """
+        Checks the uploaded file.
+
+        @param uploaded_file: the uploaded file
+        @return: the result of the check
+        """
         uploaded_file_name = uploaded_file.name
         if uploaded_file is None:
             return "File was not loaded, repeat attempt."
@@ -75,6 +128,11 @@ class UploadController:
         return "successful_check"
 
     def operation_update_file_data(self):
+        """
+        Updates file data.
+
+        @return: None
+        """
         uploaded_file = self.__view.get_file_uploaded()
         dictionary_check_result = self.__dictionary_check(uploaded_file)
         if dictionary_check_result == "successful_check":
@@ -90,14 +148,32 @@ class UploadController:
             self.__view.negative_upload_outcome(dictionary_check_result)
 
     def set_view(self, view):
+        """
+        Sets the view object.
+
+        @param view: the view object
+        @return: None
+        """
         self.__view = view
 
 class DeleteController:
+    """
+    Manages deletion operations.
+
+    @param model: the model object
+    @param view: the view object
+    """
     def __init__(self, model, view):
         self._model = model
         self._view = view
 
     def operation_delete(self, delete_file_name):
+        """
+        Deletes a file.
+
+        @param delete_file_name: the file to delete
+        @return: None
+        """
         self._model.deleteFile(delete_file_name)
         esito = self._model.getEliminationOutcome()
         if esito:
@@ -107,24 +183,32 @@ class DeleteController:
         else:
             self._view.negative_delete_outcome(delete_file_name)
 
-    def get_view(self):
-        return self._view
-
     def set_view(self, view):
+        """
+        Sets the view object.
+
+        @param view: the view object
+        @return: None
+        """
         self._view = view
 
-    def get_model(self):
-        return self._model
-
-    def set_model(self, model):
-        self._model = model
-
 class LogoutController:
+    """
+    Manages logout operations.
+
+    @param model: the model object
+    @param view: the view object
+    """
     def __init__(self, model, view):
         self._model = model
         self._view = view
 
     def operation_logout(self):
+        """
+        Performs logout operation.
+
+        @return: None
+        """
         self._model.setLoggedStatus(False)
         st.session_state.logged_in = self._model.getLoggedStatus()
         st.session_state.chat = []
@@ -132,19 +216,24 @@ class LogoutController:
         time.sleep(.5)
         st.rerun()
 
-    def get_view(self):
-        return self._view
-
     def set_view(self, view):
+        """
+        Sets the view object.
+
+        @param view: the view object
+        @return: None
+        """
         self._view = view
 
-    def get_model(self):
-        return self._model
-
-    def set_model(self, model):
-        self._model = model
-
 class ChatController:
+    """
+    Manages chat operations.
+
+    @param chat_model: the chat model object
+    @param select_model: the selection model object
+    @param auth_model: the authentication model object
+    @param view: the view object
+    """
     def __init__(self, chat_model, select_model, auth_model, view):
         self._chat_model = chat_model
         self._select_model = select_model
@@ -152,6 +241,12 @@ class ChatController:
         self._view = view
 
     def operation_generate_response(self, user_input):
+        """
+        Generates a response.
+
+        @param user_input: the user input
+        @return: None
+        """
         current_dictionary = self._select_model.getCurrentDictionary()
         sanitized_user_input = self.sanitize_input(user_input)
         if self._auth_model.getLoggedStatus():
@@ -162,19 +257,27 @@ class ChatController:
         self._view.show_response(gen_response)
 
     def operation_get_all_dictionaries(self):
+        """
+        Gets all dictionaries.
+
+        @return: all dictionaries
+        """
         return self._select_model.getFilesInDB()
 
     def sanitize_input(self, user_input):
+        """
+        Sanitizes user input.
+
+        @param user_input: the user input
+        @return: the sanitized input
+        """
         return re.sub(r"['']", " ", user_input)
 
-    def get_view(self):
-        return self._view
-
     def set_view(self, view):
+        """
+        Sets the view object.
+
+        @param view: the view object
+        @return: None
+        """
         self._view = view
-
-    def get_model(self):
-        return self._model
-
-    def set_model(self, model):
-        self._model = model

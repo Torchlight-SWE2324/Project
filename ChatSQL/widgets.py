@@ -1,7 +1,5 @@
 """
-This module defines various Streamlit widgets and their functionalities.
-
-This module contains classes that define various widgets used in a Streamlit application for handling user interactions,
+This module defines classes that define various widgets used in a Streamlit application for handling user interactions,
 file uploads, deletions, and chat functionalities.
 """
 
