@@ -9,7 +9,15 @@ from ResponseGenerator import *
 
 
 class TestEmbedder(unittest.TestCase):
-    def test_generateUpsertCommands(self):
+    def test_GenerateIndex(self):
+        dictionary_file_name = "swe_music.json"
+        embedder = Embedder()
+        embedder._index_directory = os.path.join(os.path.dirname(__file__), "indexes")
+        embedder._database_directory = os.path.join(os.path.dirname(__file__), "database")
+        result_string=embedder.generateIndex(dictionary_file_name)
+        self.assertEqual(result_string, "index_created")
+
+    def test_GenerateUpsertCommands(self):
         dictionary_path = "ChatSQL/test/database/swe_music.json"
         embedder = Embedder()
         embedder._index_directory = os.path.join(os.path.dirname(__file__), "indexes")
@@ -20,18 +28,8 @@ class TestEmbedder(unittest.TestCase):
                         None, 'field_description': 'Unique identifier assigned to each user reviews album entry'}, {'table_name': 'user_reviews_album', 'table_description': 'Table containing information about user reviews for albums', 'field_name': 'user_id', 'field_type': 'integer', 'field_references': {'table_name': 'users', 'field_name': 'id'}, 'field_description': 'Foreign key referencing the user who wrote the review'}, {'table_name': 'user_reviews_album', 'table_description': 'Table containing information about user reviews for albums', 'field_name': 'album_id', 'field_type': 'integer', 'field_references': {'table_name': 'albums', 'field_name': 'id'}, 'field_description': 'Foreign key referencing the reviewed album'}, {'table_name': 'user_reviews_album', 'table_description': 'Table containing information about user reviews for albums', 'field_name': 'rating', 'field_type': 'integer', 'field_references': None, 'field_description': 'Rating given to the album in the review'}, {'table_name': 'user_reviews_album', 'table_description': 'Table containing information about user reviews for albums', 'field_name': 'comment', 'field_type': 'text', 'field_references': None, 'field_description': 'Comments or feedback provided in the review'}]
         self.assertEqual(result_list, original_list )
 
-
-    def test_generateIndex(self):
-        dictionary_file_name = "swe_music.json"
-        embedder = Embedder()
-        embedder._index_directory = os.path.join(os.path.dirname(__file__), "indexes")
-        embedder._database_directory = os.path.join(os.path.dirname(__file__), "database")
-        result_string=embedder.generateIndex(dictionary_file_name)
-        self.assertEqual(result_string, "index_created")
-
 class TestModel(unittest.TestCase):
-
-    def test_deleteFile(self):
+    def test_DeleteFile(self):
         delete_service = DeleteService()
         delete_service._dir_path = os.path.dirname(os.path.realpath(__file__))
         delete_service._database_path = os.path.join(delete_service._dir_path, "database")
@@ -42,7 +40,7 @@ class TestModel(unittest.TestCase):
         self.assertEqual(delete_service._was_file_deleted, True)
 
         
-    def test_getEsitoFileEliminato(self):
+    def test_GetEsitoFileEliminato(self):
         delete_service2 = DeleteService()
         delete_service2._dir_path = os.path.dirname(os.path.realpath(__file__))
         delete_service2._database_path = os.path.join(delete_service2._dir_path, "database")
@@ -54,7 +52,9 @@ class TestResponseGenerator(unittest.TestCase):
         response_user=ResponseUser()
         
         generatePrompt(self, user_query, sanitized_user_input, dictionary_name)
-'''       
+'''
+
+
 def copy_json():
     source_folder = "ChatSQL/test/utils"
     destination_folder = "ChatSQL/test/database"
@@ -68,9 +68,10 @@ def copy_json():
     destination_file_path = os.path.join(destination_folder, json_filename)
     shutil.copyfile(source_file_path, destination_file_path)
     print(f"JSON file '{json_filename}' copied from '{source_folder}' to '{destination_folder}'")
-        
-
+       
+ 
 if __name__ == '__main__':
+    print("CIAO")  
     unittest.main()    
     #copy_json()
         #"ChatSQL\dicitionary_schemas\json_schema.json"

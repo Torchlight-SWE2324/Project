@@ -66,14 +66,6 @@ class SelectWidget:
     def getFile(self):
         return self.__file
 
-    '''
-    def getController(self):
-        return self.__controller_sel
-    
-    def setController(self, controller):
-        self.__controller_sel = controller
-    '''
-
 
 class UploadWidget:
     def __init__(self, controller_up):
@@ -155,7 +147,6 @@ class ChatWidget:
             
             if self._user_input:
                 st.write(f"User has sent the following prompt: {self._user_input}")
-                
                 self._controller_chat.operationGenerateResponse(self._user_input)
 
     def showResponse(self, gen_response):
