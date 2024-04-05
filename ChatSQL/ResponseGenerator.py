@@ -8,8 +8,8 @@ class ResponseUser:
         self._emb = embedder
 
     def generatePrompt(self, user_query, sanitized_user_input, dictionary_name):
-        embe = self._emb.getEmb()
-        self._emb.caricareIndex(dictionary_name)
+        embe = self._emb.get_emb()
+        self._emb.caricare_index(dictionary_name)
         
         with open(os.path.join(os.path.dirname(__file__), "database", dictionary_name), 'r') as file:
             data = json.load(file)
@@ -60,8 +60,8 @@ class ResponseTechnician:
         self._emb = embedder
 
     def generateDebug(self, user_query, sanitized_user_input, dictionary_name):
-        embe = self._emb.getEmb()
-        self._emb.caricareIndex(dictionary_name)
+        embe = self._emb.get_emb()
+        self._emb.caricare_index(dictionary_name)
         embedder_search_result = embe.search(f"SELECT score, text, table_name, field_name, field_description FROM txtai WHERE similar('{sanitized_user_input}') AND score > 0.01 GROUP BY table_name, field_name", limit=50)
         tables_with_fields = {}
 
