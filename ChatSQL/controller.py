@@ -13,7 +13,7 @@ class AuthenticationController:
     Manages authentication operations.
 
     @param model: the model object
-    @param view: the view object
+    @param view: the view object(=LoginWidget)
     """
     def __init__(self, model, view):
         self._model = model
@@ -62,7 +62,7 @@ class SelectionController:
     Manages selection operations.
 
     @param model: the model object
-    @param view: the view object
+    @param view: the view object(=SelectWidget)
     """
     def __init__(self, model, view):
         self._model = model
@@ -99,7 +99,7 @@ class UploadController:
     Manages file upload operations.
 
     @param model: the model object
-    @param view: the view object
+    @param view: the view object(=UploadWidget)
     """
     def __init__(self, model, view):
         self._model = model
@@ -161,7 +161,7 @@ class DeleteController:
     Manages deletion operations.
 
     @param model: the model object
-    @param view: the view object
+    @param view: the view object(=DeleteWidget)
     """
     def __init__(self, model, view):
         self._model = model
@@ -197,7 +197,7 @@ class LogoutController:
     Manages logout operations.
 
     @param model: the model object
-    @param view: the view object
+    @param view: the view object(=LogoutWidget)
     """
     def __init__(self, model, view):
         self._model = model
