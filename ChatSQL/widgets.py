@@ -20,10 +20,10 @@ class LoginWidget:
 
         @param controller_aut: The controller object for authentication operations.
         """
-        self._controller_aut = controller_aut
-        self.username = None
-        self.password = None
-        self.login_button = None
+        self.__controller_aut = controller_aut
+        self.__username = None
+        self.__password = None
+        self.__login_button = None
 
     def create(self):
         """
@@ -33,11 +33,11 @@ class LoginWidget:
         along with a login button for submitting the credentials.
         """
         st.sidebar.header('Login in the technician section', divider='grey')
-        self.username = st.sidebar.text_input("Username")
-        self.password = st.sidebar.text_input("Password", type="password")
-        self.login_button = st.sidebar.button("Login")
-        if self.login_button:
-            self._controller_aut.operation_login(self.username, self.password)
+        self.__username = st.sidebar.text_input("Username")
+        self.__password = st.sidebar.text_input("Password", type="password")
+        self.__login_button = st.sidebar.button("Login")
+        if self.__login_button:
+            self.__controller_aut.operation_login(self.__username, self.__password)
 
     def positive_login_outcome(self):
         """
@@ -69,7 +69,7 @@ class LoginWidget:
 
         @return: The controller object associated with this widget.
         """
-        return self._controller_aut
+        return self.__controller_aut
 
     def set_controller(self, controller):
         """
@@ -92,7 +92,7 @@ class LogoutWidget:
 
         @param controller_log: The controller object for logout operations.
         """
-        self._controller_logout = controller_log
+        self.__controller_logout = controller_log
 
     def create(self):
         """
@@ -103,7 +103,7 @@ class LogoutWidget:
         st.sidebar.header('Leave the technician section', divider='grey')
         bottone_logout = st.sidebar.button("Logout")
         if bottone_logout:
-            self._controller_logout.operation_logout()
+            self.__controller_logout.operation_logout()
 
     def positive_logout_outcome(self):
         """
@@ -119,7 +119,7 @@ class LogoutWidget:
 
         @return: The controller object associated with this widget.
         """
-        return self._controller_logout
+        return self.__controller_logout
 
     def set_controller(self, controller):
         """
@@ -127,7 +127,7 @@ class LogoutWidget:
 
         @param controller: The new controller object to be associated with this widget.
         """
-        self._controller_logout = controller
+        self.__controller_logout = controller
 
 class SelectWidget:
     """
@@ -244,8 +244,8 @@ class DeleteWidget:
         @param selection_widget: The file selection widget associated with this deletion widget.
         @param controller_del: The controller object for file deletion operations.
         """
-        self._selection_widget = selection_widget
-        self._controller_del = controller_del
+        self.__selection_widget = selection_widget
+        self.__controller_del = controller_del
 
     def create(self):
         """
@@ -253,11 +253,11 @@ class DeleteWidget:
 
         This method creates the file deletion interface with options to select and delete files.
         """
-        self._selection_widget.create()
-        delete_file_name = self._selection_widget.get_file()
+        self.__selection_widget.create()
+        delete_file_name = self.__selection_widget.get_file()
         click_select_file = st.sidebar.button("Delete selected file", type="primary", disabled = delete_file_name is None)
         if click_select_file:
-            self._controller_del.operation_delete(delete_file_name)
+            self.__controller_del.operation_delete(delete_file_name)
 
     def positive_delete_outcome(self, deleted_file_name):
         """
@@ -285,7 +285,7 @@ class DeleteWidget:
 
         @return: The controller object associated with this widget.
         """
-        return self._controller_del
+        return self.__controller_del
 
     def set_controller(self, controller):
         """
@@ -293,7 +293,7 @@ class DeleteWidget:
 
         @param controller: The new controller object to be associated with this widget.
         """
-        self._controller_del = controller
+        self.__controller_del = controller
 
 class ChatWidget:
     """
@@ -308,9 +308,8 @@ class ChatWidget:
 
         @param controller_cha: The controller object for chat operations.
         """
-        self._controller_chat = controller_cha
-        self._user_input = None
-        self._current_dictionary = None
+        self.__controller_chat = controller_cha
+        self.__user_input = None
 
     def create(self):
         """
@@ -323,13 +322,13 @@ class ChatWidget:
         for message in st.session_state.chat:
             with st.chat_message(message["role"]):
                 st.code(message["content"], language="markdown")
-        if self._controller_chat.operation_get_all_dictionaries() == []:
+        if self.__controller_chat.operation_get_all_dictionaries() == []:
             st.chat_input("A data dictionary has not been uploaded. Please log in as a technician to upload one.", disabled=True)
         else:
-            self._user_input = st.chat_input("Type your query here", max_chars=500)
-            if self._user_input:
-                st.write(f"User has sent the following prompt: {self._user_input}")
-                self._controller_chat.operation_generate_response(self._user_input)
+            self.__user_input = st.chat_input("Type your query here", max_chars=500)
+            if self.__user_input:
+                st.write(f"User has sent the following prompt: {self.__user_input}")
+                self.__controller_chat.operation_generate_response(self.__user_input)
 
     def show_response(self, gen_response):
         """
@@ -348,7 +347,7 @@ class ChatWidget:
 
         @return: The controller object associated with this widget.
         """
-        return self._controller_chat
+        return self.__controller_chat
 
     def set_controller(self, controller):
         """
@@ -356,4 +355,4 @@ class ChatWidget:
 
         @param controller: The new controller object to be associated with this widget.
         """
-        self._controller_chat = controller
+        self.__controller_chat = controller
