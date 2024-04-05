@@ -187,9 +187,9 @@ class UploadWidget:
         This method creates the file upload interface with a file uploader component for uploading files.
         """
         upload_this_file = st.sidebar.file_uploader("Upload new data dictionary file", accept_multiple_files=False, key = st.session_state["file_uploader_key"])
-        st.sidebar.button("Upload file", type="primary", on_click = lambda:self.__operazione_upload(upload_this_file), disabled = upload_this_file is None)
+        st.sidebar.button("Upload file", type="primary", on_click = lambda:self.__operation_upload(upload_this_file), disabled = upload_this_file is None)
 
-    def __operazione_upload(self, upload_this_file):
+    def __operation_upload(self, upload_this_file):
         """
         Perform the file upload operation.
 
