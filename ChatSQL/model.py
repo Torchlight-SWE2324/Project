@@ -53,7 +53,7 @@ class UploadService:
                 file_content = uploaded_file_content.encode()
                 destination_file.write(file_content)
 
-            index_creation_result = self.__embedder.generateIndex(uploaded_file_name)
+            index_creation_result = self.__embedder.generate_index(uploaded_file_name)
             if index_creation_result == "index_created":
                 return 'upload_success'
             else:
