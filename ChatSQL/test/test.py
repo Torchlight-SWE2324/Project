@@ -5,7 +5,7 @@ import shutil
 sys.path.append('ChatSQL')  # Assicurati di aggiungere il percorso che contiene la directory 'embedder'
 from embedder import *
 from model import *
-from ResponseGenerator import *
+from response import *
 
 
 class TestEmbedder(unittest.TestCase):
@@ -56,17 +56,17 @@ class TestModel(unittest.TestCase):
         self.assertEqual(delete_service2._was_file_deleted, False)
 
     def test_GetSchemaFilePath(self):
-        jsonSchema = JsonSchemaVerifierService()
+        json_schema = JsonSchemaVerifierService()
         percorso_relativo = "../ChatSQL/ChatSQL/dicitionary_schemas/json_schema.json"
         expected_path = os.path.abspath(percorso_relativo)
-        actual_path = jsonSchema._JsonSchemaVerifierService__get_schema_file_path()  # Chiamata privata del metodo
+        actual_path = json_schema._JsonSchemaVerifierService__get_schema_file_path()  # Chiamata privata del metodo
         self.assertEqual(actual_path, expected_path)
 
 '''
 class TestResponseGenerator(unittest.TestCase): 
-    def test_generatePrompt(self):
+    def test_generate_prompt(self):
         response_user=UserResponse()
-        generatePrompt(self, user_query, sanitized_user_input, dictionary_name)
+        generate_prompt(self, user_query, sanitized_user_input, dictionary_name)
 '''
 
 

@@ -250,9 +250,9 @@ class ChatController:
         sanitized_user_input = self.sanitize_input(user_input)
         current_dictionary = self._select_model.getCurrentDictionary()
         if self._auth_model.getLoggedStatus():
-            self._chat_model.generateDebug(user_input, sanitized_user_input, current_dictionary)
+            self._chat_model.generate_debug(user_input, sanitized_user_input, current_dictionary)
         else :
-            self._chat_model.generatePrompt(user_input, sanitized_user_input, current_dictionary)
+            self._chat_model.generate_prompt(user_input, sanitized_user_input, current_dictionary)
         gen_response = self._chat_model.getResponse()
         self._view.show_response(gen_response)
 
