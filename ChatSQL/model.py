@@ -17,6 +17,15 @@ class DictionarySchemaVerifierService(ABC):
     """
 
     @abstractmethod
+    def _get_schema_file_path(self) -> str:
+        """
+        Get the file path of the FORMAT schema file.
+
+        @return: String representing the file path of the FORMAT schema.
+        """
+        pass
+    
+    @abstractmethod
     def check_dictionary_schema(self, uploaded_file_content) -> str:
         """
         Verify the dictionary schema of the uploaded file content.
@@ -31,7 +40,7 @@ class JsonSchemaVerifierService(DictionarySchemaVerifierService):
     This class implements a JSON schema verifier based on DictionarySchemaVerifierService.
     """
 
-    def __get_schema_file_path(self) -> str:
+    def _get_schema_file_path(self) -> str:
         """
         Get the file path of the JSON schema file.
 
@@ -47,7 +56,7 @@ class JsonSchemaVerifierService(DictionarySchemaVerifierService):
         @param uploaded_file_content: Content of the uploaded JSON file.
         @return: String indicating the result of schema verification.
         """
-        schema_file_path = self.__get_schema_file_path()
+        schema_file_path = self._get_schema_file_path()
 
         try:
             with open(schema_file_path, "r") as schema_file:
@@ -58,7 +67,7 @@ class JsonSchemaVerifierService(DictionarySchemaVerifierService):
         try:
             validate(instance=dictionary_data, schema=json_schema)
             return "schema_check_success"
-        except ValidationError as e:
+        except ValidationError:
             return "The file is not compliant with the schema. Please upload a valid file."
 
 class UploadService:
@@ -150,7 +159,7 @@ class SelectionService:
         """
         Initialize the SelectionService.
         """
-        self.__current_dictionary = None
+        self._current_dictionary = None
 
     def _get_dictionaries_folder_path(self) -> str:
         """
@@ -180,7 +189,7 @@ class SelectionService:
 
         @param dictionary_name: Name of the dictionary to set as current.
         """
-        self.__current_dictionary = dictionary_name
+        self._current_dictionary = dictionary_name
 
     def get_current_dictionary(self):
         """
@@ -188,7 +197,7 @@ class SelectionService:
 
         @return: Name of the current dictionary.
         """
-        return self.__current_dictionary
+        return self._current_dictionary
 
 class DeleteService:
     """
