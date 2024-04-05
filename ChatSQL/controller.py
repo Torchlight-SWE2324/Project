@@ -12,17 +12,17 @@ class AuthenticationController:
 
     def operationLogin(self, username, password):
         if username == "" or password == "":
-            self._view.missingCredentialOutcome()
+            self._view.missing_credential_outcome()
         else:
             esito = self._model.checkLogin(username, password)
             if esito:
-                self._view.positiveLoginOutcome()
+                self._view.positive_login_outcome()
                 time.sleep(.5)
                 st.session_state.chat = []
                 st.session_state.logged_in = True
                 st.rerun()
             else:
-                self._view.negativeLoginOutcome()
+                self._view.negative_login_outcome()
 
     def operationGetLoggedState(self):
         return self._model.getLoggedStatus()
@@ -92,7 +92,7 @@ class UploadController:
         return "successful_check"
 
     def operationUpdateFileData(self):
-        uploaded_file = self.__view.getFileUploaded()
+        uploaded_file = self.__view.get_file_uploaded()
         dictionary_check_result = self.__dictionaryCheck(uploaded_file)
 
         if dictionary_check_result == "successful_check":
@@ -102,11 +102,11 @@ class UploadController:
             dictionary_upload_result = self.__model.uploadDictionary(uploaded_file_name, uploaded_file_content)
             
             if dictionary_upload_result == "upload_success":
-                self.__view.positiveUploadOutcome(uploaded_file_name)
+                self.__view.positive_upload_outcome(uploaded_file_name)
             else:
-                self.__view.negativeUploadOutcome(dictionary_upload_result)
+                self.__view.negative_upload_outcome(dictionary_upload_result)
         else:
-            self.__view.negativeUploadOutcome(dictionary_check_result)
+            self.__view.negative_upload_outcome(dictionary_check_result)
 
     def setView(self, view):
         self.__view = view
@@ -132,11 +132,11 @@ class DeleteController:
         self._model.deleteFile(delete_file_name)
         esito = self._model.getEliminationOutcome()
         if esito:
-            self._view.positiveDeleteOutcome(delete_file_name)
+            self._view.positive_delete_outcome(delete_file_name)
             time.sleep(.5)
             st.rerun()
         else:
-            self._view.negativeDeleteOutcome(delete_file_name)
+            self._view.negative_delete_outcome(delete_file_name)
     
     def getView(self):
         return self._view
@@ -160,7 +160,7 @@ class LogoutController:
         self._model.setLoggedStatus(False)
         st.session_state.logged_in = self._model.getLoggedStatus()
         st.session_state.chat = []
-        self._view.positiveLogoutOutcome()
+        self._view.positive_logout_outcome()
         time.sleep(.5)
         st.rerun()
 
@@ -192,7 +192,7 @@ class ChatController:
         else :
             self._chat_model.generatePrompt(user_input, sanitized_user_input, current_dictionary)
         gen_response = self._chat_model.getResponse()    
-        self._view.showResponse(gen_response)
+        self._view.show_response(gen_response)
 
     def operationGetAllDictionaries(self):
         return self._select_model.getFilesInDB()
