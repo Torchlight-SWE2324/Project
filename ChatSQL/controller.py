@@ -19,7 +19,7 @@ class AuthenticationController:
         self._model = model
         self._view = view
 
-    def operation_login(self, username, password):
+    def operation_login(self):
         """
         Performs login operation.
 
@@ -27,6 +27,8 @@ class AuthenticationController:
         @param password: the password
         @return: None
         """
+        username = self._view.get_username()
+        password = self._view.get_password()
         if username == "" or password == "":
             self._view.missing_credential_outcome()
         else:

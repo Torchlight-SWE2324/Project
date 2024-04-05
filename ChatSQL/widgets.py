@@ -18,10 +18,10 @@ class LoginWidget:
 
         @param controller_aut: The controller object for authentication operations.
         """
-        self.__controller_aut = controller_aut
-        self.__username = None
-        self.__password = None
-        self.__login_button = None
+        self._controller_aut = controller_aut
+        self._username = None
+        self._password = None
+        self._login_button = None
 
     def create(self):
         """
@@ -31,11 +31,21 @@ class LoginWidget:
         along with a login button for submitting the credentials.
         """
         st.sidebar.header('Login in the technician section', divider='grey')
-        self.__username = st.sidebar.text_input("Username")
-        self.__password = st.sidebar.text_input("Password", type="password")
-        self.__login_button = st.sidebar.button("Login")
-        if self.__login_button:
-            self.__controller_aut.operation_login(self.__username, self.__password)
+        username = st.sidebar.text_input("Username")
+        password = st.sidebar.text_input("Password", type="password")
+        self._login_button = st.sidebar.button("Login")
+        if self._login_button:
+            self._notify_login_attempt(username, password)
+
+    def _notify_login_attempt(self, username, password):
+        """
+        Communicates to the associated controller to try the login.
+
+        @param upload_this_file: The string containing user input to be used to generate the response.
+        """
+        self._username = username
+        self._password = password
+        self._controller_aut.operation_login()
 
     def positive_login_outcome(self):
         """
@@ -67,7 +77,7 @@ class LoginWidget:
 
         @return: The controller object associated with this widget.
         """
-        return self.__controller_aut
+        return self._controller_aut
 
     def set_controller(self, controller):
         """
@@ -76,6 +86,22 @@ class LoginWidget:
         @param controller: The new controller object to be associated with this widget.
         """
         self._controller_aut = controller
+
+    def get_username(self):
+        """
+        Get the username inputted by user.
+
+        @return: The string containing the username inputted by user.
+        """
+        return self._username
+    
+    def get_password(self):
+        """
+        Get the password inputted by user.
+
+        @return: The string containing the password inputted by user.
+        """
+        return self._password
 
 class LogoutWidget:
     """
@@ -90,7 +116,7 @@ class LogoutWidget:
 
         @param controller_log: The controller object for logout operations.
         """
-        self.__controller_logout = controller_log
+        self._controller_logout = controller_log
 
     def create(self):
         """
@@ -101,7 +127,7 @@ class LogoutWidget:
         st.sidebar.header('Leave the technician section', divider='grey')
         bottone_logout = st.sidebar.button("Logout")
         if bottone_logout:
-            self.__controller_logout.operation_logout()
+            self._controller_logout.operation_logout()
 
     def positive_logout_outcome(self):
         """
@@ -117,7 +143,7 @@ class LogoutWidget:
 
         @return: The controller object associated with this widget.
         """
-        return self.__controller_logout
+        return self._controller_logout
 
     def set_controller(self, controller):
         """
@@ -125,7 +151,7 @@ class LogoutWidget:
 
         @param controller: The new controller object to be associated with this widget.
         """
-        self.__controller_logout = controller
+        self._controller_logout = controller
 
 class SelectWidget:
     """
@@ -140,8 +166,8 @@ class SelectWidget:
 
         @param controller_sel: The controller object for file selection operations.
         """
-        self.__controller_sel = controller_sel
-        self.__file = None
+        self._controller_sel = controller_sel
+        self._file = None
 
     def create(self):
         """
@@ -149,10 +175,10 @@ class SelectWidget:
 
         This method creates the file selection interface with a dropdown menu for selecting files.
         """
-        files = self.__controller_sel.operation_get_all_dictionaries()
+        files = self._controller_sel.operation_get_all_dictionaries()
         file = st.sidebar.selectbox('Your data dictionary files', files, key="dizionari")
-        self.__controller_sel.operation_set_current_dictionary(file)
-        self.__file = file
+        self._controller_sel.operation_set_current_dictionary(file)
+        self._file = file
 
     def get_file(self):
         """
@@ -160,7 +186,7 @@ class SelectWidget:
 
         @return: The selected file from the file selection widget.
         """
-        return self.__file
+        return self._file
 
 class UploadWidget:
     """
@@ -175,8 +201,8 @@ class UploadWidget:
 
         @param controller_up: The controller object for file upload operations.
         """
-        self.__controller_up = controller_up
-        self.__file_uploaded = None
+        self._controller_up = controller_up
+        self._file_uploaded = None
         if "file_uploader_key" not in st.session_state:
             st.session_state["file_uploader_key"] = 0
 
@@ -187,24 +213,16 @@ class UploadWidget:
         This method creates the file upload interface with a file uploader component for uploading files.
         """
         upload_this_file = st.sidebar.file_uploader("Upload new data dictionary file", accept_multiple_files=False, key = st.session_state["file_uploader_key"])
-        st.sidebar.button("Upload file", type="primary", on_click = lambda:self.__operation_upload(upload_this_file), disabled = upload_this_file is None)
+        st.sidebar.button("Upload file", type="primary", on_click = lambda:self._operation_upload(upload_this_file), disabled = upload_this_file is None)
 
-    def __operation_upload(self, upload_this_file):
+    def _operation_upload(self, upload_this_file):
         """
         Perform the file upload operation.
 
         @param upload_this_file: The file object to be uploaded.
         """
-        self.__file_uploaded = upload_this_file
-        self.__controller_up.operation_update_file_data()
-
-    def get_file_uploaded(self):
-        """
-        Get the uploaded file.
-
-        @return: The uploaded file from the file upload widget.
-        """
-        return self.__file_uploaded
+        self._file_uploaded = upload_this_file
+        self._controller_up.operation_update_file_data()
 
     def positive_upload_outcome(self, uploaded_file_name):
         """
@@ -227,6 +245,14 @@ class UploadWidget:
         """
         st.error(dictionary_upload_error, icon="🚨")
         st.session_state["file_uploader_key"] += 1
+
+    def get_file_uploaded(self):
+        """
+        Get the uploaded file.
+
+        @return: The uploaded file from the file upload widget.
+        """
+        return self._file_uploaded
 
 class DeleteWidget:
     """
