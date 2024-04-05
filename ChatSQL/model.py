@@ -2,7 +2,7 @@ import csv
 import os
 import shutil
 
-from ResponseGenerator import *
+from response import *
 from abc import ABC, abstractmethod
 from jsonschema import validate, ValidationError
 
@@ -143,11 +143,11 @@ class ChatService:
         self._response_user = response_user
         self._response_technician = response_technician
 
-    def generatePrompt(self, user_input, sanitized_user_input, dictionary_name):
-        self._response = self._response_user.generatePrompt(user_input, sanitized_user_input, dictionary_name)
+    def generate_prompt(self, user_input, sanitized_user_input, dictionary_name):
+        self._response = self._response_user.generate_prompt(user_input, sanitized_user_input, dictionary_name)
 
-    def generateDebug(self, user_input, sanitized_user_input, dictionary_name):
-        self._response =  self._response_technician.generateDebug(user_input, sanitized_user_input, dictionary_name)
+    def generate_debug(self, user_input, sanitized_user_input, dictionary_name):
+        self._response =  self._response_technician.generate_debug(user_input, sanitized_user_input, dictionary_name)
 
     def getResponse(self):
         return self._response
