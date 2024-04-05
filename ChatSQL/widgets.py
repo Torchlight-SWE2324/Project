@@ -323,10 +323,20 @@ class ChatWidget:
         if self.__controller_chat.operation_get_all_dictionaries() == []:
             st.chat_input("A data dictionary has not been uploaded. Please log in as a technician to upload one.", disabled=True)
         else:
-            self.__user_input = st.chat_input("Type your query here", max_chars=500)
-            if self.__user_input:
-                st.write(f"User has sent the following prompt: {self.__user_input}")
-                self.__controller_chat.operation_generate_response(self.__user_input)
+            user_input = st.chat_input("Type your query here", max_chars=500)
+            if user_input:
+                self.__notify_input_user(user_input)
+                
+
+    def __notify_input_user(self, user_input):
+        """
+        Communicates to the associated controller to start the generation of response operation.
+
+        @param upload_this_file: The string containing user input to be used to generate the response.
+        """
+        st.write(f"User has sent the following prompt: {user_input}")
+        self.__user_input = user_input
+        self.__controller_chat.operation_generate_response()
 
     def show_response(self, gen_response):
         """
@@ -354,3 +364,12 @@ class ChatWidget:
         @param controller: The new controller object to be associated with this widget.
         """
         self.__controller_chat = controller
+
+    def get_user_input(self):
+        """
+        Get the user input.
+
+        @return: The string containing user input from chat input widget.
+        """
+        return self.__user_input
+

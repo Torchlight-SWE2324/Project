@@ -232,7 +232,7 @@ class ChatController:
     @param chat_model: the chat model object
     @param select_model: the selection model object
     @param auth_model: the authentication model object
-    @param view: the view object
+    @param view: the view object(=ChatWidget)
     """
     def __init__(self, chat_model, select_model, auth_model, view):
         self._chat_model = chat_model
@@ -240,15 +240,15 @@ class ChatController:
         self._auth_model = auth_model
         self._view = view
 
-    def operation_generate_response(self, user_input):
+    def operation_generate_response(self):
         """
-        Generates a response.
+        Generates a response and shows it on the view.
 
-        @param user_input: the user input
         @return: None
         """
-        current_dictionary = self._select_model.getCurrentDictionary()
+        user_input = self._view.get_user_input()
         sanitized_user_input = self.sanitize_input(user_input)
+        current_dictionary = self._select_model.getCurrentDictionary()
         if self._auth_model.getLoggedStatus():
             self._chat_model.generateDebug(user_input, sanitized_user_input, current_dictionary)
         else :
