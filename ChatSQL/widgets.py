@@ -303,10 +303,10 @@ class ChatWidget:
         else:
             user_input = st.chat_input("Type your query here", max_chars=500)
             if user_input:
-                self.__notify_input_user(user_input)
+                self._notify_input_user(user_input)
                 
 
-    def __notify_input_user(self, user_input):
+    def _notify_input_user(self, user_input):
         """
         Communicates to the associated controller to start the generation of response operation.
 
