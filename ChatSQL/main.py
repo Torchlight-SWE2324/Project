@@ -33,12 +33,12 @@ if __name__ == "__main__":
     chatWidget = ChatWidget(controllerCha)
 
     #controller imposto view
-    controllerAut.setView(loginWidget) 
-    controllerSel.setView(selectWidget)
-    controllerUp.setView(uploadWidget)
-    controllerDel.setView(deleteWidget)
-    controllerLog.setView(logoutWidget)
-    controllerCha.setView(chatWidget)
+    controllerAut.set_view(loginWidget) 
+    controllerSel.set_view(selectWidget)
+    controllerUp.set_view(uploadWidget)
+    controllerDel.set_view(deleteWidget)
+    controllerLog.set_view(logoutWidget)
+    controllerCha.set_view(chatWidget)
     
 
     if "logged_in" not in st.session_state:

@@ -37,7 +37,7 @@ class LoginWidget:
         self.password = st.sidebar.text_input("Password", type="password")
         self.login_button = st.sidebar.button("Login")
         if self.login_button:
-            self._controller_aut.operationLogin(self.username, self.password)
+            self._controller_aut.operation_login(self.username, self.password)
 
     def positive_login_outcome(self):
         """
@@ -103,7 +103,7 @@ class LogoutWidget:
         st.sidebar.header('Leave the technician section', divider='grey')
         bottone_logout = st.sidebar.button("Logout")
         if bottone_logout:
-            self._controller_logout.operationLogout()
+            self._controller_logout.operation_logout()
 
     def positive_logout_outcome(self):
         """
@@ -151,9 +151,9 @@ class SelectWidget:
 
         This method creates the file selection interface with a dropdown menu for selecting files.
         """
-        files = self.__controller_sel.operationGetAllDictionaries()
+        files = self.__controller_sel.operation_get_all_dictionaries()
         file = st.sidebar.selectbox('Your data dictionary files', files, key="dizionari")
-        self.__controller_sel.operationSetCurrentDictionary(file)
+        self.__controller_sel.operation_set_current_dictionary(file)
         self.__file = file
 
     def get_file(self):
@@ -198,7 +198,7 @@ class UploadWidget:
         @param upload_this_file: The file object to be uploaded.
         """
         self.__file_uploaded = upload_this_file
-        self.__controller_up.operationUpdateFileData()
+        self.__controller_up.operation_update_file_data()
 
     def get_file_uploaded(self):
         """
@@ -257,7 +257,7 @@ class DeleteWidget:
         delete_file_name = self._selection_widget.get_file()
         click_select_file = st.sidebar.button("Delete selected file", type="primary", disabled = delete_file_name is None)
         if click_select_file:
-            self._controller_del.operationDelete(delete_file_name)
+            self._controller_del.operation_delete(delete_file_name)
 
     def positive_delete_outcome(self, deleted_file_name):
         """
@@ -323,13 +323,13 @@ class ChatWidget:
         for message in st.session_state.chat:
             with st.chat_message(message["role"]):
                 st.code(message["content"], language="markdown")
-        if self._controller_chat.operationGetAllDictionaries() == []:
+        if self._controller_chat.operation_get_all_dictionaries() == []:
             st.chat_input("A data dictionary has not been uploaded. Please log in as a technician to upload one.", disabled=True)
         else:
             self._user_input = st.chat_input("Type your query here", max_chars=500)
             if self._user_input:
                 st.write(f"User has sent the following prompt: {self._user_input}")
-                self._controller_chat.operationGenerateResponse(self._user_input)
+                self._controller_chat.operation_generate_response(self._user_input)
 
     def show_response(self, gen_response):
         """
