@@ -29,6 +29,15 @@ class TestEmbedder(unittest.TestCase):
         self.assertEqual(result_list, original_list )
 
 class TestModel(unittest.TestCase):
+    
+    def test_checkDictionarySchema(self):
+        json_schema_verifier = JsonSchemaVerifierService()
+        uploaded_file_path = "ChatSQL/test/database/swe_music.json"
+        with open(uploaded_file_path, 'r') as file:
+            uploaded_file_content = file.read()
+        response_string = json_schema_verifier.checkDictionarySchema(uploaded_file_content)
+        self.assertEqual(response_string, "schema_check_success")
+   
     def test_DeleteFile(self):
         delete_service = DeleteService()
         delete_service._dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -38,19 +47,25 @@ class TestModel(unittest.TestCase):
         delete_service.deleteFile(file)
         copy_json()
         self.assertEqual(delete_service._was_file_deleted, True)
-
-        
+         
     def test_GetEsitoFileEliminato(self):
         delete_service2 = DeleteService()
         delete_service2._dir_path = os.path.dirname(os.path.realpath(__file__))
         delete_service2._database_path = os.path.join(delete_service2._dir_path, "database")
         delete_service2._indexes_path = os.path.join(delete_service2._dir_path, "indexes")
         self.assertEqual(delete_service2._was_file_deleted, False)
+
+    def test_GetSchemaFilePath(self):
+        jsonSchema = JsonSchemaVerifierService()
+        percorso_relativo = "../ChatSQL/ChatSQL/dicitionary_schemas/json_schema.json"
+        expected_path = os.path.abspath(percorso_relativo)
+        actual_path = jsonSchema._JsonSchemaVerifierService__get_schema_file_path()  # Chiamata privata del metodo
+        self.assertEqual(actual_path, expected_path)
+
 '''
 class TestResponseGenerator(unittest.TestCase): 
     def test_generatePrompt(self):
         response_user=ResponseUser()
-        
         generatePrompt(self, user_query, sanitized_user_input, dictionary_name)
 '''
 
@@ -60,18 +75,14 @@ def copy_json():
     destination_folder = "ChatSQL/test/database"
     json_filename = "swe_music.json"
     source_file_path = os.path.join(source_folder, json_filename)
-    print("source file path:", source_file_path)
     if not os.path.isfile(source_file_path):
         print(f"Source JSON file '{json_filename}' not found in '{source_folder}'")
     if not os.path.exists(destination_folder):
         os.makedirs(destination_folder)
     destination_file_path = os.path.join(destination_folder, json_filename)
     shutil.copyfile(source_file_path, destination_file_path)
-    print(f"JSON file '{json_filename}' copied from '{source_folder}' to '{destination_folder}'")
+    
        
  
 if __name__ == '__main__':
-    print("CIAO")  
-    unittest.main()    
-    #copy_json()
-        #"ChatSQL\dicitionary_schemas\json_schema.json"
+    unittest.main()
