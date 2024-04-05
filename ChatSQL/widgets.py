@@ -21,7 +21,6 @@ class LoginWidget:
         self._controller_aut = controller_aut
         self._username = None
         self._password = None
-        self._login_button = None
 
     def create(self):
         """
@@ -33,8 +32,8 @@ class LoginWidget:
         st.sidebar.header('Login in the technician section', divider='grey')
         username = st.sidebar.text_input("Username")
         password = st.sidebar.text_input("Password", type="password")
-        self._login_button = st.sidebar.button("Login")
-        if self._login_button:
+        login_button = st.sidebar.button("Login")
+        if login_button:
             self._notify_login_attempt(username, password)
 
     def _notify_login_attempt(self, username, password):
