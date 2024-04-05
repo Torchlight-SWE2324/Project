@@ -65,8 +65,8 @@ class SelectionController:
     @param view: the view object
     """
     def __init__(self, model, view):
-        self.__model = model
-        self.__view = view
+        self._model = model
+        self._view = view
 
     def operation_get_all_dictionaries(self):
         """
@@ -74,7 +74,7 @@ class SelectionController:
 
         @return: all dictionaries
         """
-        return self.__model.getFilesInDB()
+        return self._model.getFilesInDB()
 
     def operation_set_current_dictionary(self, dictionary):
         """
@@ -83,7 +83,7 @@ class SelectionController:
         @param dictionary: the dictionary to set
         @return: None
         """
-        self.__model.setCurrentDictionary(dictionary)
+        self._model.setCurrentDictionary(dictionary)
 
     def set_view(self, view):
         """
@@ -92,7 +92,7 @@ class SelectionController:
         @param view: the view object
         @return: None
         """
-        self.__view = view
+        self._view = view
 
 class UploadController:
     """
@@ -102,8 +102,8 @@ class UploadController:
     @param view: the view object
     """
     def __init__(self, model, view):
-        self.__model = model
-        self.__view = view
+        self._model = model
+        self._view = view
 
     def __dictionary_check(self, uploaded_file) -> str:
         """
@@ -119,10 +119,10 @@ class UploadController:
         if os.path.splitext(uploaded_file_name)[1] != ".json":
             return "File must have format JSON"
 
-        if self.__model.getLoadedDictionariesNumber() > 3:
+        if self._model.getLoadedDictionariesNumber() > 3:
             return "App cannot contain more than 4 dictionaries."
 
-        for dictionary in self.__model.getAllDictionariesNames():
+        for dictionary in self._model.getAllDictionariesNames():
             if uploaded_file_name == dictionary:
                 return f"File with name '{uploaded_file_name}' already present."
         return "successful_check"
@@ -133,19 +133,19 @@ class UploadController:
 
         @return: None
         """
-        uploaded_file = self.__view.get_file_uploaded()
+        uploaded_file = self._view.get_file_uploaded()
         dictionary_check_result = self.__dictionary_check(uploaded_file)
         if dictionary_check_result == "successful_check":
             dictionary_content = uploaded_file.read()
             uploaded_file_content = dictionary_content.decode('utf-8')
             uploaded_file_name = uploaded_file.name
-            dictionary_upload_result = self.__model.uploadDictionary(uploaded_file_name, uploaded_file_content)
+            dictionary_upload_result = self._model.uploadDictionary(uploaded_file_name, uploaded_file_content)
             if dictionary_upload_result == "upload_success":
-                self.__view.positive_upload_outcome(uploaded_file_name)
+                self._view.positive_upload_outcome(uploaded_file_name)
             else:
-                self.__view.negative_upload_outcome(dictionary_upload_result)
+                self._view.negative_upload_outcome(dictionary_upload_result)
         else:
-            self.__view.negative_upload_outcome(dictionary_check_result)
+            self._view.negative_upload_outcome(dictionary_check_result)
 
     def set_view(self, view):
         """
@@ -154,7 +154,7 @@ class UploadController:
         @param view: the view object
         @return: None
         """
-        self.__view = view
+        self._view = view
 
 class DeleteController:
     """
