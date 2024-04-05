@@ -29,7 +29,14 @@ class TestEmbedder(unittest.TestCase):
         self.assertEqual(result_list, original_list )
 
 class TestModel(unittest.TestCase):
-    
+#class JsonSchemaVerifierService    
+    def test_GetSchemaFilePath(self):
+        json_schema = JsonSchemaVerifierService()
+        percorso_relativo = "../ChatSQL/ChatSQL/dicitionary_schemas/json_schema.json"
+        expected_path = os.path.abspath(percorso_relativo)
+        actual_path = json_schema._get_schema_file_path()  # Chiamata privata del metodo
+        self.assertEqual(actual_path, expected_path)
+
     def test_check_dictionary_schema(self):
         json_schema_verifier = JsonSchemaVerifierService()
         uploaded_file_path = "ChatSQL/test/database/swe_music.json"
@@ -37,7 +44,7 @@ class TestModel(unittest.TestCase):
             uploaded_file_content = file.read()
         response_string = json_schema_verifier.check_dictionary_schema(uploaded_file_content)
         self.assertEqual(response_string, "schema_check_success")
-   
+#class DeleteService  
     def test_delete_file(self):
         delete_service = DeleteService()
         delete_service._dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -48,26 +55,70 @@ class TestModel(unittest.TestCase):
         copy_json()
         self.assertEqual(delete_service._was_file_deleted, True)
          
-    def test_GetEsitoFileEliminato(self):
-        delete_service2 = DeleteService()
-        delete_service2._dir_path = os.path.dirname(os.path.realpath(__file__))
-        delete_service2._database_path = os.path.join(delete_service2._dir_path, "database")
-        delete_service2._indexes_path = os.path.join(delete_service2._dir_path, "indexes")
-        self.assertEqual(delete_service2._was_file_deleted, False)
+    def test_get_elimination_outcome(self):
+        delete_service = DeleteService()
+        self.assertEqual(delete_service._was_file_deleted, delete_service.get_elimination_outcome())
 
-    def test_GetSchemaFilePath(self):
-        json_schema = JsonSchemaVerifierService()
-        percorso_relativo = "../ChatSQL/ChatSQL/dicitionary_schemas/json_schema.json"
-        expected_path = os.path.abspath(percorso_relativo)
-        actual_path = json_schema._JsonSchemaVerifierService__get_schema_file_path()  # Chiamata privata del metodo
-        self.assertEqual(actual_path, expected_path)
+#class AuthenticationService
 
-'''
-class TestResponseGenerator(unittest.TestCase): 
+    def test_check_login(self):
+        username = "admin"
+        password = "admin"
+        authenticationService = AuthenticationService()
+        self.assertEqual(authenticationService.check_login(username, password), True)
+
+    def test_set_logged_status(self):
+        obj = AuthenticationService()  # Creo un'istanza della tua classe
+        obj.set_logged_status(True)  # Imposto lo stato del login a True
+        self.assertTrue(obj._is_technician_logged)  # Verifico che lo stato del login sia stato impostato correttamente a True
+
+        obj.set_logged_status(False)  # Imposto lo stato del login a False
+        self.assertFalse(obj._is_technician_logged)  # Verifico che lo stato del login sia stato impostato correttamente a False
+
+    def test_get_logged_status(self):
+        obj = AuthenticationService()  # Creo un'istanza della tua classe
+        obj.set_logged_status(True)  # Imposto lo stato del login a True
+        self.assertTrue(obj.get_logged_status())  # Verifico che il metodo get restituisca True
+
+        obj.set_logged_status(False)  # Imposto lo stato del login a False
+        self.assertFalse(obj.get_logged_status())
+
+#class ChatService
+
     def test_generate_prompt(self):
-        response_user=UserResponse()
-        generate_prompt(self, user_query, sanitized_user_input, dictionary_name)
-'''
+        # Creare un'istanza di ChatService con gli oggetti di risposta simulati
+        emb = Embedder()
+        user = UserResponse(emb)
+        tec = TechnicianResponse(emb)
+        chat_service = ChatService(user, tec)
+
+        # Definire input di esempio
+        user_input = "HELLO"
+        sanitized_user_input = "HELLO"
+        dictionary_name = "swe_music.json"
+
+        # Chiamare il metodo generate_prompt
+        chat_service.generate_prompt(user_input, sanitized_user_input, dictionary_name)
+
+        self.assertNotEqual(chat_service._response, "No relevant information was found regarding your request.") 
+
+    def test_generate_debug(self):
+        # Creare un'istanza di ChatService con gli oggetti di risposta simulati
+        emb = Embedder()
+        user = UserResponse(emb)
+        tec = TechnicianResponse(emb)
+        chat_service = ChatService(user, tec)
+
+        # Definire input di esempio
+        user_input = "HELLO"
+        sanitized_user_input = "HELLO"
+        dictionary_name = "swe_music.json"
+
+        # Chiamare il metodo generate_prompt
+        chat_service.generate_debug(user_input, sanitized_user_input, dictionary_name)
+        self.assertNotEqual(chat_service._response, "No relevant information was found regarding your request.") 
+
+
 
 
 def copy_json():
