@@ -1,8 +1,6 @@
 import os
 import json
 
-#from embedder import *
-
 class UserResponse:
     def __init__(self, embedder):
         self._emb = embedder
@@ -13,12 +11,12 @@ class UserResponse:
 
         with open(os.path.join(os.path.dirname(__file__), "database", dictionary_name), 'r', encoding="utf-8") as file:
             data = json.load(file)
-            embedder_search_result = embe.search(f"select score, text, table_name, table_description, field_name, field_type, field_references, from txtai where similar('{sanitized_user_input}') and score > 0.25 group by table_name")
+            embedder_search_result = embe.search(f"select score, text, table_name, table_description, field_name, field_type, field_references, from txtai where similar('{sanitized_user_input}') and score > 0.40 group by table_name")
             tables_with_fields_list = []
             referencies_list = []
 
             if embedder_search_result == []:
-                return "No relevant information was found regarding your request. \nPlease try again with a different query. \nPlease note that this application is designed to handle requests that \ncan be translated into a SQL query."
+                return "No relevant information was found regarding your request. \nPlease try again with a different query. \nPlease note that this application is designed to handle requests that can be translated into a SQL query."
             for result in embedder_search_result:
                 for table in data["tables"]:
                     if table["name"] == result['table_name']:
@@ -43,11 +41,8 @@ class UserResponse:
                     for reference in referencies_list:
                         prompt += reference
                 prompt += f"\nGenerate the SQL query equivalent to: {user_query}"
-                if prompt:
-                    pass
                 
                 embe.close()
-                print(prompt)
                 return prompt
 
 class TechnicianResponse:

@@ -8,7 +8,7 @@ if __name__ == "__main__":
     dictionary_schema_verifier = JsonSchemaVerifierService()
     user_response = UserResponse(embedder)
     technician_response = TechnicianResponse(embedder)
-    
+
     #modelli
     aut_model = AuthenticationService()
     sel_model = SelectionService() 
@@ -39,7 +39,6 @@ if __name__ == "__main__":
     del_controller.set_view(delete_widget)
     log_controller.set_view(logout_widget)
     cha_controller.set_view(chat_widget)
-    
 
     if "logged_in" not in st.session_state:
         st.session_state.logged_in = False
@@ -52,7 +51,7 @@ if __name__ == "__main__":
         select_widget.create()   #creazione widget selezione dizionario
         chat_widget.create()     #deve essere messa come ultimo widget (non primo)
         login_widget.create()    #creazione widget login
-        
+
     else:
         aut_model.setLoggedStatus(True)
         delete_widget.create()   #creazione widget delete (crea in automatico anche la selezione diz)
