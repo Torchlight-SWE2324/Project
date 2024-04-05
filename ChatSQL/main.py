@@ -47,13 +47,13 @@ if __name__ == "__main__":
         st.session_state.chat = []
 
     if st.session_state.logged_in == False:
-        aut_model.setLoggedStatus(False)
+        aut_model.set_logged_status(False)
         select_widget.create()   #creazione widget selezione dizionario
         chat_widget.create()     #deve essere messa come ultimo widget (non primo)
         login_widget.create()    #creazione widget login
 
     else:
-        aut_model.setLoggedStatus(True)
+        aut_model.set_logged_status(True)
         delete_widget.create()   #creazione widget delete (crea in automatico anche la selezione diz)
         chat_widget.create()     #deve essere messa come ultimo widget (non primo)
         upload_widget.create()   #creazione widget selezione dizionario

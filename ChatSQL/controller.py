@@ -32,7 +32,7 @@ class AuthenticationController:
         if username == "" or password == "":
             self._view.missing_credential_outcome()
         else:
-            esito = self._model.checkLogin(username, password)
+            esito = self._model.check_login(username, password)
             if esito:
                 self._view.positive_login_outcome()
                 time.sleep(.5)
@@ -48,7 +48,7 @@ class AuthenticationController:
 
         @return: the logged-in state
         """
-        return self._model.getLoggedStatus()
+        return self._model.get_logged_status()
 
     def set_view(self, view):
         """
@@ -76,7 +76,7 @@ class SelectionController:
 
         @return: all dictionaries as a list of Strings
         """
-        return self._model.getFilesInDB()
+        return self._model.get_files_in_db()
 
     def operation_set_current_dictionary(self, dictionary):
         """
@@ -85,7 +85,7 @@ class SelectionController:
         @param dictionary: the dictionary to set
         @return: None
         """
-        self._model.setCurrentDictionary(dictionary)
+        self._model.set_current_dictionary(dictionary)
 
     def set_view(self, view):
         """
@@ -121,10 +121,10 @@ class UploadController:
         if os.path.splitext(uploaded_file_name)[1] != ".json":
             return "File must have format JSON"
 
-        if self._model.getLoadedDictionariesNumber() > 3:
+        if self._model.get_loaded_dictionaries_number() > 3:
             return "App cannot contain more than 4 dictionaries."
 
-        for dictionary in self._model.getAllDictionariesNames():
+        for dictionary in self._model.get_all_dictionaries_names():
             if uploaded_file_name == dictionary:
                 return f"File with name '{uploaded_file_name}' already present."
         return "successful_check"
@@ -141,7 +141,7 @@ class UploadController:
             dictionary_content = uploaded_file.read()
             uploaded_file_content = dictionary_content.decode('utf-8')
             uploaded_file_name = uploaded_file.name
-            dictionary_upload_result = self._model.uploadDictionary(uploaded_file_name, uploaded_file_content)
+            dictionary_upload_result = self._model.upload_dictionary(uploaded_file_name, uploaded_file_content)
             if dictionary_upload_result == "upload_success":
                 self._view.positive_upload_outcome(uploaded_file_name)
             else:
@@ -176,8 +176,8 @@ class DeleteController:
         @param delete_file_name: the file to delete
         @return: None
         """
-        self._model.deleteFile(delete_file_name)
-        esito = self._model.getEliminationOutcome()
+        self._model.delete_file(delete_file_name)
+        esito = self._model.get_elimination_outcome()
         if esito:
             self._view.positive_delete_outcome(delete_file_name)
             time.sleep(.5)
@@ -211,8 +211,8 @@ class LogoutController:
 
         @return: None
         """
-        self._model.setLoggedStatus(False)
-        st.session_state.logged_in = self._model.getLoggedStatus()
+        self._model.set_logged_status(False)
+        st.session_state.logged_in = self._model.get_logged_status()
         st.session_state.chat = []
         self._view.positive_logout_outcome()
         time.sleep(.5)
@@ -250,12 +250,12 @@ class ChatController:
         """
         user_input = self._view.get_user_input()
         sanitized_user_input = self.sanitize_input(user_input)
-        current_dictionary = self._select_model.getCurrentDictionary()
-        if self._auth_model.getLoggedStatus():
+        current_dictionary = self._select_model.get_current_dictionary()
+        if self._auth_model.get_logged_status():
             self._chat_model.generate_debug(user_input, sanitized_user_input, current_dictionary)
         else :
             self._chat_model.generate_prompt(user_input, sanitized_user_input, current_dictionary)
-        gen_response = self._chat_model.getResponse()
+        gen_response = self._chat_model.get_response()
         self._view.show_response(gen_response)
 
     def operation_get_all_dictionaries(self):
@@ -264,7 +264,7 @@ class ChatController:
 
         @return: all dictionaries
         """
-        return self._select_model.getFilesInDB()
+        return self._select_model.get_files_in_db()
 
     def sanitize_input(self, user_input):
         """

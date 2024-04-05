@@ -8,14 +8,14 @@ from jsonschema import validate, ValidationError
 
 class DictionarySchemaVerifierService(ABC):
     @abstractmethod
-    def checkDictionarySchema(self, uploaded_file_content) -> str: pass
+    def check_dictionary_schema(self, uploaded_file_content) -> str: pass
 
 class JsonSchemaVerifierService(DictionarySchemaVerifierService):
     def __get_schema_file_path(self) -> str:
         dictionary_schema_folder_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "dicitionary_schemas")
         return os.path.join(dictionary_schema_folder_path, "json_schema.json")
 
-    def checkDictionarySchema(self, uploaded_file_content) -> str:
+    def check_dictionary_schema(self, uploaded_file_content) -> str:
         schema_file_path = self.__get_schema_file_path()
 
         try:
@@ -28,22 +28,21 @@ class JsonSchemaVerifierService(DictionarySchemaVerifierService):
             validate(instance=dictionary_data, schema=json_schema)
             return "schema_check_success"
         except ValidationError as e:
-            return f"The file is not compliant with the schema. Please upload a valid file."
-
+            return "The file is not compliant with the schema. Please upload a valid file."
 
 class UploadService:
     def __init__(self, embedder, dictionary_schema_verifier):
         self.__dictionary_schema_verifier = dictionary_schema_verifier
         self.__embedder = embedder
 
-    def __dictionarySchemaCheck(self, uploaded_file_content):
-        return self.__dictionary_schema_verifier.checkDictionarySchema(uploaded_file_content)
+    def _dictionary_schema_check(self, uploaded_file_content):
+        return self.__dictionary_schema_verifier.check_dictionary_schema(uploaded_file_content)
 
-    def __getDictionariesFolderPath(self) -> str:
+    def _get_dictionaries_folder_path(self) -> str:
         return os.path.join(os.path.dirname(os.path.realpath(__file__)), "database")
 
-    def uploadDictionary(self, uploaded_file_name, uploaded_file_content) -> str:
-        dictionary_check = self.__dictionarySchemaCheck(uploaded_file_content)
+    def upload_dictionary(self, uploaded_file_name, uploaded_file_content) -> str:
+        dictionary_check = self._dictionary_schema_check(uploaded_file_content)
 
         if dictionary_check == "schema_check_success":
             dictionary_folder_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "database")
@@ -58,46 +57,42 @@ class UploadService:
                 return 'upload_success'
             else:
                 return index_creation_result
-
         else:
             return dictionary_check
 
-    def getLoadedDictionariesNumber(self) -> int:
-        return len(self.getAllDictionariesNames())
-
-    def getAllDictionariesNames(self):
-        dictionary_folder_path = self.__getDictionariesFolderPath()
-        list = []
+    def get_all_dictionaries_names(self):
+        dictionary_folder_path = self._get_dictionaries_folder_path()
+        dict_list = []
         
         for name in os.listdir(dictionary_folder_path):
             if os.path.isfile(os.path.join(dictionary_folder_path, name)):
-                list.append(name)
-        return list
+                dict_list.append(name)
+        return dict_list
 
+    def get_loaded_dictionaries_number(self) -> int:
+        return len(self.get_all_dictionaries_names())
 
 class SelectionService:
     def __init__(self):
         self.__current_dictionary = None
 
-    def __getDictionariesFolderPath(self) -> str:
+    def _get_dictionaries_folder_path(self) -> str:
         return os.path.join(os.path.dirname(os.path.realpath(__file__)), "database")
 
-    def getFilesInDB(self):
-        dictionary_folder_path = self.__getDictionariesFolderPath()
-        list = []
-        
+    def get_files_in_db(self):
+        dictionary_folder_path = self._get_dictionaries_folder_path()
+        dict_list = []
         for name in os.listdir(dictionary_folder_path):
             if os.path.isfile(os.path.join(dictionary_folder_path, name)):
-                list.append(name)
-        sorted_list = sorted(list, key=lambda x: os.path.getmtime(os.path.join(dictionary_folder_path, x)), reverse=True)
+                dict_list.append(name)
+        sorted_list = sorted(dict_list, key=lambda x: os.path.getmtime(os.path.join(dictionary_folder_path, x)), reverse=True)
         return sorted_list
 
-    def setCurrentDictionary(self, dictionary_name):
+    def set_current_dictionary(self, dictionary_name):
         self.__current_dictionary = dictionary_name
 
-    def getCurrentDictionary(self):
+    def get_current_dictionary(self):
         return self.__current_dictionary
-
 
 class DeleteService:
     def __init__(self):
@@ -105,11 +100,10 @@ class DeleteService:
         self._database_path = os.path.join(_dir_path, "database")
         self._indexes_path = os.path.join(_dir_path, "indexes")
         self._was_file_deleted = False
-        
-    def deleteFile(self, file):
+
+    def delete_file(self, file):
         was_json_deleted = False
         was_index_deleted = False
-        
         if file:
             file_paths_to_try = [os.path.join(self._database_path, file)]
             self._was_file_deleted = False
@@ -117,7 +111,6 @@ class DeleteService:
                 if os.path.exists(file_path):
                     os.remove(file_path)
                     was_json_deleted = True 
-
             filename_without_extension = os.path.splitext(file)[0]
             indexes_directory = os.path.join(self._indexes_path, filename_without_extension)
             if os.path.isdir(indexes_directory):
@@ -127,18 +120,15 @@ class DeleteService:
                         os.remove(file_path)
                 shutil.rmtree(indexes_directory)
                 was_index_deleted = True
-
         if was_json_deleted and was_index_deleted:
             self._was_file_deleted = True
     
-    def getEliminationOutcome(self):
+    def get_elimination_outcome(self):
         return self._was_file_deleted
-    
 
 class ChatService:
     def __init__(self, response_user, response_technician):
         self._response = ""
-        #self._model_path = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
         self._data_path = os.path.join(os.path.dirname(__file__), "indexes")
         self._response_user = response_user
         self._response_technician = response_technician
@@ -149,20 +139,14 @@ class ChatService:
     def generate_debug(self, user_input, sanitized_user_input, dictionary_name):
         self._response =  self._response_technician.generate_debug(user_input, sanitized_user_input, dictionary_name)
 
-    def getResponse(self):
+    def get_response(self):
         return self._response
-    
-    def setResponse(self, new_response):
-        self._response = new_response
-
 
 class AuthenticationService:
     def __init__(self):
         self._is_technician_logged = False
 
-    # used by the controller, sets the status of "self._is_technician_logged" to True and returns True only if inserted credentials(username and password) are correct
-    # otherwise returns false
-    def checkLogin(self, username, password):
+    def check_login(self, username, password):
         try:
             _dir_path = os.path.dirname(os.path.realpath(__file__))
             file_path = os.path.join(_dir_path, "pswrd.csv")
@@ -176,9 +160,8 @@ class AuthenticationService:
             print(f"An error occurred: {e}")
         return False
 
-    # used by the controller, sets the status of "self._is_technician_logged" to the value of "status" (in this case False)
-    def setLoggedStatus(self, status):
+    def set_logged_status(self, status):
         self._is_technician_logged = status
 
-    def getLoggedStatus(self):
+    def get_logged_status(self):
         return self._is_technician_logged

@@ -30,21 +30,21 @@ class TestEmbedder(unittest.TestCase):
 
 class TestModel(unittest.TestCase):
     
-    def test_checkDictionarySchema(self):
+    def test_check_dictionary_schema(self):
         json_schema_verifier = JsonSchemaVerifierService()
         uploaded_file_path = "ChatSQL/test/database/swe_music.json"
         with open(uploaded_file_path, 'r') as file:
             uploaded_file_content = file.read()
-        response_string = json_schema_verifier.checkDictionarySchema(uploaded_file_content)
+        response_string = json_schema_verifier.check_dictionary_schema(uploaded_file_content)
         self.assertEqual(response_string, "schema_check_success")
    
-    def test_DeleteFile(self):
+    def test_delete_file(self):
         delete_service = DeleteService()
         delete_service._dir_path = os.path.dirname(os.path.realpath(__file__))
         delete_service._database_path = os.path.join(delete_service._dir_path, "database")
         delete_service._indexes_path = os.path.join(delete_service._dir_path, "indexes")
         file = "swe_music.json"
-        delete_service.deleteFile(file)
+        delete_service.delete_file(file)
         copy_json()
         self.assertEqual(delete_service._was_file_deleted, True)
          
