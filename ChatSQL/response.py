@@ -1,11 +1,31 @@
+"""
+This module defines classes that generate responses for the user and the technician.
+
+The UserResponse class generates a prompt for the user based on the user's query and the sanitized input. The prompt contains information about the tables and fields in the database that are relevant to the user's query.
+
+The TechnicianResponse class generates a debug prompt for the technician based on the user's query and the sanitized input. The prompt contains information about the similarity score of each field in the database with the user's query.
+"""
+
 import os
 import json
 
 class UserResponse:
+    """
+    Class that generates a prompt for the user based on the user's query and the sanitized input.
+    """
+    
     def __init__(self, embedder):
         self._emb = embedder
 
     def generate_prompt(self, user_query, sanitized_user_input, dictionary_name):
+        """
+        Generates a prompt for the user based on the user's query and the sanitized input.
+        Args:
+            - user_query (str): The user's query.
+            - sanitized_user_input (str): The sanitized input.
+            - dictionary_name (str): The name of the dictionary file.
+        Returns:
+            str: The prompt for the user."""
         embe = self._emb.get_emb()
         self._emb.caricare_index(dictionary_name)
 
@@ -41,7 +61,7 @@ class UserResponse:
                     for reference in referencies_list:
                         prompt += reference
                 prompt += f"\nGenerate the SQL query equivalent to: {user_query}"
-                
+
                 embe.close()
                 return prompt
 
