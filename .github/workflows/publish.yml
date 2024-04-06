@@ -2,8 +2,9 @@ name: publish
 
 on:
   push:
-    branches-ignore:
-      - '*'
+    branches:
+      - main
+      - dockerPB
 
 jobs:
   publish-hello-docker-image:
