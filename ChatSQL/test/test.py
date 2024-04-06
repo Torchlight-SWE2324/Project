@@ -44,6 +44,17 @@ class TestModel(unittest.TestCase):
             uploaded_file_content = file.read()
         response_string = json_schema_verifier.check_dictionary_schema(uploaded_file_content)
         self.assertEqual(response_string, "schema_check_success")
+
+
+    def test_check_dictionary_schema_false(self):
+        json_schema_verifier = JsonSchemaVerifierService()
+        uploaded_file_path = "ChatSQL/test/database/notCompliantFile.json"
+        with open(uploaded_file_path, 'r') as file:
+            uploaded_file_content = file.read()
+        response_string = json_schema_verifier.check_dictionary_schema(uploaded_file_content)
+        self.assertEqual(response_string, "The file is not compliant with the schema. Please upload a valid file.")
+        
+    
 #class DeleteService  
     def test_delete_file(self):
         delete_service = DeleteService()
@@ -54,6 +65,15 @@ class TestModel(unittest.TestCase):
         delete_service.delete_file(file)
         copy_json()
         self.assertEqual(delete_service._was_file_deleted, True)
+
+    def test_delete_file_false(self):
+        delete_service = DeleteService()
+        delete_service._dir_path = os.path.dirname(os.path.realpath(__file__))
+        delete_service._database_path = os.path.join(delete_service._dir_path, "database")
+        delete_service._indexes_path = os.path.join(delete_service._dir_path, "indexes")
+        file = "file_che_non_esiste.json"
+        delete_service.delete_file(file)
+        self.assertEqual(delete_service._was_file_deleted, False)
          
     def test_get_elimination_outcome(self):
         delete_service = DeleteService()
@@ -61,11 +81,17 @@ class TestModel(unittest.TestCase):
 
 #class AuthenticationService
 
-    def test_check_login(self):
+    def test_check_login_true(self):
         username = "admin"
         password = "admin"
         authenticationService = AuthenticationService()
         self.assertEqual(authenticationService.check_login(username, password), True)
+
+    def test_check_login_false(self):
+        username = "admin11"
+        password = "admin11"
+        authenticationService = AuthenticationService()
+        self.assertEqual(authenticationService.check_login(username, password), False)
 
     def test_set_logged_status(self):
         obj = AuthenticationService()  
@@ -85,7 +111,7 @@ class TestModel(unittest.TestCase):
 
 #class ChatService
 
-    def test_generate_prompt(self):
+    def test_generate_prompt_false(self):
         emb = Embedder()
         user = UserResponse(emb)
         tec = TechnicianResponse(emb)
@@ -95,6 +121,18 @@ class TestModel(unittest.TestCase):
         dictionary_name = "swe_music.json"
         chat_service.generate_prompt(user_input, sanitized_user_input, dictionary_name)
         self.assertEqual(chat_service._response, "No relevant information was found regarding your request. \nPlease try again with a different query. \nPlease note that this application is designed to handle requests that can be translated into a SQL query.") 
+
+    def test_generate_prompt_true(self):
+        emb = Embedder()
+        user = UserResponse(emb)
+        tec = TechnicianResponse(emb)
+        chat_service = ChatService(user, tec)
+        user_input = "name"
+        sanitized_user_input = "name"
+        dictionary_name = "swe_music.json"
+        chat_service.generate_prompt(user_input, sanitized_user_input, dictionary_name)
+        self.assertNotEqual(chat_service._response, "No relevant information was found regarding your request. \nPlease try again with a different query. \nPlease note that this application is designed to handle requests that can be translated into a SQL query.") 
+
 
     def test_generate_debug(self):
         emb = Embedder()
@@ -128,6 +166,15 @@ class TestModel(unittest.TestCase):
         result=upload_service._dictionary_schema_check(uploaded_file_content)
         self.assertEqual(result, "schema_check_success")
 
+    def test_dictionary_schema_check_false(self):
+        emb = Embedder()
+        json_verifier = JsonSchemaVerifierService()
+        upload_service = UploadService(emb, json_verifier)
+        uploaded_file_path = "ChatSQL/test/database/notCompliantFile.json"
+        with open(uploaded_file_path, 'r') as file:
+            uploaded_file_content = file.read()
+        result=upload_service._dictionary_schema_check(uploaded_file_content)
+        self.assertEqual(result, "The file is not compliant with the schema. Please upload a valid file.")
 
     def test_get_dictionaries_folder_path(self):
         emb = Embedder()
@@ -183,7 +230,7 @@ class TestModel(unittest.TestCase):
         result = selection_service.get_files_in_db()
         database_folder_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "database"))
         files = os.listdir(database_folder_path)
-        self.assertEqual(result, files)
+        self.assertEqual(sorted(result), sorted(files))
 
 
     def test_set_current_dictionary(self):
@@ -203,20 +250,37 @@ class TestModel(unittest.TestCase):
 #class UserResponse
 class TestResponse(unittest.TestCase):
 
-    def test_UserResponse(self):
+    def test_generate_prompt_false(self):
         emb = Embedder()
-        emb.caricare_index("swe_music.json")
         user = UserResponse(emb)
-        user_query = "lsieuj"
-        sanitized_user_input = "lsieuj"
+        user_query = "awsd"
+        sanitized_user_input = "awsd"
         dictionary_name = "swe_music.json"
         prompt = user.generate_prompt(user_query, sanitized_user_input, dictionary_name)
+
         self.assertEqual(prompt, "No relevant information was found regarding your request. \nPlease try again with a different query. \nPlease note that this application is designed to handle requests that can be translated into a SQL query.")
         
+
+    def test_generate_prompt_true(self):
+        emb = Embedder()
+        user = UserResponse(emb)
+        user_query = "name"
+        sanitized_user_input = "name"
+        dictionary_name = "swe_music.json"
+        prompt = user.generate_prompt(user_query, sanitized_user_input, dictionary_name)
+        self.assertNotEqual(prompt, "No relevant information was found regarding your request. \nPlease try again with a different query. \nPlease note that this application is designed to handle requests that can be translated into a SQL query.")
+       
 #class TechnicianResponse
 
-
-
+    def test_generate_debug(self):
+        emb = Embedder()
+        user = TechnicianResponse(emb)
+        user_query = "song"
+        sanitized_user_input = "song"
+        dictionary_name = "swe_music.json"
+        prompt = user.generate_debug(user_query, sanitized_user_input, dictionary_name)
+        self.assertEqual(type(prompt), str)
+ 
 
 def copy_json():
     source_folder = "ChatSQL/test/utils"
@@ -229,8 +293,31 @@ def copy_json():
         os.makedirs(destination_folder)
     destination_file_path = os.path.join(destination_folder, json_filename)
     shutil.copyfile(source_file_path, destination_file_path)
+
+def initt():
+    source_folder = "ChatSQL/test/utils"
+    destination_folder = "ChatSQL/database"
+    json_filename1 = "swe_music.json"
+    json_filename2 = "fitness_app.json"
+    source_file_path1 = os.path.join(source_folder, json_filename1)
+    source_file_path2 = os.path.join(source_folder, json_filename2)
+    if not os.path.exists(destination_folder):
+        os.makedirs(destination_folder)
+    destination_file_path = os.path.join(destination_folder, json_filename1)
+    destination_file_path2 = os.path.join(destination_folder, json_filename2)
+    shutil.copyfile(source_file_path1, destination_file_path)
+    shutil.copyfile(source_file_path2, destination_file_path2)
+
+    emb = Embedder()
+    json_verifier = JsonSchemaVerifierService()
+    upload_service = UploadService(emb, json_verifier)
+    uploaded_file_path = "ChatSQL/database/swe_music.json"
+    with open(uploaded_file_path, 'r') as file:
+        uploaded_file_content = file.read()
+    result = upload_service.upload_dictionary("swe_music.json", uploaded_file_content)
     
        
  
 if __name__ == '__main__':
+    initt()
     unittest.main()
