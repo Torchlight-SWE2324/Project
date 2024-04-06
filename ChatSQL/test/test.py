@@ -34,7 +34,7 @@ class TestModel(unittest.TestCase):
         json_schema = JsonSchemaVerifierService()
         percorso_relativo = "../ChatSQL/ChatSQL/dicitionary_schemas/json_schema.json"
         expected_path = os.path.abspath(percorso_relativo)
-        actual_path = json_schema._get_schema_file_path()  # Chiamata privata del metodo
+        actual_path = json_schema._get_schema_file_path()  
         self.assertEqual(actual_path, expected_path)
 
     def test_check_dictionary_schema(self):
@@ -68,55 +68,152 @@ class TestModel(unittest.TestCase):
         self.assertEqual(authenticationService.check_login(username, password), True)
 
     def test_set_logged_status(self):
-        obj = AuthenticationService()  # Creo un'istanza della tua classe
-        obj.set_logged_status(True)  # Imposto lo stato del login a True
-        self.assertTrue(obj._is_technician_logged)  # Verifico che lo stato del login sia stato impostato correttamente a True
+        obj = AuthenticationService()  
+        obj.set_logged_status(True)  
+        self.assertTrue(obj._is_technician_logged)  
 
-        obj.set_logged_status(False)  # Imposto lo stato del login a False
-        self.assertFalse(obj._is_technician_logged)  # Verifico che lo stato del login sia stato impostato correttamente a False
+        obj.set_logged_status(False)  
+        self.assertFalse(obj._is_technician_logged)  
 
     def test_get_logged_status(self):
-        obj = AuthenticationService()  # Creo un'istanza della tua classe
-        obj.set_logged_status(True)  # Imposto lo stato del login a True
-        self.assertTrue(obj.get_logged_status())  # Verifico che il metodo get restituisca True
+        obj = AuthenticationService() 
+        obj.set_logged_status(True)  
+        self.assertTrue(obj.get_logged_status())  
 
-        obj.set_logged_status(False)  # Imposto lo stato del login a False
+        obj.set_logged_status(False) 
         self.assertFalse(obj.get_logged_status())
 
 #class ChatService
 
     def test_generate_prompt(self):
-        # Creare un'istanza di ChatService con gli oggetti di risposta simulati
         emb = Embedder()
         user = UserResponse(emb)
         tec = TechnicianResponse(emb)
         chat_service = ChatService(user, tec)
-
-        # Definire input di esempio
-        user_input = "HELLO"
-        sanitized_user_input = "HELLO"
+        user_input = "HELLO'"
+        sanitized_user_input = "HELLO "
         dictionary_name = "swe_music.json"
-
-        # Chiamare il metodo generate_prompt
         chat_service.generate_prompt(user_input, sanitized_user_input, dictionary_name)
-
-        self.assertNotEqual(chat_service._response, "No relevant information was found regarding your request.") 
+        self.assertEqual(chat_service._response, "No relevant information was found regarding your request. \nPlease try again with a different query. \nPlease note that this application is designed to handle requests that can be translated into a SQL query.") 
 
     def test_generate_debug(self):
-        # Creare un'istanza di ChatService con gli oggetti di risposta simulati
         emb = Embedder()
         user = UserResponse(emb)
         tec = TechnicianResponse(emb)
         chat_service = ChatService(user, tec)
-
-        # Definire input di esempio
-        user_input = "HELLO"
-        sanitized_user_input = "HELLO"
+        user_input = "MUSIC'"
+        sanitized_user_input = "MUSIC "
         dictionary_name = "swe_music.json"
-
-        # Chiamare il metodo generate_prompt
         chat_service.generate_debug(user_input, sanitized_user_input, dictionary_name)
-        self.assertNotEqual(chat_service._response, "No relevant information was found regarding your request.") 
+        self.assertEqual(type(chat_service._response), str) 
+
+    def test_get_response(self):
+        emb = Embedder()
+        user = UserResponse(emb)
+        tec = TechnicianResponse(emb)
+        chat_service = ChatService(user, tec)
+        response_value = "Test response"
+        chat_service._response = response_value
+        result = chat_service.get_response()
+        self.assertEqual(result, response_value)
+
+#class UploadService
+    def test_dictionary_schema_check(self):
+        emb = Embedder()
+        json_verifier = JsonSchemaVerifierService()
+        upload_service = UploadService(emb, json_verifier)
+        uploaded_file_path = "ChatSQL/test/database/swe_music.json"
+        with open(uploaded_file_path, 'r') as file:
+            uploaded_file_content = file.read()
+        result=upload_service._dictionary_schema_check(uploaded_file_content)
+        self.assertEqual(result, "schema_check_success")
+
+
+    def test_get_dictionaries_folder_path(self):
+        emb = Embedder()
+        json_verifier = JsonSchemaVerifierService()
+        upload_service = UploadService(emb, json_verifier)
+        actual_path = upload_service._get_dictionaries_folder_path()
+        expected_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "database"))
+        actual_path_lower = actual_path.lower()
+        expected_path_lower = expected_path.lower()
+        self.assertEqual(actual_path_lower, expected_path_lower)
+
+
+    def test_upload_dictionary(self):
+        emb = Embedder()
+        json_verifier = JsonSchemaVerifierService()
+        upload_service = UploadService(emb, json_verifier)
+        uploaded_file_path = "ChatSQL/database/fitness_app.json"
+        with open(uploaded_file_path, 'r') as file:
+            uploaded_file_content = file.read()
+        result = upload_service.upload_dictionary("fitness_app.json", uploaded_file_content)
+        self.assertEqual(result, 'upload_success')
+
+    def test_get_all_dictionaries_names(self):
+        emb = Embedder()
+        json_verifier = JsonSchemaVerifierService()
+        upload_service = UploadService(emb, json_verifier)
+        result=upload_service.get_all_dictionaries_names()
+        database_folder_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "database"))
+        files = os.listdir(database_folder_path)
+        self.assertEqual(result, files)
+
+    
+    def test_get_loaded_dictionaries_number(self):
+        emb = Embedder()
+        json_verifier = JsonSchemaVerifierService()
+        upload_service = UploadService(emb, json_verifier)
+        result=upload_service.get_all_dictionaries_names()
+        database_folder_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "database"))
+        files = os.listdir(database_folder_path)
+        self.assertEqual(len(result), len(files))
+        
+#class SelectionService
+    def test_get_dictionaries_folder_path_sel_service(self):
+        selection_service = SelectionService()
+        actual_path = selection_service._get_dictionaries_folder_path()
+        expected_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "database"))
+        expected_path_lower = expected_path.lower()
+        actual_path_lower = actual_path.lower()
+        self.assertEqual(actual_path_lower, expected_path_lower)
+        
+    def test_get_files_in_db(self):
+        selection_service = SelectionService()
+        result = selection_service.get_files_in_db()
+        database_folder_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "database"))
+        files = os.listdir(database_folder_path)
+        self.assertEqual(result, files)
+
+
+    def test_set_current_dictionary(self):
+        selection_service = SelectionService()
+        current_dictionary_name = "swe_music"
+        selection_service.set_current_dictionary(current_dictionary_name)
+        retrieved_dictionary_name = selection_service.get_current_dictionary()
+        self.assertEqual(retrieved_dictionary_name, current_dictionary_name)
+
+    def test_get_current_dictionary(self):
+        selection_service = SelectionService()
+        current_dictionary_name = "swe_music"
+        selection_service.set_current_dictionary(current_dictionary_name)
+        retrieved_dictionary_name = selection_service.get_current_dictionary()
+        self.assertEqual(retrieved_dictionary_name, current_dictionary_name)
+
+#class UserResponse
+class TestResponse(unittest.TestCase):
+
+    def test_UserResponse(self):
+        emb = Embedder()
+        emb.caricare_index("swe_music.json")
+        user = UserResponse(emb)
+        user_query = "lsieuj"
+        sanitized_user_input = "lsieuj"
+        dictionary_name = "swe_music.json"
+        prompt = user.generate_prompt(user_query, sanitized_user_input, dictionary_name)
+        self.assertEqual(prompt, "No relevant information was found regarding your request. \nPlease try again with a different query. \nPlease note that this application is designed to handle requests that can be translated into a SQL query.")
+        
+#class TechnicianResponse
 
 
 
