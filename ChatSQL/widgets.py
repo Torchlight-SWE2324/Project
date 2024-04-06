@@ -259,7 +259,8 @@ class DeleteWidget:
 
         @param deleted_file_name: The name of the deleted file.
         """
-        st.success(f'Dictionary "{deleted_file_name}" deleted successfully.', icon="✅")
+        st.success(f'Dictionary "{deleted_file_name}" deleted successfully.', icon="🗑️")
+        time.sleep(0.5)
 
     def negative_delete_outcome(self, file_name):
         """
