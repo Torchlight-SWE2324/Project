@@ -22,5 +22,5 @@ jobs:
 
       - name: Build the CatSQL Docker image
         run: |
-          docker build . --tag ghcr.io/Torchlight-SWE2324/chatsql-docker:latest
-          docker push ghcr.io/Torchlight-SWE2324/chatsql-docker:latest
+          docker build . --tag ghcr.io/torchlight-swe2324/chatsql-docker:latest
+          docker push ghcr.io/torchlight-swe2324/chatsql-docker:latest
