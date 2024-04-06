@@ -86,6 +86,7 @@ class SelectionController:
         @return: None
         """
         self._model.set_current_dictionary(dictionary)
+        st.session_state.chat = []
 
     def set_view(self, view):
         """
@@ -143,6 +144,7 @@ class UploadController:
             uploaded_file_name = uploaded_file.name
             dictionary_upload_result = self._model.upload_dictionary(uploaded_file_name, uploaded_file_content)
             if dictionary_upload_result == "upload_success":
+                st.session_state.chat = []
                 self._view.positive_upload_outcome(uploaded_file_name)
             else:
                 self._view.negative_upload_outcome(dictionary_upload_result)
@@ -180,6 +182,7 @@ class DeleteController:
         esito = self._model.get_elimination_outcome()
         if esito:
             self._view.positive_delete_outcome(delete_file_name)
+            st.session_state.chat = []
             time.sleep(.5)
             st.rerun()
         else:
