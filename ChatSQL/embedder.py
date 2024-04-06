@@ -117,10 +117,6 @@ class Embedder:
             print(f"An error occurred in load_index in : {e}")
             self._load_index_flag=False
 
-    def save(self):
-        """Saves the current state of the index."""
-        self.get_emb().save(self._index_directory)
-
     def close(self):
         """Closes the current index."""
         self.get_emb().close(self._index_directory)
