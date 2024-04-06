@@ -40,7 +40,7 @@ class LoginWidget:
         """
         Communicates to the associated controller to try the login.
 
-        @param upload_this_file: The string containing user input to be used to generate the response.
+        @param upload_this_file: The string with the user input used to generate the response.
         """
         self._username = username
         self._password = password
@@ -77,7 +77,7 @@ class LoginWidget:
         @return: The string containing the username inputted by user.
         """
         return self._username
-    
+
     def get_password(self):
         """
         Get the password inputted by user.
@@ -177,7 +177,7 @@ class UploadWidget:
         """
         Create the file upload widget.
 
-        This method creates the file upload interface with a file uploader component for uploading files.
+        This method creates the file upload interface with a file uploader component.
         """
         upload_this_file = st.sidebar.file_uploader("Upload new data dictionary file", accept_multiple_files=False, key = st.session_state["file_uploader_key"])
         st.sidebar.button("Upload file", type="primary", on_click = lambda:self._operation_upload(upload_this_file), disabled = upload_this_file is None)
@@ -303,13 +303,12 @@ class ChatWidget:
             user_input = st.chat_input("Type your query here", max_chars=500)
             if user_input:
                 self._notify_input_user(user_input)
-                
 
     def _notify_input_user(self, user_input):
         """
         Communicates to the associated controller to start the generation of response operation.
 
-        @param upload_this_file: The string containing user input to be used to generate the response.
+        @param upload_this_file: The string containing user input used to generate the response.
         """
         st.write(f"User has sent the following prompt: {user_input}")
         self.__user_input = user_input
@@ -333,4 +332,3 @@ class ChatWidget:
         @return: The string containing user input from chat input widget.
         """
         return self.__user_input
-
