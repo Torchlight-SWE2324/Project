@@ -2,7 +2,8 @@
 This module defines classes that define various widgets used in a Streamlit application for handling user interactions,
 file uploads, deletions, and chat functionalities.
 """
-
+import random
+import time
 import streamlit as st
 
 class LoginWidget:
@@ -310,7 +311,21 @@ class ChatWidget:
 
         @param upload_this_file: The string containing user input used to generate the response.
         """
-        st.write(f"User has sent the following prompt: {user_input}")
+        with st.chat_message("user"):
+            st.write(user_input)
+        st.session_state.chat.append({"role": "user", "content": user_input})
+        assistant_response = "Generating response..."
+        with st.chat_message("assistant"):
+            message_placeholder = st.empty()
+            full_response = ""
+            for character in assistant_response:
+                full_response += character
+                time.sleep(0.01)
+                # Add a blinking cursor to simulate typing
+                message_placeholder.markdown(full_response + "▌")
+            message_placeholder.markdown(full_response)
+            st.session_state.chat.append({"role": "assistant", "content": full_response})
+
         self.__user_input = user_input
         self.__controller_chat.operation_generate_response()
 
@@ -322,8 +337,9 @@ class ChatWidget:
 
         @param gen_response: The generated response to be displayed.
         """
-        st.session_state.chat.append({"role": "user", "content": gen_response})
-        st.code(f"Response: {gen_response}", language="markdown")
+        st.session_state.chat.append({"role": "assistant", "content": gen_response})
+        with st.chat_message("assistant"):
+            st.code(f"Response: {gen_response}", language="markdown")
 
     def get_user_input(self):
         """
