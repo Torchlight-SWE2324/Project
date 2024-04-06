@@ -97,7 +97,7 @@ class Embedder:
         except Exception as e:
             return f"An error occurred in generate_index in embedder.py: {e}"
 
-    def caricare_index(self, dictionary_file_name):
+    def load_index(self, dictionary_file_name):
         """
         Loads an index from the specified dictionary file.
 
@@ -114,7 +114,7 @@ class Embedder:
             self._load_index_flag=False
 
         except Exception as e:
-            print(f"An error occurred in caricare_index in : {e}")
+            print(f"An error occurred in load_index in : {e}")
             self._load_index_flag=False
 
     def save(self):
