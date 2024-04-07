@@ -458,9 +458,7 @@ class ChatWidget:
         @param controller_cha: The controller object for chat operations.
         """
         self.__controller_chat = controller_cha
-        self.__user_input = None
-        self._container_title = st.container()
-        self._container_chat = st.container(height=500, border=True)
+        self.__user_input = None 
 
     def create(self):
         """
@@ -468,12 +466,10 @@ class ChatWidget:
 
         This method creates the chat interface where users can input queries and receive responses.
         """
-        with self._container_title:
-            st.subheader("Type your natural language query in the chat box below and press enter to get the corresponding SQL query.")
-        with self._container_chat:
-            for message in st.session_state.chat:
-                with st.chat_message(message["role"]):
-                    st.code(message["content"], language="markdown")
+        st.subheader("Type your natural language query in the chat box below and press enter to get the corresponding SQL query.")
+        for message in st.session_state.chat:
+            with st.chat_message(message["role"]):
+                st.code(message["content"], language="markdown")
         if self.__controller_chat.operation_get_all_dictionaries() == []:
             st.chat_input("A data dictionary has not been uploaded. Please log in as a technician to upload one.", disabled=True)
         else:
@@ -487,10 +483,9 @@ class ChatWidget:
 
         @param upload_this_file: The string containing user input used to generate the response.
         """
-        with self._container_chat:
-            st.session_state.chat.append({"role": "user", "content": user_input})
-            with st.chat_message("user"):
-                st.write(user_input)
+        st.session_state.chat.append({"role": "user", "content": user_input})
+        with st.chat_message("user"):
+            st.write(user_input)
 
         self.__user_input = user_input
         self.__controller_chat.operation_generate_response()
@@ -503,19 +498,18 @@ class ChatWidget:
 
         @param gen_response: The generated response to be displayed.
         """
-        with self._container_chat:
-            progress_text = "Operation in progress. Please wait."
-            my_bar = st.progress(0, text=progress_text)
+        progress_text = "Operation in progress. Please wait."
+        my_bar = st.progress(0, text=progress_text)
 
-            for percent_complete in range(100):
-                time.sleep(0.01)
-                my_bar.progress(percent_complete + 1, text=progress_text)
-            time.sleep(1)
-            my_bar.empty()
-            time.sleep(0.5)
-            st.session_state.chat.append({"role": "assistant", "content": gen_response})
-            with st.chat_message("assistant"):
-                st.code(f"Response: {gen_response}", language="markdown")
+        for percent_complete in range(100):
+            time.sleep(0.01)
+            my_bar.progress(percent_complete + 1, text=progress_text)
+        time.sleep(1)
+        my_bar.empty()
+        time.sleep(0.5)
+        st.session_state.chat.append({"role": "assistant", "content": gen_response})
+        with st.chat_message("assistant"):
+            st.code(f"Response: {gen_response}", language="markdown")
 
     def get_user_input(self):
         """
