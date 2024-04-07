@@ -6,7 +6,7 @@ on:
     branches:
       - main
       - dev
-      - dockerPB
+      - Test
 
 jobs:
   publish-chatsql-docker-image:
