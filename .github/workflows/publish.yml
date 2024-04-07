@@ -9,7 +9,7 @@ on:
       - dockerPB
 
 jobs:
-  publish-hello-docker-image:
+  publish-chatsql-docker-image:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
