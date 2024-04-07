@@ -42,14 +42,6 @@ class AuthenticationController:
             else:
                 self._view.negative_login_outcome()
 
-    def operation_get_logged_tate(self):
-        """
-        Gets the logged-in state.
-
-        @return: the logged-in state
-        """
-        return self._model.get_logged_status()
-
     def set_view(self, view):
         """
         Sets the view object.
