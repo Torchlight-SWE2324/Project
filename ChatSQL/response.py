@@ -91,6 +91,6 @@ class TechnicianResponse:
         for table_name, fields in tables_with_fields.items():
             prompt += f"TABLE '{table_name}':\n"
             for field, description, score in fields:
-                prompt += f"- FIELD: {field} {' '*(max(len(field), 12) - len(field))} | SCORE: {score:.5f} | DESCRIPTION: {description}\n"
+                prompt += f"- FIELD: {field} {' '*(max(len(field), 14) - len(field))} | SCORE: {score:.5f} | DESCRIPTION: {description}\n"
         embe.close()
         return prompt
