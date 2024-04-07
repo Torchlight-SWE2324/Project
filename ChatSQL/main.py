@@ -12,7 +12,7 @@ if __name__ == "__main__":
     initial_sidebar_state="auto",
     menu_items={
         'Get Help': 'https://github.com/Torchlight-SWE2324/Documentazione',
-        'Report a bug': "https://github.com/Torchlight-SWE2324/ChatSQL",
+        'Report a bug': 'mailto:torchlight.swe2324@outlook.com',
         'About': "# Generate a prompt that once given to any LLM, will translate your natural language query into the equivalent SQL one!"
     }
 )
