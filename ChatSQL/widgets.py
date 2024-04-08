@@ -2,7 +2,8 @@
 This module defines classes that define various widgets used in a Streamlit application for handling user interactions,
 file uploads, deletions, and chat functionalities.
 """
-
+import random
+import time
 import streamlit as st
 
 class LoginWidget:
@@ -52,7 +53,29 @@ class LoginWidget:
 
         This method displays a success message when the login operation is successful.
         """
-        st.success('Login successful!', icon="✅")
+        st.markdown(
+                    """
+                    <style>
+                        div[data-testid=toastContainer] {
+                                padding: 50px 10px 10px 10px;
+                                align-items: end;
+                                position: sticky; 
+                            }
+                        
+                            div[data-testid=stToast] {
+                                padding: 15px 25px 15px 10px;
+                                width: 20%;
+                            }
+                            
+                            [data-testid=toastContainer] [data-testid=stMarkdownContainer] > p {
+                                font-size: 1.3rem;
+                                padding: 10px 10px 10px 40px;
+                                text-indent: -1.7em;
+                            }
+                    </style>
+                    """, unsafe_allow_html=True)
+        st.toast(':green[Login successful!]', icon="✅")
+        time.sleep(1)
 
     def negative_login_outcome(self):
         """
@@ -60,7 +83,28 @@ class LoginWidget:
 
         This method displays an error message when the user enters incorrect credentials during login.
         """
-        st.error('Wrong credentials. Please try again.', icon="🚨")
+        st.markdown(
+                    """
+                    <style>
+                        div[data-testid=toastContainer] {
+                                padding: 50px 10px 10px 10px;
+                                align-items: end;
+                                position: sticky; 
+                            }
+                        
+                            div[data-testid=stToast] {
+                                padding: 15px 25px 15px 10px;
+                                width: 30%;
+                            }
+                            
+                            [data-testid=toastContainer] [data-testid=stMarkdownContainer] > p {
+                                font-size: 1.3rem;
+                                padding: 10px 10px 10px 40px;
+                                text-indent: -1.7em;
+                            }
+                    </style>
+                    """, unsafe_allow_html=True)
+        st.toast(':red[Wrong credentials. Please try again.]', icon="🚨")
 
     def missing_credential_outcome(self):
         """
@@ -68,7 +112,28 @@ class LoginWidget:
 
         This method displays a warning message when the user fails to provide both username and password.
         """
-        st.warning('Please write both username and password')
+        st.markdown(
+                    """
+                    <style>
+                        div[data-testid=toastContainer] {
+                                padding: 50px 10px 10px 10px;
+                                align-items: end;
+                                position: sticky; 
+                            }
+                        
+                            div[data-testid=stToast] {
+                                padding: 15px 25px 15px 10px;
+                                width: 30%;
+                            }
+                            
+                            [data-testid=toastContainer] [data-testid=stMarkdownContainer] > p {
+                                font-size: 1.3rem;
+                                padding: 10px 10px 10px 40px;
+                                text-indent: -1.7em;
+                            }
+                    </style>
+                    """, unsafe_allow_html=True)
+        st.toast(':orange[Please write both username and password]', icon="⚠️")
 
     def get_username(self):
         """
@@ -118,7 +183,29 @@ class LogoutWidget:
 
         This method displays a success message when the logout operation is successful.
         """
-        st.success('Logged out', icon="✅")
+        st.markdown(
+                    """
+                    <style>
+                        div[data-testid=toastContainer] {
+                                padding: 50px 10px 10px 10px;
+                                align-items: end;
+                                position: sticky; 
+                            }
+                        
+                            div[data-testid=stToast] {
+                                padding: 15px 25px 15px 10px;
+                                width: 20%;
+                            }
+                            
+                            [data-testid=toastContainer] [data-testid=stMarkdownContainer] > p {
+                                font-size: 1.3rem;
+                                padding: 10px 10px 10px 40px;
+                                text-indent: -1.7em;
+                            }
+                    </style>
+                    """, unsafe_allow_html=True)
+        st.toast(':green[Logged out.]', icon="✅")
+        time.sleep(1)
 
 class SelectWidget:
     """
@@ -142,6 +229,7 @@ class SelectWidget:
 
         This method creates the file selection interface with a dropdown menu for selecting files.
         """
+        st.sidebar.title("ChatSQL")
         files = self._controller_sel.operation_get_all_dictionaries()
         file = st.sidebar.selectbox('Your data dictionary files', files, key="dizionari")
         self._controller_sel.operation_set_current_dictionary(file)
@@ -199,7 +287,28 @@ class UploadWidget:
         
         @param uploaded_file_name: The name of the uploaded file.
         """
-        st.success(f'Dictionary "{uploaded_file_name}" uploaded.', icon="✅")
+        st.markdown(
+                    """
+                    <style>
+                        div[data-testid=toastContainer] {
+                                padding: 50px 10px 10px 10px;
+                                align-items: end;
+                                position: sticky; 
+                            }
+                        
+                            div[data-testid=stToast] {
+                                padding: 15px 25px 15px 10px;
+                                width: 40%;
+                            }
+                            
+                            [data-testid=toastContainer] [data-testid=stMarkdownContainer] > p {
+                                font-size: 1.3rem;
+                                padding: 10px 10px 10px 40px;
+                                text-indent: -1.7em;
+                            }
+                    </style>
+                    """, unsafe_allow_html=True)
+        st.toast(f':green[Dictionary "{uploaded_file_name}" uploaded.]', icon="✅")
         st.session_state["file_uploader_key"] += 1
 
     def negative_upload_outcome(self, dictionary_upload_error):
@@ -210,7 +319,28 @@ class UploadWidget:
 
         @param dictionary_upload_error: The error message related to the file upload operation.
         """
-        st.error(dictionary_upload_error, icon="🚨")
+        st.markdown(
+                    """
+                    <style>
+                        div[data-testid=toastContainer] {
+                                padding: 50px 10px 10px 10px;
+                                align-items: end;
+                                position: sticky; 
+                            }
+                        
+                            div[data-testid=stToast] {
+                                padding: 15px 25px 15px 10px;
+                                width: 30%;
+                            }
+                            
+                            [data-testid=toastContainer] [data-testid=stMarkdownContainer] > p {
+                                font-size: 1.3rem;
+                                padding: 10px 10px 10px 40px;
+                                text-indent: -1.7em;
+                            }
+                    </style>
+                    """, unsafe_allow_html=True)
+        st.toast(f':red[{dictionary_upload_error}]', icon="🚨")
         st.session_state["file_uploader_key"] += 1
 
     def get_file_uploaded(self):
@@ -258,7 +388,29 @@ class DeleteWidget:
 
         @param deleted_file_name: The name of the deleted file.
         """
-        st.success(f'Dictionary "{deleted_file_name}" deleted successfully.', icon="✅")
+        st.markdown(
+                    """
+                    <style>
+                        div[data-testid=toastContainer] {
+                                padding: 50px 10px 10px 10px;
+                                align-items: end;
+                                position: sticky; 
+                            }
+                        
+                            div[data-testid=stToast] {
+                                padding: 15px 25px 15px 10px;
+                                width: 40%;
+                            }
+                            
+                            [data-testid=toastContainer] [data-testid=stMarkdownContainer] > p {
+                                font-size: 1.3rem;
+                                padding: 10px 10px 10px 40px;
+                                text-indent: -1.7em;
+                            }
+                    </style>
+                    """, unsafe_allow_html=True)
+        st.toast(f':green[Dictionary "{deleted_file_name}" deleted successfully.]', icon="🗑️")
+        time.sleep(1)
 
     def negative_delete_outcome(self, file_name):
         """
@@ -268,7 +420,29 @@ class DeleteWidget:
 
         @param file_name: The name of the file for which deletion failed.
         """
-        st.error(f'Deletion of dictionary "{file_name}" failed.', icon="🚨")
+        st.markdown(
+                    """
+                    <style>
+                        div[data-testid=toastContainer] {
+                                padding: 50px 10px 10px 10px;
+                                align-items: end;
+                                position: sticky; 
+                            }
+                        
+                            div[data-testid=stToast] {
+                                padding: 15px 25px 15px 10px;
+                                width: 40%;
+                            }
+                            
+                            [data-testid=toastContainer] [data-testid=stMarkdownContainer] > p {
+                                font-size: 1.3rem;
+                                padding: 10px 10px 10px 40px;
+                                text-indent: -1.7em;
+                            }
+                    </style>
+                    """, unsafe_allow_html=True)
+        st.toast(f':red[Deletion of dictionary "{file_name}" failed.]', icon="🚨")
+        time.sleep(1)
 
 class ChatWidget:
     """
@@ -284,7 +458,7 @@ class ChatWidget:
         @param controller_cha: The controller object for chat operations.
         """
         self.__controller_chat = controller_cha
-        self.__user_input = None
+        self.__user_input = None 
 
     def create(self):
         """
@@ -292,7 +466,6 @@ class ChatWidget:
 
         This method creates the chat interface where users can input queries and receive responses.
         """
-        st.title("ChatSQL")
         st.subheader("Type your natural language query in the chat box below and press enter to get the corresponding SQL query.")
         for message in st.session_state.chat:
             with st.chat_message(message["role"]):
@@ -300,7 +473,7 @@ class ChatWidget:
         if self.__controller_chat.operation_get_all_dictionaries() == []:
             st.chat_input("A data dictionary has not been uploaded. Please log in as a technician to upload one.", disabled=True)
         else:
-            user_input = st.chat_input("Type your query here", max_chars=500)
+            user_input = st.chat_input("Type your query here", max_chars=800)
             if user_input:
                 self._notify_input_user(user_input)
 
@@ -310,7 +483,10 @@ class ChatWidget:
 
         @param upload_this_file: The string containing user input used to generate the response.
         """
-        st.write(f"User has sent the following prompt: {user_input}")
+        st.session_state.chat.append({"role": "user", "content": user_input})
+        with st.chat_message("user"):
+            st.write(user_input)
+
         self.__user_input = user_input
         self.__controller_chat.operation_generate_response()
 
@@ -322,8 +498,18 @@ class ChatWidget:
 
         @param gen_response: The generated response to be displayed.
         """
-        st.session_state.chat.append({"role": "user", "content": gen_response})
-        st.code(f"Response: {gen_response}", language="markdown")
+        progress_text = "Operation in progress. Please wait."
+        my_bar = st.progress(0, text=progress_text)
+
+        for percent_complete in range(100):
+            time.sleep(0.01)
+            my_bar.progress(percent_complete + 1, text=progress_text)
+        time.sleep(1)
+        my_bar.empty()
+        time.sleep(0.5)
+        st.session_state.chat.append({"role": "assistant", "content": gen_response})
+        with st.chat_message("assistant"):
+            st.code(f"Response: {gen_response}", language="markdown")
 
     def get_user_input(self):
         """

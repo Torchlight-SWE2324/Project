@@ -27,7 +27,7 @@ class UserResponse:
         Returns:
             str: The prompt for the user."""
         embe = self._emb.get_emb()
-        self._emb.caricare_index(dictionary_name)
+        self._emb.load_index(dictionary_name)
 
         with open(os.path.join(os.path.dirname(__file__), "database", dictionary_name), 'r', encoding="utf-8") as file:
             data = json.load(file)
@@ -71,7 +71,7 @@ class TechnicianResponse:
 
     def generate_debug(self, user_query, sanitized_user_input, dictionary_name):
         embe = self._emb.get_emb()
-        self._emb.caricare_index(dictionary_name)
+        self._emb.load_index(dictionary_name)
         embedder_search_result = embe.search(f"SELECT score, text, table_name, field_name, field_description FROM txtai WHERE similar('{sanitized_user_input}') AND score > 0.01 GROUP BY table_name, field_name", limit=50)
         tables_with_fields = {}
 
@@ -91,6 +91,6 @@ class TechnicianResponse:
         for table_name, fields in tables_with_fields.items():
             prompt += f"TABLE '{table_name}':\n"
             for field, description, score in fields:
-                prompt += f"- FIELD: {field} {' '*(max(len(field), 12) - len(field))} | SCORE: {score:.5f} | DESCRIPTION: {description}\n"
+                prompt += f"- FIELD: {field} {' '*(max(len(field), 14) - len(field))} | SCORE: {score:.5f} | DESCRIPTION: {description}\n"
         embe.close()
         return prompt
