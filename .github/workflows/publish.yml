@@ -4,9 +4,7 @@ permissions: write-all
 on:
   push:
     branches:
-      - main
       - dev
-      - Test
 
 jobs:
   publish-chatsql-docker-image:

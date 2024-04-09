@@ -1,6 +1,37 @@
 # ChatSQL MVP (Minimum Viable Product)
 
-## How to run the program
+## How to run the program with the Docker Image
+
+First of all, you need to have Docker installed on your computer. You can download it from the following link: <https://www.docker.com/products/docker-desktop>.
+
+you can check if Docker is installed by running the following command in the terminal:
+
+```shell
+docker --version
+```
+
+### Download the Docker image
+
+To download the Docker image, you need to run the following command in the terminal:
+
+```shell
+docker pull ghcr.io/torchlight-swe2324/chatsql-docker:latest
+```
+
+### Run the Docker container
+
+In the terminal, run the following command:
+
+```shell
+docker run -p 8501:8501 ghcr.io/torchlight-swe2324/chatsql-docker:latest
+```
+
+The container will be built and started. Now you can open the browser and go to the ```localhost:8501``` address to access the program.
+
+> [!WARNING]
+> Thw terminal will say that the progarm is running on ```0.0.0.0:8501```, but you need to go to ```localhost:8501``` in the browser to access it.
+
+## How to run the program locally withouth Docker
 
 To run the program, you need to follow these steps:
 
