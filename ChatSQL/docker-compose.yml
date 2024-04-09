@@ -1,0 +1,7 @@
+version: '2'
+
+services:
+  chatsql:
+    build: .
+    ports:
+      - "8501:8501"
