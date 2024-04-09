@@ -1,0 +1,23 @@
+version: '2'
+
+services:
+  chatsql:
+    build: .
+    ports:
+      - "8501:8501"
+
+# Docker Compose viene installato assieme a Docker Desktop su Windows, l'attualmente versione compatibile è la v2.
+# Per macOS non saprei ¯\_(ツ)_/¯ 
+
+# Per controllare se è installato, ricorrere al comando "docker-compose version"
+# se installato, si può evitare tutto il processo descritto in Dockerfile
+
+# Sito con la documentazione Docker Compose: https://docs.docker.com/compose/
+# Sito con guida di download di Docker Compose: https://docs.docker.com/compose/install/
+
+# Procedura:
+# 0) avviare docker (su windows basta avviare docker desktop)
+# 1) spostarsi in "/ChatSQL"
+# 2) run commando "docker-compose up"  : per avviare costruzione dell'immagine docker e in seguito run del container docker 
+# 3) run commando "docker-compose down": per interrompere l'applicazione
+# 4) l'app è disponibile all'indirizzo "localhost:8501"
