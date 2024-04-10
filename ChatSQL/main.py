@@ -59,6 +59,9 @@ if __name__ == "__main__":
     if "chat" not in st.session_state:
         st.session_state.chat = []
 
+    if "doing_test" not in st.session_state:
+        st.session_state.doing_test = False
+
     if st.session_state.logged_in is False:
         aut_model.set_logged_status(False)
         select_widget.create()
