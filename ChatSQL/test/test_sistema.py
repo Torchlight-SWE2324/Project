@@ -125,7 +125,7 @@ def logout_func():
     aut_model.set_logged_status(True)
     logout_widget.create()
 
-def test_logout_correct():
+def test_logout_correct_TS03():
     """
     tests the case of logging out
     """
@@ -154,6 +154,9 @@ def delete_func():
 
 
 def test_delete_true():
+    """
+    tests the case of succesfully deleting a dictinary with relative success message
+    """
     at = AppTest.from_function(delete_func)
     at.run()
 
@@ -162,6 +165,9 @@ def test_delete_true():
     assert at.toast[0].value == ":green[Dictionary \"swe_music.json\" deleted successfully.]" and at.toast[0].icon == "🗑️"
 
 def test_delete_false():
+    """
+    tests the case of not being able to delete a dictinary with relative error message
+    """
     at = AppTest.from_function(delete_func)
     at.run()
 
@@ -174,34 +180,50 @@ def test_delete_false():
 #-------------------------------------------------------------------------------------------------------------------------------------
 def chat_func():
     import streamlit as st
-    from model import SelectionService, UserResponse, TechnicianResponse, AuthenticationService, ChatService
-    from controller import ChatController
-    from widgets import ChatWidget
+    from model import AuthenticationService, SelectionService, UploadService, DeleteService, ChatService, JsonSchemaVerifierService, UserResponse, TechnicianResponse
+    from controller import AuthenticationController, SelectionController, UploadController, DeleteController, LogoutController, ChatController
+    from widgets import LoginWidget, LogoutWidget, SelectWidget, UploadWidget, DeleteWidget, ChatWidget, st
     from embedder import Embedder
 
     embedder = Embedder()
     user_response = UserResponse(embedder)
     technician_response = TechnicianResponse(embedder)
-    cha_model = ChatService(user_response, technician_response)
+    #modelli
     aut_model = AuthenticationService()
     sel_model = SelectionService()
+    cha_model = ChatService(user_response, technician_response)
+    #controller
+    sel_controller = SelectionController(sel_model, None)
     cha_controller = ChatController(cha_model, sel_model, aut_model, None)
+    #view
+    select_widget = SelectWidget(sel_controller)
     chat_widget = ChatWidget(cha_controller)
+    #controller imposto view
+    sel_controller.set_view(select_widget)
     cha_controller.set_view(chat_widget)
     if "logged_in" not in st.session_state:
         st.session_state.logged_in = False
-    #aut_model.set_logged_status(False)
     if "chat" not in st.session_state:
         st.session_state.chat = []
+    if "doing_test" not in st.session_state:
+        st.session_state.doing_test = True
+    aut_model.set_logged_status(False)
+    select_widget.create()
     chat_widget.create()
 
 def test_chat_no_similarity():
-    at = AppTest.from_function(chat_func)
+    """
+    tests the case of visualizing both messages of user input and no similarity prompt
+    """
+    at = AppTest.from_function(chat_func, default_timeout=30)
     at.run()
     
+    at.sidebar.selectbox[0].set_value("swe_music.json").run()
+    #assert at.selectbox[0].options == ["swe_music.json","fitness_app.json"]
     at.chat_input[0].set_value("a").run()
-    
+
+    assert at.chat_message[0].avatar == "user"
     assert at.chat_message[0].markdown[0].value == "a"
-    assert at.chat_message[1].markdown[1].value == "No relevant information was found regarding your request. \nPlease try again with a different query. \nPlease note that this application is designed to handle requests that can be translated into a SQL query."
-    #assert at.code[0].value != "No relevant information was found regarding your request. \nPlease try again with a different query. \nPlease note that this application is designed to handle requests that can be translated into a SQL query."
+    assert at.chat_message[1].avatar == "assistant"
+    assert at.chat_message[1].markdown[0].value == "```\nResponse: No relevant information was found regarding your request. \nPlease try again with a different query. \nPlease note that this application is designed to handle requests that can be translated into a SQL query.\n```"
     
