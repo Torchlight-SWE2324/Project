@@ -231,7 +231,7 @@ class SelectWidget:
         """
         st.sidebar.title("ChatSQL")
         files = self._controller_sel.operation_get_all_dictionaries()
-        file = st.sidebar.selectbox('Your data dictionary files', files, key="dizionari")
+        file = st.sidebar.selectbox('Your data dictionary files', files)
         self._controller_sel.operation_set_current_dictionary(file)
         self._file = file
 
@@ -473,7 +473,7 @@ class ChatWidget:
         if self.__controller_chat.operation_get_all_dictionaries() == []:
             st.chat_input("A data dictionary has not been uploaded. Please log in as a technician to upload one.", disabled=True)
         else:
-            user_input = st.chat_input("Type your query here", max_chars=800)
+            user_input = st.chat_input("Type your query here", key="chat_input", max_chars=800)
             if user_input:
                 self._notify_input_user(user_input)
 
@@ -509,7 +509,9 @@ class ChatWidget:
         time.sleep(0.5)
         st.session_state.chat.append({"role": "assistant", "content": gen_response})
         with st.chat_message("assistant"):
-            st.code(f"Response: {gen_response}", language="markdown")
+            #st.code(f"Response: {gen_response}", language="markdown")
+            st.write(f"```\nResponse: {gen_response}\n```")
+            
 
     def get_user_input(self):
         """
