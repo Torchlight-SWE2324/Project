@@ -23,8 +23,6 @@ class AuthenticationController:
         """
         Performs login operation.
 
-        @param username: the username
-        @param password: the password
         @return: None
         """
         username = self._view.get_username()
