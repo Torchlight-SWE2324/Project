@@ -350,6 +350,15 @@ class UploadWidget:
         @return: The uploaded file from the file upload widget.
         """
         return self._file_uploaded
+    
+    def set_file_uploader(self, file_up):
+        """
+        Sets the uploaded file.
+
+        @return: none
+        """
+        self._file_uploaded = file_up
+
 
 class DeleteWidget:
     """

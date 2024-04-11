@@ -54,7 +54,7 @@ def login_func():
     login_widget.create()
 
 
-def tes_login_missing_credentials_TS02():
+def test_login_missing_credentials_TS02():
     """
     tests the case of trying logging in without inserting both username and password
     """
@@ -74,7 +74,7 @@ def tes_login_missing_credentials_TS02():
     # at.sidebar.button[0].click().run()
     # assert at.sidebar.button[0].value == True
 
-def tes_login_wrong_credentials_TS02():
+def test_login_wrong_credentials_TS02():
     """
     tests the case of trying logging in with wrong credentials
     """
@@ -88,7 +88,7 @@ def tes_login_wrong_credentials_TS02():
     assert at.session_state.logged_in == False
     assert at.toast[0].value == ":red[Wrong credentials. Please try again.]" and at.toast[0].icon == "🚨"
 
-def tes_login_correct_credentials_TS01():
+def test_login_correct_credentials_TS01():
     """
     tests the case of trying logging in with correct credentials
     """
@@ -125,7 +125,7 @@ def logout_func():
     aut_model.set_logged_status(True)
     logout_widget.create()
 
-def tes_logout_correct_TS03():
+def test_logout_correct_TS03():
     """
     tests the case of logging out
     """
@@ -153,7 +153,7 @@ def delete_func():
     delete_widget.create()
 
 
-def tes_delete_true():
+def test_delete_true():
     """
     tests the case of succesfully deleting a dictinary with relative success message
     """
@@ -164,7 +164,7 @@ def tes_delete_true():
     at.sidebar.button[0].click().run()
     assert at.toast[0].value == ":green[Dictionary \"swe_music.json\" deleted successfully.]" and at.toast[0].icon == "🗑️"
 
-def tes_delete_false():
+def test_delete_false():
     """
     tests the case of not being able to delete a dictinary with relative error message
     """
@@ -211,7 +211,7 @@ def chat_prompt_func():
     select_widget.create()
     chat_widget.create()
 
-def tes_chat_prompt_no_similarity():
+def test_chat_prompt_no_similarity():
     """
     tests the case of visualizing both messages of user input and no similarity prompt
     """
@@ -227,7 +227,7 @@ def tes_chat_prompt_no_similarity():
     assert at.chat_message[1].avatar == "assistant"
     assert at.chat_message[1].markdown[0].value == "```\nNo relevant information was found regarding your request. \nPlease try again with a different query. \nPlease note that this application is designed to handle requests that can be translated into a SQL query.\n```"
     
-def tes_chat_prompt_with_similarity():
+def test_chat_prompt_with_similarity():
     """
     tests the case of visualizing both messages of user input and prompt with similarities
     """
@@ -279,7 +279,7 @@ def chat_debug_func():
     select_widget.create()
     chat_widget.create()
 
-def tes_chat_debug():
+def test_chat_debug():
     """
     tests the case of visualizing both messages of technician input and debug message
     """
@@ -317,7 +317,7 @@ def select_func():
     select_widget.create()
 
 
-def tes_select():
+def test_select():
     """
     tests the case of visualizing the selected dictionary name as the value displayed in the selectbox
     """
