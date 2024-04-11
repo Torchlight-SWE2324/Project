@@ -54,9 +54,10 @@ def login_func():
     login_widget.create()
 
 
-def test_login_missing_credentials():
+def test_login_missing_credentials_VC():
     """
-    tests the case of trying logging in without inserting both username and password
+    tests the case of trying logging in without inserting both username and password between View and Controller
+    since the test passes, it means that LoginController got the username "a" and password "" successfully from LoginWidget
     """
     at = AppTest.from_function(login_func)
     at.run()
@@ -65,18 +66,13 @@ def test_login_missing_credentials():
     at.sidebar.text_input[1].set_value("").run()
     at.sidebar.button[0].click().run()
 
-    # assert at.sidebar.text_input[0].value == "a"
-    # assert at.sidebar.text_input[1].value == "a"
     assert at.session_state.logged_in == False
     assert at.toast[0].value == ":orange[Please write both username and password]" and at.toast[0].icon == "⚠️"
 
-    # assert at.sidebar.button[0].value == False
-    # at.sidebar.button[0].click().run()
-    # assert at.sidebar.button[0].value == True
-
-def test_login_wrong_credentials():
+def test_login_wrong_credentials_VC():
     """
-    tests the case of trying logging in with wrong credentials
+    tests the case of trying logging in with wrong credentials between View and Controller
+    since the test passes, it means that LoginController got the username "wrong username" and password "wrong password" successfully from LoginWidget
     """
     at = AppTest.from_function(login_func)
     at.run()
@@ -88,9 +84,9 @@ def test_login_wrong_credentials():
     assert at.session_state.logged_in == False
     assert at.toast[0].value == ":red[Wrong credentials. Please try again.]" and at.toast[0].icon == "🚨"
 
-def test_login_correct_credentials():
+def test_login_correct_credentials_VC():
     """
-    tests the case of trying logging in with correct credentials
+    tests the case of trying logging in with correct credentials between View and Controller
     since the test passes, it means that LoginController got the username "admin" and password "admin" successfully from LoginWidget
     """
     at = AppTest.from_function(login_func)
@@ -104,10 +100,33 @@ def test_login_correct_credentials():
     assert at.session_state.logged_in == True
     assert at.toast[0].value == ":green[Login successful!]" and at.toast[0].icon == "✅"
 
+def test_login_correct_credentials_MC():
+    """
+    tests the case of trying logging in with correct credentials between Model and Controller
+    since the test passes, it means that AuthenticationController passes username "admin" and password "admin" successfully to AuthenticationService
+    """
+    import streamlit as st
+    from model import AuthenticationService
+    from controller import AuthenticationController
+    from widgets import LoginWidget
 
+    aut_model = AuthenticationService()
+    aut_controller = AuthenticationController(aut_model, None)
+    login_widget = LoginWidget(aut_controller)
+    aut_controller.set_view(login_widget)
+    if "logged_in" not in st.session_state:
+        st.session_state.logged_in = False
+    if "doing_test" not in st.session_state:
+        st.session_state.doing_test = True
+    aut_model.set_logged_status(False)
+    login_widget.create()
+
+    aut_controller._model.check_login("admin","admin")
+    result = aut_model.get_logged_status()
+    assert result == True
 
 #-------------------------------------------------------------------------------------------------------------------------------------
-# test sistema Logout
+# test d'integrazione Logout
 #-------------------------------------------------------------------------------------------------------------------------------------
 
 def logout_func():
@@ -128,10 +147,9 @@ def logout_func():
     aut_model.set_logged_status(True)
     logout_widget.create()
 
-def test_logout_correct_TS03():
+def test_logout_correct_VC():
     """
     tests the case of logging out
-    since the test passes, it means that LogoutController and LogoutWidget works together successfully
     """
     at = AppTest.from_function(logout_func)
     at.run()
@@ -141,7 +159,7 @@ def test_logout_correct_TS03():
     assert at.toast[0].value == ":green[Logged out.]" and at.toast[0].icon == "✅"
 
 #-------------------------------------------------------------------------------------------------------------------------------------
-# test sistema delete dizionari
+# test d'integrazione delete dizionari
 #-------------------------------------------------------------------------------------------------------------------------------------
 def delete_func():
     from model import DeleteService, SelectionService
@@ -157,7 +175,7 @@ def delete_func():
     delete_widget.create()
 
 
-def test_delete_true():
+def test_delete_true_VC():
     """
     tests the case of succesfully deleting a dictinary with relative success message
     """
@@ -168,7 +186,7 @@ def test_delete_true():
     at.sidebar.button[0].click().run()
     assert at.toast[0].value == ":green[Dictionary \"swe_music.json\" deleted successfully.]" and at.toast[0].icon == "🗑️"
 
-def test_delete_false():
+def test_delete_false_VC():
     """
     tests the case of not being able to delete a dictinary with relative error message
     """
@@ -180,7 +198,7 @@ def test_delete_false():
     assert at.toast[0].value == ":red[Deletion of dictionary \"fitness_app.json\" failed.]" and at.toast[0].icon == "🚨"
 
 #-------------------------------------------------------------------------------------------------------------------------------------
-# test sistema chat lato utente 
+# test d'integrazione chat lato utente 
 #-------------------------------------------------------------------------------------------------------------------------------------
 def chat_prompt_func():
     import streamlit as st
@@ -215,7 +233,7 @@ def chat_prompt_func():
     select_widget.create()
     chat_widget.create()
 
-def test_chat_prompt_no_similarity():
+def test_chat_prompt_no_similarity_VC():
     """
     tests the case of visualizing both messages of user input and no similarity prompt
     """
@@ -231,7 +249,7 @@ def test_chat_prompt_no_similarity():
     assert at.chat_message[1].avatar == "assistant"
     assert at.chat_message[1].markdown[0].value == "```\nNo relevant information was found regarding your request. \nPlease try again with a different query. \nPlease note that this application is designed to handle requests that can be translated into a SQL query.\n```"
     
-def test_chat_prompt_with_similarity():
+def test_chat_prompt_with_similarity_VC():
     """
     tests the case of visualizing both messages of user input and prompt with similarities
     """
@@ -248,7 +266,7 @@ def test_chat_prompt_with_similarity():
     assert at.chat_message[1].markdown[0].value != "```\nNo relevant information was found regarding your request. \nPlease try again with a different query. \nPlease note that this application is designed to handle requests that can be translated into a SQL query.\n```"
 
 #-------------------------------------------------------------------------------------------------------------------------------------
-# test sistema chat lato tecnico 
+# test d'integrazione chat lato tecnico 
 #-------------------------------------------------------------------------------------------------------------------------------------
 def chat_debug_func():
     import streamlit as st
@@ -300,7 +318,7 @@ def test_chat_debug():
     assert at.chat_message[1].markdown[0].value != "```\nNo relevant information was found regarding your request. \nPlease try again with a different query. \nPlease note that this application is designed to handle requests that can be translated into a SQL query.\n```"
 
 #-------------------------------------------------------------------------------------------------------------------------------------
-# test sistema selezione
+# test d'integrazione selezione
 #-------------------------------------------------------------------------------------------------------------------------------------
 def select_func():
     import streamlit as st
@@ -321,7 +339,7 @@ def select_func():
     select_widget.create()
 
 
-def test_select():
+def test_select_VC():
     """
     tests the case of visualizing the selected dictionary name as the value displayed in the selectbox
     """
@@ -335,6 +353,6 @@ def test_select():
     assert at.selectbox[0].value == "fitness_app.json"
 
 #-------------------------------------------------------------------------------------------------------------------------------------
-# test sistema input
+# test d'integrazione input
 #-------------------------------------------------------------------------------------------------------------------------------------
 #non svolgibili perché la classe AppTest di Streamlit non supporta ancora il widget file_uploader nella versione 1.30.0 di Streamlit

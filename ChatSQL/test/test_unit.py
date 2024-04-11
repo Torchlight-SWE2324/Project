@@ -151,7 +151,6 @@ def test_generate_prompt_true():
     chat_service.generate_prompt(user_input, sanitized_user_input, dictionary_name)
     assert chat_service._response != "No relevant information was found regarding your request. \nPlease try again with a different query. \nPlease note that this application is designed to handle requests that can be translated into a SQL query." 
 
-
 def test_generate_debug1():
     emb = Embedder()
     user = UserResponse(emb)
