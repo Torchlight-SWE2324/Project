@@ -91,7 +91,6 @@ def test_login_wrong_credentials():
 def test_login_correct_credentials():
     """
     tests the case of trying logging in with correct credentials
-    since the test passes, it means that LoginController got the username "admin" and password "admin" successfully from LoginWidget
     """
     at = AppTest.from_function(login_func)
     at.run()
@@ -131,7 +130,6 @@ def logout_func():
 def test_logout_correct_TS03():
     """
     tests the case of logging out
-    since the test passes, it means that LogoutController and LogoutWidget works together successfully
     """
     at = AppTest.from_function(logout_func)
     at.run()

@@ -397,6 +397,35 @@ def test_chat_prompt_with_similarity_MC():
     cha_controller._chat_model.generate_prompt("list of musicians'", "list of musicians ", "swe_music.json")
     response = cha_model.get_response()
     assert response != "No relevant information was found regarding your request. \nPlease try again with a different query. \nPlease note that this application is designed to handle requests that can be translated into a SQL query."
+#-------------------------------------------------------------------------------------------------------------------------------------
+# test d'integrazione generazione response tra ChatService e UserResponse
+#-------------------------------------------------------------------------------------------------------------------------------------
+
+def test_chat_user_generation():
+    """
+    tests the case of generating a similarity prompt by giving a resonable interrogation input between ChatService and ChatController
+    since the test passes, it means that ChatController and ChatService work together successfully
+    """
+    from model import ChatService, UserResponse, TechnicianResponse
+    from controller import ChatController
+    from widgets import ChatWidget
+    from embedder import Embedder
+
+    embedder = Embedder()
+    user_response = UserResponse(embedder)
+    technician_response = TechnicianResponse(embedder)
+    #modelli
+    cha_model = ChatService(user_response, technician_response)
+    #controller
+    cha_controller = ChatController(cha_model, None, None, None)
+    #view
+    chat_widget = ChatWidget(cha_controller)
+    #controller imposto view
+    cha_controller.set_view(chat_widget)
+
+    cha_controller._chat_model.generate_prompt("list of musicians'", "list of musicians ", "swe_music.json")
+    response = cha_model.get_response()
+    assert response != "No relevant information was found regarding your request. \nPlease try again with a different query. \nPlease note that this application is designed to handle requests that can be translated into a SQL query."
 
 #-------------------------------------------------------------------------------------------------------------------------------------
 # test d'integrazione chat lato tecnico View-Controller(VC) e Model-Controller(MC)
@@ -434,9 +463,10 @@ def chat_debug_func():
     select_widget.create()
     chat_widget.create()
 
-def test_chat_debug():
+def test_chat_debug_VC():
     """
-    tests the case of visualizing both messages of technician input and debug message
+    tests the case of visualizing both messages of technician input and debug message between ChatWidget and ChatController
+    since the test passes, it means that ChatController and ChatService work together successfully
     """
     at = AppTest.from_function(chat_debug_func, default_timeout=30)
     at.run()
@@ -449,6 +479,36 @@ def test_chat_debug():
     assert at.chat_message[0].markdown[0].value == "All the songs of a certain singer"
     assert at.chat_message[1].avatar == "assistant"
     assert at.chat_message[1].markdown[0].value != "```\nNo relevant information was found regarding your request. \nPlease try again with a different query. \nPlease note that this application is designed to handle requests that can be translated into a SQL query.\n```"
+
+def test_chat_debug_MC():
+    """
+    tests the case of generating a debug message by giving a resonable interrogation input between ChatService and ChatController
+    since the test passes, it means that ChatController and ChatService work together successfully
+    """
+    from model import ChatService, UserResponse, TechnicianResponse
+    from controller import ChatController
+    from widgets import ChatWidget
+    from embedder import Embedder
+
+    embedder = Embedder()
+    user_response = UserResponse(embedder)
+    technician_response = TechnicianResponse(embedder)
+    #modelli
+    cha_model = ChatService(user_response, technician_response)
+    #controller
+    cha_controller = ChatController(cha_model, None, None, None)
+    #view
+    chat_widget = ChatWidget(cha_controller)
+    #controller imposto view
+    cha_controller.set_view(chat_widget)
+
+    cha_controller._chat_model.generate_debug("All the songs of a certain singer'", "All the songs of a certain singer ", "swe_music.json")
+    response = cha_model.get_response()
+    assert response != "No relevant information was found regarding your request. \nPlease try again with a different query. \nPlease note that this application is designed to handle requests that can be translated into a SQL query."
+
+#-------------------------------------------------------------------------------------------------------------------------------------
+# test d'integrazione generazione response tra ChatService e TechnicianResponse
+#-------------------------------------------------------------------------------------------------------------------------------------
 
 #-------------------------------------------------------------------------------------------------------------------------------------
 # test d'integrazione selezione View-Controller(VC) e Model-Controller(MC)
