@@ -242,3 +242,55 @@ def test_chat_prompt_with_similarity():
     assert at.chat_message[0].markdown[0].value == "All the songs of a certain singer"
     assert at.chat_message[1].avatar == "assistant"
     assert at.chat_message[1].markdown[0].value != "```\nNo relevant information was found regarding your request. \nPlease try again with a different query. \nPlease note that this application is designed to handle requests that can be translated into a SQL query.\n```"
+
+#-------------------------------------------------------------------------------------------------------------------------------------
+# test d'integrazione chat lato tecnico 
+#-------------------------------------------------------------------------------------------------------------------------------------
+def chat_debug_func():
+    import streamlit as st
+    from model import AuthenticationService, SelectionService, ChatService, UserResponse, TechnicianResponse
+    from controller import SelectionController, ChatController
+    from widgets import SelectWidget, ChatWidget, st
+    from embedder import Embedder
+
+    embedder = Embedder()
+    user_response = UserResponse(embedder)
+    technician_response = TechnicianResponse(embedder)
+    #modelli
+    aut_model = AuthenticationService()
+    sel_model = SelectionService()
+    cha_model = ChatService(user_response, technician_response)
+    #controller
+    sel_controller = SelectionController(sel_model, None)
+    cha_controller = ChatController(cha_model, sel_model, aut_model, None)
+    #view
+    select_widget = SelectWidget(sel_controller)
+    chat_widget = ChatWidget(cha_controller)
+    #controller imposto view
+    sel_controller.set_view(select_widget)
+    cha_controller.set_view(chat_widget)
+    if "logged_in" not in st.session_state:
+        st.session_state.logged_in = True
+    if "chat" not in st.session_state:
+        st.session_state.chat = []
+    if "doing_test" not in st.session_state:
+        st.session_state.doing_test = True
+    aut_model.set_logged_status(True)
+    select_widget.create()
+    chat_widget.create()
+
+def test_chat_debug():
+    """
+    tests the case of visualizing both messages of technician input and debug message
+    """
+    at = AppTest.from_function(chat_debug_func, default_timeout=30)
+    at.run()
+    
+    at.sidebar.selectbox[0].set_value("swe_music.json").run()
+    #assert at.selectbox[0].options == ["swe_music.json","fitness_app.json"]
+    at.chat_input[0].set_value("All the songs of a certain singer").run()
+
+    assert at.chat_message[0].avatar == "user"
+    assert at.chat_message[0].markdown[0].value == "All the songs of a certain singer"
+    assert at.chat_message[1].avatar == "assistant"
+    assert at.chat_message[1].markdown[0].value != "```\nNo relevant information was found regarding your request. \nPlease try again with a different query. \nPlease note that this application is designed to handle requests that can be translated into a SQL query.\n```"
