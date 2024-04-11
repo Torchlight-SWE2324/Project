@@ -294,3 +294,39 @@ def test_chat_debug():
     assert at.chat_message[0].markdown[0].value == "All the songs of a certain singer"
     assert at.chat_message[1].avatar == "assistant"
     assert at.chat_message[1].markdown[0].value != "```\nNo relevant information was found regarding your request. \nPlease try again with a different query. \nPlease note that this application is designed to handle requests that can be translated into a SQL query.\n```"
+
+#-------------------------------------------------------------------------------------------------------------------------------------
+# test sistema selezione
+#-------------------------------------------------------------------------------------------------------------------------------------
+def select_func():
+    import streamlit as st
+    from model import AuthenticationService, SelectionService, ChatService, UserResponse, TechnicianResponse
+    from controller import SelectionController, ChatController
+    from widgets import SelectWidget, ChatWidget, st
+    from embedder import Embedder
+
+    #modelli
+    sel_model = SelectionService()
+    #controller
+    sel_controller = SelectionController(sel_model, None)
+    #view
+    select_widget = SelectWidget(sel_controller)
+    #controller imposto view
+    sel_controller.set_view(select_widget)
+    if "doing_test" not in st.session_state:
+        st.session_state.doing_test = True
+    select_widget.create()
+
+
+def test_select():
+    """
+    tests the case of visualizing the selected dictionary name as the value displayed in the selectbox
+    """
+    at = AppTest.from_function(select_func, default_timeout=3)
+    at.run()
+
+    assert at.sidebar.selectbox[0].options == ["swe_music.json","fitness_app.json"]
+    at.sidebar.selectbox[0].set_value("swe_music.json").run()
+    assert at.selectbox[0].value == "swe_music.json"
+    at.sidebar.selectbox[0].set_value("fitness_app.json").run()
+    assert at.selectbox[0].value == "fitness_app.json"
