@@ -209,7 +209,7 @@ def delete_func():
 
 def test_delete_true_VC():
     """
-    tests the case of being able to delete a dictinary with relative error message between View and Controller
+    tests the case of being able to delete a dictinary with relative error message between DeleteWidget and DeleteController
     since the test passes, it means that DeleteController and DeleteWidget work together successfully
     """
     at = AppTest.from_function(delete_func)
@@ -221,7 +221,7 @@ def test_delete_true_VC():
 
 def test_delete_false_VC():
     """
-    tests the case of not being able to delete a dictinary with relative error message between View and Controller
+    tests the case of not being able to delete a dictinary with relative error message between DeleteWidget and DeleteController
     since the test passes, it means that DeleteController and DeleteWidget work together successfully
     """
     at = AppTest.from_function(delete_func)
@@ -233,7 +233,7 @@ def test_delete_false_VC():
 
 def test_delete_true_MC():
     """
-    tests the case of being able to delete a dictinary between Model and Controller
+    tests the case of being able to delete a dictinary between DeleteService and DeleteController
     since the test passes, it means that DeleteController and DeleteService work together successfully
     """
     from model import DeleteService, SelectionService
@@ -257,7 +257,7 @@ def test_delete_true_MC():
 
 def test_delete_false_MC():
     """
-    tests the case of not being able to delete a dictinary between Model and Controller
+    tests the case of not being able to delete a dictinary between DeleteService and DeleteController
     since the test passes, it means that DeleteController and DeleteService work together successfully
     """
     from model import DeleteService, SelectionService
@@ -314,7 +314,8 @@ def chat_prompt_func():
 
 def test_chat_prompt_no_similarity_VC():
     """
-    tests the case of visualizing both messages of user input and no similarity prompt between View and Controller
+    tests the case of visualizing both messages of user input and no similarity prompt between ChatWidget and ChatController
+    since the test passes, it means that ChatController and ChatWidget work together successfully
     """
     at = AppTest.from_function(chat_prompt_func, default_timeout=30)
     at.run()
@@ -330,7 +331,8 @@ def test_chat_prompt_no_similarity_VC():
     
 def test_chat_prompt_with_similarity_VC():
     """
-    tests the case of visualizing both messages of user input and prompt with similarities between View and Controller
+    tests the case of visualizing both messages of user input and prompt with similarities between ChatWidget and ChatController
+    since the test passes, it means that ChatController and ChatWidget work together successfully
     """
     at = AppTest.from_function(chat_prompt_func, default_timeout=30)
     at.run()
@@ -343,6 +345,58 @@ def test_chat_prompt_with_similarity_VC():
     assert at.chat_message[0].markdown[0].value == "All the songs of a certain singer"
     assert at.chat_message[1].avatar == "assistant"
     assert at.chat_message[1].markdown[0].value != "```\nNo relevant information was found regarding your request. \nPlease try again with a different query. \nPlease note that this application is designed to handle requests that can be translated into a SQL query.\n```"
+
+def test_chat_prompt_no_similarity_MC():
+    """
+    tests the case of generating a no similarity prompt by giving an obsolete input between ChatService and ChatController
+    since the test passes, it means that ChatController and ChatService work together successfully
+    """
+    from model import ChatService, UserResponse, TechnicianResponse
+    from controller import ChatController
+    from widgets import ChatWidget
+    from embedder import Embedder
+
+    embedder = Embedder()
+    user_response = UserResponse(embedder)
+    technician_response = TechnicianResponse(embedder)
+    #modelli
+    cha_model = ChatService(user_response, technician_response)
+    #controller
+    cha_controller = ChatController(cha_model, None, None, None)
+    #view
+    chat_widget = ChatWidget(cha_controller)
+    #controller imposto view
+    cha_controller.set_view(chat_widget)
+
+    cha_controller._chat_model.generate_prompt("a", "a", "swe_music.json")
+    response = cha_model.get_response()
+    assert response == "No relevant information was found regarding your request. \nPlease try again with a different query. \nPlease note that this application is designed to handle requests that can be translated into a SQL query."
+
+def test_chat_prompt_with_similarity_MC():
+    """
+    tests the case of generating a similarity prompt by giving a resonable interrogation input between ChatService and ChatController
+    since the test passes, it means that ChatController and ChatService work together successfully
+    """
+    from model import ChatService, UserResponse, TechnicianResponse
+    from controller import ChatController
+    from widgets import ChatWidget
+    from embedder import Embedder
+
+    embedder = Embedder()
+    user_response = UserResponse(embedder)
+    technician_response = TechnicianResponse(embedder)
+    #modelli
+    cha_model = ChatService(user_response, technician_response)
+    #controller
+    cha_controller = ChatController(cha_model, None, None, None)
+    #view
+    chat_widget = ChatWidget(cha_controller)
+    #controller imposto view
+    cha_controller.set_view(chat_widget)
+
+    cha_controller._chat_model.generate_prompt("list of musicians'", "list of musicians ", "swe_music.json")
+    response = cha_model.get_response()
+    assert response != "No relevant information was found regarding your request. \nPlease try again with a different query. \nPlease note that this application is designed to handle requests that can be translated into a SQL query."
 
 #-------------------------------------------------------------------------------------------------------------------------------------
 # test d'integrazione chat lato tecnico View-Controller(VC) e Model-Controller(MC)

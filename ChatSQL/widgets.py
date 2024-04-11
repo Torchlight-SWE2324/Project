@@ -466,8 +466,8 @@ class ChatWidget:
 
         @param controller_cha: The controller object for chat operations.
         """
-        self.__controller_chat = controller_cha
-        self.__user_input = None 
+        self._controller_chat = controller_cha
+        self._user_input = None 
 
     def create(self):
         """
@@ -479,7 +479,7 @@ class ChatWidget:
         for message in st.session_state.chat:
             with st.chat_message(message["role"]):
                 st.code(message["content"], language="markdown")
-        if self.__controller_chat.operation_get_all_dictionaries() == []:
+        if self._controller_chat.operation_get_all_dictionaries() == []:
             st.chat_input("A data dictionary has not been uploaded. Please log in as a technician to upload one.", disabled=True)
         else:
             user_input = st.chat_input("Type your query here", key="chat_input", max_chars=800)
@@ -496,8 +496,8 @@ class ChatWidget:
         with st.chat_message("user"):
             st.write(user_input)
 
-        self.__user_input = user_input
-        self.__controller_chat.operation_generate_response()
+        self._user_input = user_input
+        self._controller_chat.operation_generate_response()
 
     def show_response(self, gen_response):
         """
@@ -528,4 +528,4 @@ class ChatWidget:
 
         @return: The string containing user input from chat input widget.
         """
-        return self.__user_input
+        return self._user_input
