@@ -29,7 +29,7 @@ def setup_function():
     upload_service.upload_dictionary("swe_music.json", uploaded_file_content)
 
 #-------------------------------------------------------------------------------------------------------------------------------------
-# test d'integrazione login
+# test d'integrazione login View-Controller(VC) e Model-Controller(MC)
 #-------------------------------------------------------------------------------------------------------------------------------------
 
 def login_func():
@@ -100,12 +100,11 @@ def test_login_correct_credentials_VC():
     assert at.session_state.logged_in == True
     assert at.toast[0].value == ":green[Login successful!]" and at.toast[0].icon == "✅"
 
-def test_login_correct_credentials_MC():
+def test_login_wrong_credentials_MC():
     """
     tests the case of trying logging in with correct credentials between Model and Controller
-    since the test passes, it means that AuthenticationController passes username "admin" and password "admin" successfully to AuthenticationService
+    since the test passes, it means that AuthenticationController passes username "wrong username" and password "wrong password" successfully to AuthenticationService
     """
-    import streamlit as st
     from model import AuthenticationService
     from controller import AuthenticationController
     from widgets import LoginWidget
@@ -114,19 +113,33 @@ def test_login_correct_credentials_MC():
     aut_controller = AuthenticationController(aut_model, None)
     login_widget = LoginWidget(aut_controller)
     aut_controller.set_view(login_widget)
-    if "logged_in" not in st.session_state:
-        st.session_state.logged_in = False
-    if "doing_test" not in st.session_state:
-        st.session_state.doing_test = True
     aut_model.set_logged_status(False)
-    login_widget.create()
+
+    aut_controller._model.check_login("wrong username","wrong password")
+    result = aut_model.get_logged_status()
+    assert result == False
+
+def test_login_correct_credentials_MC():
+    """
+    tests the case of trying logging in with correct credentials between Model and Controller
+    since the test passes, it means that AuthenticationController passes username "admin" and password "admin" successfully to AuthenticationService
+    """
+    from model import AuthenticationService
+    from controller import AuthenticationController
+    from widgets import LoginWidget
+
+    aut_model = AuthenticationService()
+    aut_controller = AuthenticationController(aut_model, None)
+    login_widget = LoginWidget(aut_controller)
+    aut_controller.set_view(login_widget)
+    aut_model.set_logged_status(False)
 
     aut_controller._model.check_login("admin","admin")
     result = aut_model.get_logged_status()
     assert result == True
 
 #-------------------------------------------------------------------------------------------------------------------------------------
-# test d'integrazione Logout
+# test d'integrazione Logout View-Controller(VC) e Model-Controller(MC)
 #-------------------------------------------------------------------------------------------------------------------------------------
 
 def logout_func():
@@ -149,7 +162,8 @@ def logout_func():
 
 def test_logout_correct_VC():
     """
-    tests the case of logging out
+    tests the case of logging out between View and Controller
+    since the test passes, it means that LogoutController and LogoutWidget work together successfully
     """
     at = AppTest.from_function(logout_func)
     at.run()
@@ -158,8 +172,26 @@ def test_logout_correct_VC():
     assert at.session_state.logged_in == False
     assert at.toast[0].value == ":green[Logged out.]" and at.toast[0].icon == "✅"
 
+def test_logout_correct_MC():
+    """
+    tests the case of logging out between Model and Controller
+    since the test passes, it means that LogoutController and AuthenticationService work together successfully
+    """
+    from model import AuthenticationService
+    from controller import LogoutController
+    from widgets import LogoutWidget
+    aut_model = AuthenticationService()
+    log_controller = LogoutController(aut_model, None)
+    logout_widget = LogoutWidget(log_controller)
+    log_controller.set_view(logout_widget)
+    aut_model.set_logged_status(True)
+
+    log_controller._model.set_logged_status(False)
+    result = aut_model.get_logged_status()
+    assert result == False
+
 #-------------------------------------------------------------------------------------------------------------------------------------
-# test d'integrazione delete dizionari
+# test d'integrazione delete dizionari View-Controller(VC) e Model-Controller(MC)
 #-------------------------------------------------------------------------------------------------------------------------------------
 def delete_func():
     from model import DeleteService, SelectionService
@@ -177,7 +209,8 @@ def delete_func():
 
 def test_delete_true_VC():
     """
-    tests the case of succesfully deleting a dictinary with relative success message
+    tests the case of being able to delete a dictinary with relative error message between View and Controller
+    since the test passes, it means that DeleteController and DeleteWidget work together successfully
     """
     at = AppTest.from_function(delete_func)
     at.run()
@@ -188,7 +221,8 @@ def test_delete_true_VC():
 
 def test_delete_false_VC():
     """
-    tests the case of not being able to delete a dictinary with relative error message
+    tests the case of not being able to delete a dictinary with relative error message between View and Controller
+    since the test passes, it means that DeleteController and DeleteWidget work together successfully
     """
     at = AppTest.from_function(delete_func)
     at.run()
@@ -197,8 +231,53 @@ def test_delete_false_VC():
     at.sidebar.button[0].click().run()
     assert at.toast[0].value == ":red[Deletion of dictionary \"fitness_app.json\" failed.]" and at.toast[0].icon == "🚨"
 
+def test_delete_true_MC():
+    """
+    tests the case of being able to delete a dictinary between Model and Controller
+    since the test passes, it means that DeleteController and DeleteService work together successfully
+    """
+    from model import DeleteService, SelectionService
+    from controller import DeleteController, SelectionController
+    from widgets import DeleteWidget, SelectWidget
+
+    del_model = DeleteService()
+    sel_model = SelectionService()
+    del_controller = DeleteController(del_model, None)
+    sel_controller = SelectionController(sel_model, None)
+    select_widget = SelectWidget(sel_controller)
+    delete_widget = DeleteWidget(select_widget, del_controller)
+    del_controller.set_view(delete_widget)
+
+    n_dict_before = len(sel_model.get_files_in_db())
+    del_controller._model.delete_file("swe_music.json")
+    n_dict_after = len(sel_model.get_files_in_db())
+    del_outcome = del_model.get_elimination_outcome()
+    assert n_dict_before > n_dict_after
+    assert del_outcome == True
+
+def test_delete_false_MC():
+    """
+    tests the case of not being able to delete a dictinary between Model and Controller
+    since the test passes, it means that DeleteController and DeleteService work together successfully
+    """
+    from model import DeleteService, SelectionService
+    from controller import DeleteController, SelectionController
+    from widgets import DeleteWidget, SelectWidget
+
+    del_model = DeleteService()
+    sel_model = SelectionService()
+    del_controller = DeleteController(del_model, None)
+    sel_controller = SelectionController(sel_model, None)
+    select_widget = SelectWidget(sel_controller)
+    delete_widget = DeleteWidget(select_widget, del_controller)
+    del_controller.set_view(delete_widget)
+    
+    del_controller._model.delete_file("fitness_app.json")
+    del_outcome = del_model.get_elimination_outcome()
+    assert del_outcome == False
+    
 #-------------------------------------------------------------------------------------------------------------------------------------
-# test d'integrazione chat lato utente 
+# test d'integrazione chat lato utente View-Controller(VC) e Model-Controller(MC)
 #-------------------------------------------------------------------------------------------------------------------------------------
 def chat_prompt_func():
     import streamlit as st
@@ -235,7 +314,7 @@ def chat_prompt_func():
 
 def test_chat_prompt_no_similarity_VC():
     """
-    tests the case of visualizing both messages of user input and no similarity prompt
+    tests the case of visualizing both messages of user input and no similarity prompt between View and Controller
     """
     at = AppTest.from_function(chat_prompt_func, default_timeout=30)
     at.run()
@@ -251,7 +330,7 @@ def test_chat_prompt_no_similarity_VC():
     
 def test_chat_prompt_with_similarity_VC():
     """
-    tests the case of visualizing both messages of user input and prompt with similarities
+    tests the case of visualizing both messages of user input and prompt with similarities between View and Controller
     """
     at = AppTest.from_function(chat_prompt_func, default_timeout=30)
     at.run()
@@ -266,7 +345,7 @@ def test_chat_prompt_with_similarity_VC():
     assert at.chat_message[1].markdown[0].value != "```\nNo relevant information was found regarding your request. \nPlease try again with a different query. \nPlease note that this application is designed to handle requests that can be translated into a SQL query.\n```"
 
 #-------------------------------------------------------------------------------------------------------------------------------------
-# test d'integrazione chat lato tecnico 
+# test d'integrazione chat lato tecnico View-Controller(VC) e Model-Controller(MC)
 #-------------------------------------------------------------------------------------------------------------------------------------
 def chat_debug_func():
     import streamlit as st
@@ -318,7 +397,7 @@ def test_chat_debug():
     assert at.chat_message[1].markdown[0].value != "```\nNo relevant information was found regarding your request. \nPlease try again with a different query. \nPlease note that this application is designed to handle requests that can be translated into a SQL query.\n```"
 
 #-------------------------------------------------------------------------------------------------------------------------------------
-# test d'integrazione selezione
+# test d'integrazione selezione View-Controller(VC) e Model-Controller(MC)
 #-------------------------------------------------------------------------------------------------------------------------------------
 def select_func():
     import streamlit as st
@@ -353,6 +432,6 @@ def test_select_VC():
     assert at.selectbox[0].value == "fitness_app.json"
 
 #-------------------------------------------------------------------------------------------------------------------------------------
-# test d'integrazione input
+# test d'integrazione input Model-Controller(MC)
 #-------------------------------------------------------------------------------------------------------------------------------------
 #non svolgibili perché la classe AppTest di Streamlit non supporta ancora il widget file_uploader nella versione 1.30.0 di Streamlit
