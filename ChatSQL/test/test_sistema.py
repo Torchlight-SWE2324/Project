@@ -176,13 +176,13 @@ def test_delete_false():
     assert at.toast[0].value == ":red[Deletion of dictionary \"fitness_app.json\" failed.]" and at.toast[0].icon == "🚨"
 
 #-------------------------------------------------------------------------------------------------------------------------------------
-# test d'integrazione chat
+# test d'integrazione chat lato utente 
 #-------------------------------------------------------------------------------------------------------------------------------------
-def chat_func():
+def chat_prompt_func():
     import streamlit as st
-    from model import AuthenticationService, SelectionService, UploadService, DeleteService, ChatService, JsonSchemaVerifierService, UserResponse, TechnicianResponse
-    from controller import AuthenticationController, SelectionController, UploadController, DeleteController, LogoutController, ChatController
-    from widgets import LoginWidget, LogoutWidget, SelectWidget, UploadWidget, DeleteWidget, ChatWidget, st
+    from model import AuthenticationService, SelectionService, ChatService, UserResponse, TechnicianResponse
+    from controller import SelectionController, ChatController
+    from widgets import SelectWidget, ChatWidget, st
     from embedder import Embedder
 
     embedder = Embedder()
@@ -211,11 +211,11 @@ def chat_func():
     select_widget.create()
     chat_widget.create()
 
-def test_chat_no_similarity():
+def test_chat_prompt_no_similarity():
     """
     tests the case of visualizing both messages of user input and no similarity prompt
     """
-    at = AppTest.from_function(chat_func, default_timeout=30)
+    at = AppTest.from_function(chat_prompt_func, default_timeout=30)
     at.run()
     
     at.sidebar.selectbox[0].set_value("swe_music.json").run()
@@ -225,5 +225,20 @@ def test_chat_no_similarity():
     assert at.chat_message[0].avatar == "user"
     assert at.chat_message[0].markdown[0].value == "a"
     assert at.chat_message[1].avatar == "assistant"
-    assert at.chat_message[1].markdown[0].value == "```\nResponse: No relevant information was found regarding your request. \nPlease try again with a different query. \nPlease note that this application is designed to handle requests that can be translated into a SQL query.\n```"
+    assert at.chat_message[1].markdown[0].value == "```\nNo relevant information was found regarding your request. \nPlease try again with a different query. \nPlease note that this application is designed to handle requests that can be translated into a SQL query.\n```"
     
+def test_chat_prompt_with_similarity():
+    """
+    tests the case of visualizing both messages of user input and prompt with similarities
+    """
+    at = AppTest.from_function(chat_prompt_func, default_timeout=30)
+    at.run()
+    
+    at.sidebar.selectbox[0].set_value("swe_music.json").run()
+    #assert at.selectbox[0].options == ["swe_music.json","fitness_app.json"]
+    at.chat_input[0].set_value("All the songs of a certain singer").run()
+
+    assert at.chat_message[0].avatar == "user"
+    assert at.chat_message[0].markdown[0].value == "All the songs of a certain singer"
+    assert at.chat_message[1].avatar == "assistant"
+    assert at.chat_message[1].markdown[0].value != "```\nNo relevant information was found regarding your request. \nPlease try again with a different query. \nPlease note that this application is designed to handle requests that can be translated into a SQL query.\n```"

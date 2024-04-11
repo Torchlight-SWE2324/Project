@@ -510,7 +510,7 @@ class ChatWidget:
         st.session_state.chat.append({"role": "assistant", "content": gen_response})
         with st.chat_message("assistant"):
             #st.code(f"Response: {gen_response}", language="markdown")
-            st.write(f"```\nResponse: {gen_response}\n```")
+            st.write(f"```\n{gen_response}\n```")
             
 
     def get_user_input(self):
