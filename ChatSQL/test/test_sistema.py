@@ -29,7 +29,7 @@ def setup_function():
     upload_service.upload_dictionary("swe_music.json", uploaded_file_content)
 
 #-------------------------------------------------------------------------------------------------------------------------------------
-# test d'integrazione login
+# test sistema login
 #-------------------------------------------------------------------------------------------------------------------------------------
 
 def login_func():
@@ -104,7 +104,7 @@ def test_login_correct_credentials_TS01():
     assert at.toast[0].value == ":green[Login successful!]" and at.toast[0].icon == "✅"
 
 #-------------------------------------------------------------------------------------------------------------------------------------
-# test d'integrazione Logout
+# test sistema Logout
 #-------------------------------------------------------------------------------------------------------------------------------------
 
 def logout_func():
@@ -137,7 +137,7 @@ def test_logout_correct_TS03():
     assert at.toast[0].value == ":green[Logged out.]" and at.toast[0].icon == "✅"
 
 #-------------------------------------------------------------------------------------------------------------------------------------
-# test d'integrazione delete dizionari
+# test sistema delete dizionari
 #-------------------------------------------------------------------------------------------------------------------------------------
 def delete_func():
     from model import DeleteService, SelectionService
@@ -176,7 +176,7 @@ def test_delete_false():
     assert at.toast[0].value == ":red[Deletion of dictionary \"fitness_app.json\" failed.]" and at.toast[0].icon == "🚨"
 
 #-------------------------------------------------------------------------------------------------------------------------------------
-# test d'integrazione chat lato utente 
+# test sistema chat lato utente 
 #-------------------------------------------------------------------------------------------------------------------------------------
 def chat_prompt_func():
     import streamlit as st
@@ -244,7 +244,7 @@ def test_chat_prompt_with_similarity():
     assert at.chat_message[1].markdown[0].value != "```\nNo relevant information was found regarding your request. \nPlease try again with a different query. \nPlease note that this application is designed to handle requests that can be translated into a SQL query.\n```"
 
 #-------------------------------------------------------------------------------------------------------------------------------------
-# test d'integrazione chat lato tecnico 
+# test sistema chat lato tecnico 
 #-------------------------------------------------------------------------------------------------------------------------------------
 def chat_debug_func():
     import streamlit as st
