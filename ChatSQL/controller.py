@@ -23,8 +23,6 @@ class AuthenticationController:
         """
         Performs login operation.
 
-        @param username: the username
-        @param password: the password
         @return: None
         """
         username = self._view.get_username()
@@ -38,7 +36,8 @@ class AuthenticationController:
                 time.sleep(.5)
                 st.session_state.chat = []
                 st.session_state.logged_in = True
-                st.rerun()
+                if st.session_state.doing_test == False:
+                    st.rerun()
             else:
                 self._view.negative_login_outcome()
 
@@ -173,7 +172,8 @@ class DeleteController:
         if esito:
             self._view.positive_delete_outcome(delete_file_name)
             time.sleep(.5)
-            st.rerun()
+            if st.session_state.doing_test == False:
+                st.rerun()
         else:
             self._view.negative_delete_outcome(delete_file_name)
 
@@ -208,7 +208,8 @@ class LogoutController:
         st.session_state.chat = []
         self._view.positive_logout_outcome()
         time.sleep(.5)
-        st.rerun()
+        if st.session_state.doing_test == False:
+            st.rerun()
 
     def set_view(self, view):
         """
