@@ -6,7 +6,26 @@ from embedder import *
 from model import *
 from response import *
 
-
+def setup_function():
+    source_folder = "ChatSQL/test/utils"
+    destination_folder = "ChatSQL/database"
+    json_filename1 = "swe_music.json"
+    json_filename2 = "fitness_app.json"
+    source_file_path1 = os.path.join(source_folder, json_filename1)
+    source_file_path2 = os.path.join(source_folder, json_filename2)
+    if not os.path.exists(destination_folder):
+        os.makedirs(destination_folder)
+    destination_file_path = os.path.join(destination_folder, json_filename1)
+    destination_file_path2 = os.path.join(destination_folder, json_filename2)
+    shutil.copyfile(source_file_path1, destination_file_path)
+    shutil.copyfile(source_file_path2, destination_file_path2)
+    emb = Embedder()
+    json_verifier = JsonSchemaVerifierService()
+    upload_service = UploadService(emb, json_verifier)
+    uploaded_file_path = "ChatSQL/database/swe_music.json"
+    with open(uploaded_file_path, 'r') as file:
+        uploaded_file_content = file.read()
+    upload_service.upload_dictionary("swe_music.json", uploaded_file_content)     
 
 def test_generate_index():
     dictionary_file_name = "swe_music.json"
@@ -131,7 +150,6 @@ def test_generate_prompt_true():
     dictionary_name = "swe_music.json"
     chat_service.generate_prompt(user_input, sanitized_user_input, dictionary_name)
     assert chat_service._response != "No relevant information was found regarding your request. \nPlease try again with a different query. \nPlease note that this application is designed to handle requests that can be translated into a SQL query." 
-
 
 def test_generate_debug1():
     emb = Embedder()
@@ -290,30 +308,4 @@ def copy_json():
     destination_file_path = os.path.join(destination_folder, json_filename)
     shutil.copyfile(source_file_path, destination_file_path)
 
-def initt():
-    source_folder = "ChatSQL/test/utils"
-    destination_folder = "ChatSQL/database"
-    json_filename1 = "swe_music.json"
-    json_filename2 = "fitness_app.json"
-    source_file_path1 = os.path.join(source_folder, json_filename1)
-    source_file_path2 = os.path.join(source_folder, json_filename2)
-    if not os.path.exists(destination_folder):
-        os.makedirs(destination_folder)
-    destination_file_path = os.path.join(destination_folder, json_filename1)
-    destination_file_path2 = os.path.join(destination_folder, json_filename2)
-    shutil.copyfile(source_file_path1, destination_file_path)
-    shutil.copyfile(source_file_path2, destination_file_path2)
-
-    emb = Embedder()
-    json_verifier = JsonSchemaVerifierService()
-    upload_service = UploadService(emb, json_verifier)
-    uploaded_file_path = "ChatSQL/database/swe_music.json"
-    with open(uploaded_file_path, 'r') as file:
-        uploaded_file_content = file.read()
-    upload_service.upload_dictionary("swe_music.json", uploaded_file_content)
-
-       
- 
-if __name__ == '__main__':
-    initt()
     
