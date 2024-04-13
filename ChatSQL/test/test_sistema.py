@@ -245,6 +245,16 @@ def test_chat_prompt_with_similarity():
     assert at.chat_message[1].avatar == "assistant"
     assert at.chat_message[1].markdown[0].value != "```\nNo relevant information was found regarding your request. \nPlease try again with a different query. \nPlease note that this application is designed to handle requests that can be translated into a SQL query.\n```"
 
+def test_chat_input_area():
+    at = AppTest.from_file("../main.py")
+    at.run()
+
+    at.chat_input[0].set_value("All the songs of a certain singer")
+    assert at.chat_input[0].value == "All the songs of a certain singer"
+    at.chat_input[0].set_value("Test the chat input area")
+    assert at.chat_input[0].value == "Test the chat input area"
+
+
 #-------------------------------------------------------------------------------------------------------------------------------------
 # test sistema chat lato tecnico 
 #-------------------------------------------------------------------------------------------------------------------------------------
