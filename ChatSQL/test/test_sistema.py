@@ -319,18 +319,26 @@ def select_func():
     select_widget.create()
 
 
-def test_select():
+def test_select_dictionary():
     """
     tests the case of visualizing the selected dictionary name as the value displayed in the selectbox
     """
     at = AppTest.from_function(select_func, default_timeout=3)
     at.run()
 
-    assert at.sidebar.selectbox[0].options == ["swe_music.json","fitness_app.json"]
     at.sidebar.selectbox[0].set_value("swe_music.json").run()
     assert at.selectbox[0].value == "swe_music.json"
     at.sidebar.selectbox[0].set_value("fitness_app.json").run()
     assert at.selectbox[0].value == "fitness_app.json"
+
+def test_view_dictionary():
+    """
+    tests the case of visualizing all the saved dictionaries name in the selectbox
+    """
+    at = AppTest.from_function(select_func, default_timeout=3)
+    at.run()
+
+    assert at.sidebar.selectbox[0].options == ["swe_music.json","fitness_app.json"]
 
 #-------------------------------------------------------------------------------------------------------------------------------------
 # test sistema input
