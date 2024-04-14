@@ -213,7 +213,7 @@ def chat_prompt_func():
     select_widget.create()
     chat_widget.create()
 
-def test_chat_prompt_no_similarity():
+def test_chat_prompt_no_similarity_TS14():
     """
     tests the case of visualizing both messages of user input and no similarity prompt
     """
@@ -229,7 +229,7 @@ def test_chat_prompt_no_similarity():
     assert at.chat_message[1].avatar == "assistant"
     assert at.chat_message[1].markdown[0].value == "```\nNo relevant information was found regarding your request. \nPlease try again with a different query. \nPlease note that this application is designed to handle requests that can be translated into a SQL query.\n```"
     
-def test_chat_prompt_with_similarity():
+def test_chat_prompt_with_similarity_TS13():
     """
     tests the case of visualizing both messages of user input and prompt with similarities
     """
@@ -245,6 +245,29 @@ def test_chat_prompt_with_similarity():
     assert at.chat_message[1].avatar == "assistant"
     assert at.chat_message[1].markdown[0].value != "```\nNo relevant information was found regarding your request. \nPlease try again with a different query. \nPlease note that this application is designed to handle requests that can be translated into a SQL query.\n```"
 
+def test_chat_prompt_differente_languages_TS17():
+    """
+    tests the case of LLM understanding english, italian, romanian, chinese and russian interrogations
+    """
+    at = AppTest.from_function(chat_prompt_func, default_timeout=30)
+    at.run()
+    
+    at.sidebar.selectbox[0].set_value("swe_music.json").run()
+    at.chat_input[0].set_value("All the songs of a certain singer").run()
+    assert at.chat_message[0].markdown[0].value == "All the songs of a certain singer"
+    assert at.chat_message[1].markdown[0].value != "```\nNo relevant information was found regarding your request. \nPlease try again with a different query. \nPlease note that this application is designed to handle requests that can be translated into a SQL query.\n```"
+    at.chat_input[0].set_value("Tutte le canzoni di un certo cantante").run()
+    assert at.chat_message[2].markdown[0].value == "Tutte le canzoni di un certo cantante"
+    assert at.chat_message[3].markdown[0].value != "```\nNo relevant information was found regarding your request. \nPlease try again with a different query. \nPlease note that this application is designed to handle requests that can be translated into a SQL query.\n```"
+    at.chat_input[0].set_value("Toate melodiile unui anumit cântăreț").run()
+    assert at.chat_message[4].markdown[0].value == "Toate melodiile unui anumit cântăreț"
+    assert at.chat_message[5].markdown[0].value != "```\nNo relevant information was found regarding your request. \nPlease try again with a different query. \nPlease note that this application is designed to handle requests that can be translated into a SQL query.\n```"
+    at.chat_input[0].set_value("某个歌手的所有歌曲").run()
+    assert at.chat_message[6].markdown[0].value == "某个歌手的所有歌曲"
+    assert at.chat_message[7].markdown[0].value != "```\nNo relevant information was found regarding your request. \nPlease try again with a different query. \nPlease note that this application is designed to handle requests that can be translated into a SQL query.\n```"
+    at.chat_input[0].set_value("Все песни определенного певца").run()
+    assert at.chat_message[8].markdown[0].value == "Все песни определенного певца"
+    assert at.chat_message[9].markdown[0].value != "```\nNo relevant information was found regarding your request. \nPlease try again with a different query. \nPlease note that this application is designed to handle requests that can be translated into a SQL query.\n```"
 def test_chat_prompt_similarity_filter_TS19():
     """
     tests the case of filter functionality working properly for the generation of prompt
@@ -306,7 +329,7 @@ def chat_debug_func():
     select_widget.create()
     chat_widget.create()
 
-def test_chat_debug():
+def test_chat_debug_TS15():
     """
     tests the case of visualizing both messages of technician input and debug message
     """
@@ -376,7 +399,7 @@ TS8  V
 TS10 V
 TS11 Non sono riuscito
 TS16 non fattibile
-TS17 DA FARE
+TS17 V
 TS18 non fattibile
 TS19 V
 TS20 DA FARE
