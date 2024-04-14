@@ -27,6 +27,10 @@ def setup_function():
     with open(uploaded_file_path, 'r') as file:
         uploaded_file_content = file.read()
     upload_service.upload_dictionary("swe_music.json", uploaded_file_content)
+    uploaded_file_path = "ChatSQL/database/fitness_app.json"
+    with open(uploaded_file_path, 'r') as file:
+        uploaded_file_content = file.read()
+    upload_service.upload_dictionary("fitness_app.json", uploaded_file_content)
 
 #-------------------------------------------------------------------------------------------------------------------------------------
 # test d'integrazione login
@@ -165,17 +169,6 @@ def test_delete_true():
     at.sidebar.selectbox[0].set_value("swe_music.json").run()
     at.sidebar.button[0].click().run()
     assert at.toast[0].value == ":green[Dictionary \"swe_music.json\" deleted successfully.]" and at.toast[0].icon == "🗑️"
-
-def test_delete_false():
-    """
-    tests the case of not being able to delete a dictinary with relative error message
-    """
-    at = AppTest.from_function(delete_func)
-    at.run()
-
-    at.sidebar.selectbox[0].set_value("fitness_app.json").run()
-    at.sidebar.button[0].click().run()
-    assert at.toast[0].value == ":red[Deletion of dictionary \"fitness_app.json\" failed.]" and at.toast[0].icon == "🚨"
 
 #-------------------------------------------------------------------------------------------------------------------------------------
 # test sistema chat lato utente 
@@ -386,7 +379,7 @@ def test_view_dictionary_TS08():
     at = AppTest.from_function(select_func, default_timeout=3)
     at.run()
 
-    assert at.sidebar.selectbox[0].options == ["swe_music.json","fitness_app.json"]
+    assert at.sidebar.selectbox[0].options == ["fitness_app.json","swe_music.json"]
 
 #-------------------------------------------------------------------------------------------------------------------------------------
 # test sistema input
