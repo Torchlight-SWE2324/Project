@@ -245,7 +245,22 @@ def test_chat_prompt_with_similarity():
     assert at.chat_message[1].avatar == "assistant"
     assert at.chat_message[1].markdown[0].value != "```\nNo relevant information was found regarding your request. \nPlease try again with a different query. \nPlease note that this application is designed to handle requests that can be translated into a SQL query.\n```"
 
-def test_chat_input_area():
+def test_chat_prompt_similarity_filter_TS19():
+    """
+    tests the case of filter functionality working properly for the generation of prompt
+    """
+    at = AppTest.from_function(chat_prompt_func, default_timeout=30)
+    at.run()
+    
+    at.sidebar.selectbox[0].set_value("swe_music.json").run()
+    at.chat_input[0].set_value("All the songs of a certain singer").run()
+
+    assert at.chat_message[0].avatar == "user"
+    assert at.chat_message[0].markdown[0].value == "All the songs of a certain singer"
+    assert at.chat_message[1].avatar == "assistant"
+    assert at.chat_message[1].markdown[0].value == "```\nThe database contains the following tables:\n\ntable 'songs' with fields:\n'id' that contains Unique identifier assigned to each song;\n'title' that contains Title of the song;\n'duration' that contains Duration of the song in seconds;\n'album_id' that contains Foreign key referencing the album to which the song belongs;\n\ntable 'playlist_songs' with fields:\n'id' that contains Unique identifier assigned to each playlist song entry;\n'playlist_id' that contains Foreign key referencing the playlist to which the song belongs;\n'song_id' that contains Foreign key referencing the song in the playlist;\n\ntable 'user_likes_song' with fields:\n'id' that contains Unique identifier assigned to each user likes song entry;\n'user_id' that contains Foreign key referencing the user who likes the song;\n'song_id' that contains Foreign key referencing the liked song;\n\nand the database contains the following relationships:\n'songs.album_id' references albums.id';\n'playlist_songs.playlist_id' references playlists.id';\n'playlist_songs.song_id' references songs.id';\n'user_likes_song.user_id' references users.id';\n'user_likes_song.song_id' references songs.id';\n\nGenerate the SQL query equivalent to: All the songs of a certain singer\n```"
+    
+def test_chat_input_area_TS10():
     at = AppTest.from_file("../main.py")
     at.run()
 
@@ -341,7 +356,7 @@ def test_select_dictionary():
     at.sidebar.selectbox[0].set_value("fitness_app.json").run()
     assert at.selectbox[0].value == "fitness_app.json"
 
-def test_view_dictionary():
+def test_view_dictionary_TS08():
     """
     tests the case of visualizing all the saved dictionaries name in the selectbox
     """
@@ -354,3 +369,16 @@ def test_view_dictionary():
 # test sistema input
 #-------------------------------------------------------------------------------------------------------------------------------------
 #non svolgibili perché la classe AppTest di Streamlit non supporta ancora il widget file_uploader nella versione 1.30.0 di Streamlit
+
+
+"""
+TS8  V
+TS10 V
+TS11 Non sono riuscito
+TS16 non fattibile
+TS17 DA FARE
+TS18 non fattibile
+TS19 V
+TS20 DA FARE
+TS21 DA FARE
+"""
