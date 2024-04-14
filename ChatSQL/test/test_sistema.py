@@ -386,6 +386,143 @@ def test_view_dictionary_TS08():
 #-------------------------------------------------------------------------------------------------------------------------------------
 #non svolgibili perché la classe AppTest di Streamlit non supporta ancora il widget file_uploader nella versione 1.30.0 di Streamlit
 
+#-------------------------------------------------------------------------------------------------------------------------------------
+# test sistema chat & login
+#-------------------------------------------------------------------------------------------------------------------------------------
+def login_chat_func():
+    """
+    The function builds an application which has in its GUI the graphical components of "SelectWidget", "ChatWidget" and "LoginWidget" 
+    and their Controllers and Models in the back-end
+    """
+    import streamlit as st
+    from model import AuthenticationService, SelectionService, ChatService, UserResponse, TechnicianResponse
+    from controller import AuthenticationController, SelectionController, ChatController
+    from widgets import LoginWidget, SelectWidget, ChatWidget
+    from embedder import Embedder
+
+    embedder = Embedder()
+    user_response = UserResponse(embedder)
+    technician_response = TechnicianResponse(embedder)
+    aut_model = AuthenticationService()
+    sel_model = SelectionService()
+    cha_model = ChatService(user_response, technician_response)
+    aut_controller = AuthenticationController(aut_model, None)
+    sel_controller = SelectionController(sel_model, None)
+    cha_controller = ChatController(cha_model, sel_model, aut_model, None)
+    login_widget = LoginWidget(aut_controller)
+    select_widget = SelectWidget(sel_controller)
+    chat_widget = ChatWidget(cha_controller)
+    aut_controller.set_view(login_widget)
+    sel_controller.set_view(select_widget)
+    cha_controller.set_view(chat_widget)
+    if "logged_in" not in st.session_state:
+        st.session_state.logged_in = False
+    if "chat" not in st.session_state:
+        st.session_state.chat = []
+    if "doing_test" not in st.session_state:
+        st.session_state.doing_test = True
+    aut_model.set_logged_status(False)
+    select_widget.create()
+    chat_widget.create()
+    login_widget.create()
+
+
+
+def test_login_chat_TS20():
+    """
+    tests the case of all chat messages being deleted when login is successfull
+    """
+    at = AppTest.from_function(login_chat_func, default_timeout=30)
+    at.run()
+
+    at.sidebar.selectbox[0].set_value("swe_music.json").run()
+    #assert at.selectbox[0].options == ["swe_music.json","fitness_app.json"]
+    at.chat_input[0].set_value("All the songs of a certain singer").run()
+
+    assert at.chat_message[0].markdown[0].value == "All the songs of a certain singer"
+    assert at.chat_message[1].markdown[0].value != "```\nNo relevant information was found regarding your request. \nPlease try again with a different query. \nPlease note that this application is designed to handle requests that can be translated into a SQL query.\n```"
+    
+    at.sidebar.text_input[0].set_value("admin").run()
+    at.sidebar.text_input[1].set_value("admin").run()
+    at.sidebar.button[0].click().run()
+    assert at.session_state.logged_in == True
+    assert at.toast[0].value == ":green[Login successful!]" and at.toast[0].icon == "✅"
+
+    try:
+        assert at.chat_message[0].markdown[0].value == "All the songs of a certain singer"
+    except IndexError:
+        pass
+    else:
+        # If no IndexError occurs, the test fails
+        assert False, "Expected IndexError did not occur"
+    
+
+
+#-------------------------------------------------------------------------------------------------------------------------------------
+# test sistema chat & logout
+#-------------------------------------------------------------------------------------------------------------------------------------
+def logout_chat_func():
+    """
+    The function builds an application which has in its GUI only the graphical components of "LoginWidget" 
+    and "AuthenticationController" and "AuthenticationService" classes in the back-end
+    """
+    import streamlit as st
+    from model import AuthenticationService, SelectionService, ChatService, UserResponse, TechnicianResponse
+    from controller import LogoutController, SelectionController, ChatController
+    from widgets import LogoutWidget, SelectWidget, ChatWidget
+    from embedder import Embedder
+
+    embedder = Embedder()
+    user_response = UserResponse(embedder)
+    technician_response = TechnicianResponse(embedder)
+    aut_model = AuthenticationService()
+    sel_model = SelectionService()
+    cha_model = ChatService(user_response, technician_response)
+    log_controller = LogoutController(aut_model, None)
+    sel_controller = SelectionController(sel_model, None)
+    cha_controller = ChatController(cha_model, sel_model, aut_model, None)
+    logout_widget = LogoutWidget(log_controller)
+    select_widget = SelectWidget(sel_controller)
+    chat_widget = ChatWidget(cha_controller)
+    log_controller.set_view(logout_widget)
+    sel_controller.set_view(select_widget)
+    cha_controller.set_view(chat_widget)
+    if "logged_in" not in st.session_state:
+        st.session_state.logged_in = True
+    if "chat" not in st.session_state:
+        st.session_state.chat = []
+    if "doing_test" not in st.session_state:
+        st.session_state.doing_test = True
+    aut_model.set_logged_status(True)
+    select_widget.create()
+    chat_widget.create()
+    logout_widget.create()
+   
+
+def test_logout_chat_TS21():
+    """
+    tests the case of all chat messages being deleted when logging out from technician area
+    """
+    at = AppTest.from_function(logout_chat_func, default_timeout=30)
+    at.run()
+
+    at.sidebar.selectbox[0].set_value("swe_music.json").run()
+    at.chat_input[0].set_value("All the songs of a certain singer").run()
+
+    assert at.chat_message[0].markdown[0].value == "All the songs of a certain singer"
+    assert at.chat_message[1].markdown[0].value != "```\nNo relevant information was found regarding your request. \nPlease try again with a different query. \nPlease note that this application is designed to handle requests that can be translated into a SQL query.\n```"
+    
+    at.sidebar.button[0].click().run()
+    assert at.session_state.logged_in == False
+    assert at.toast[0].value == ":green[Logged out.]" and at.toast[0].icon == "✅"
+
+    try:
+        assert at.chat_message[0].markdown[0].value == "All the songs of a certain singer"
+    except IndexError:
+        pass
+    else:
+        # If no IndexError occurs, the test fails
+        assert False, "Expected IndexError did not occur"
 
 """
 TS8  V
@@ -395,6 +532,6 @@ TS16 non fattibile
 TS17 V
 TS18 non fattibile
 TS19 V
-TS20 DA FARE
-TS21 DA FARE
+TS20 V
+TS21 V
 """
