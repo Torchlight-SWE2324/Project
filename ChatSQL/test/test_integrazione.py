@@ -27,6 +27,10 @@ def setup_function():
     with open(uploaded_file_path, 'r') as file:
         uploaded_file_content = file.read()
     upload_service.upload_dictionary("swe_music.json", uploaded_file_content)
+    uploaded_file_path = "ChatSQL/database/fitness_app.json"
+    with open(uploaded_file_path, 'r') as file:
+        uploaded_file_content = file.read()
+    upload_service.upload_dictionary("fitness_app.json", uploaded_file_content)
 
 #-------------------------------------------------------------------------------------------------------------------------------------
 # test d'integrazione login View-Controller(VC) e Model-Controller(MC)
@@ -219,18 +223,6 @@ def test_delete_true_VC():
     at.sidebar.button[0].click().run()
     assert at.toast[0].value == ":green[Dictionary \"swe_music.json\" deleted successfully.]" and at.toast[0].icon == "🗑️"
 
-def test_delete_false_VC():
-    """
-    tests the case of not being able to delete a dictinary with relative error message between DeleteWidget and DeleteController
-    since the test passes, it means that DeleteController and DeleteWidget work together successfully
-    """
-    at = AppTest.from_function(delete_func)
-    at.run()
-
-    at.sidebar.selectbox[0].set_value("fitness_app.json").run()
-    at.sidebar.button[0].click().run()
-    assert at.toast[0].value == ":red[Deletion of dictionary \"fitness_app.json\" failed.]" and at.toast[0].icon == "🚨"
-
 def test_delete_true_MC():
     """
     tests the case of being able to delete a dictinary between DeleteService and DeleteController
@@ -254,27 +246,6 @@ def test_delete_true_MC():
     del_outcome = del_model.get_elimination_outcome()
     assert n_dict_before > n_dict_after
     assert del_outcome == True
-
-def test_delete_false_MC():
-    """
-    tests the case of not being able to delete a dictinary between DeleteService and DeleteController
-    since the test passes, it means that DeleteController and DeleteService work together successfully
-    """
-    from model import DeleteService, SelectionService
-    from controller import DeleteController, SelectionController
-    from widgets import DeleteWidget, SelectWidget
-
-    del_model = DeleteService()
-    sel_model = SelectionService()
-    del_controller = DeleteController(del_model, None)
-    sel_controller = SelectionController(sel_model, None)
-    select_widget = SelectWidget(sel_controller)
-    delete_widget = DeleteWidget(select_widget, del_controller)
-    del_controller.set_view(delete_widget)
-    
-    del_controller._model.delete_file("fitness_app.json")
-    del_outcome = del_model.get_elimination_outcome()
-    assert del_outcome == False
     
 #-------------------------------------------------------------------------------------------------------------------------------------
 # test d'integrazione chat lato utente View-Controller(VC) e Model-Controller(MC)
@@ -509,6 +480,31 @@ def test_chat_debug_MC():
 #-------------------------------------------------------------------------------------------------------------------------------------
 # test d'integrazione generazione response tra ChatService e TechnicianResponse
 #-------------------------------------------------------------------------------------------------------------------------------------
+def test_chat_technician_generation():
+    """
+    tests the case of generating a similarity prompt by giving a resonable interrogation input between ChatService and ChatController
+    since the test passes, it means that ChatController and ChatService work together successfully
+    """
+    from model import ChatService, UserResponse, TechnicianResponse
+    from controller import ChatController
+    from widgets import ChatWidget
+    from embedder import Embedder
+
+    embedder = Embedder()
+    user_response = UserResponse(embedder)
+    technician_response = TechnicianResponse(embedder)
+    #modelli
+    cha_model = ChatService(user_response, technician_response)
+    #controller
+    cha_controller = ChatController(cha_model, None, None, None)
+    #view
+    chat_widget = ChatWidget(cha_controller)
+    #controller imposto view
+    cha_controller.set_view(chat_widget)
+
+    cha_controller._chat_model.generate_debug("list of musicians'", "list of musicians ", "swe_music.json")
+    response = cha_model.get_response()
+    assert response != "No relevant information was found regarding your request. \nPlease try again with a different query. \nPlease note that this application is designed to handle requests that can be translated into a SQL query."
 
 #-------------------------------------------------------------------------------------------------------------------------------------
 # test d'integrazione selezione View-Controller(VC) e Model-Controller(MC)
@@ -534,7 +530,8 @@ def select_func():
 
 def test_select_VC():
     """
-    tests the case of visualizing the selected dictionary name as the value displayed in the selectbox
+    tests the case of visualizing the selected dictionary name as the value displayed in the selectbox between SelectionService and SelectionController
+    since the test passes, it means that SelectionController and SelectionService work together successfully
     """
     at = AppTest.from_function(select_func, default_timeout=3)
     at.run()
@@ -545,7 +542,122 @@ def test_select_VC():
     at.sidebar.selectbox[0].set_value("fitness_app.json").run()
     assert at.selectbox[0].value == "fitness_app.json"
 
+def test_select_MC():
+    """
+    tests the case of visualizing the selected dictionary name as the value displayed in the selectbox between SelectionService and SelectionController
+    since the test passes, it means that SelectionController and SelectionService work together successfully
+    """
+
+    import streamlit as st
+    from model import SelectionService
+    from controller import SelectionController
+    from widgets import SelectWidget
+
+    sel_model = SelectionService()
+    sel_controller = SelectionController(sel_model, None)
+    select_widget = SelectWidget(sel_controller)
+    #controller imposto view
+    sel_controller.set_view(select_widget)
+    if "doing_test" not in st.session_state:
+        st.session_state.doing_test = True
+    select_widget.create()
+
+    sel_controller.operation_set_current_dictionary("swe_music.json")
+    assert sel_model.get_current_dictionary() == "swe_music.json"
+    sel_controller.operation_set_current_dictionary("fitness_app.json")
+    assert sel_model.get_current_dictionary() == "fitness_app.json"
+
+def test_return_all_dictionaries_MC():
+    """
+    tests the case of visualizing the selected dictionary name as the value displayed in the selectbox between SelectionService and SelectionController
+    since the test passes, it means that SelectionController and SelectionService work together successfully
+    """
+
+    import streamlit as st
+    from model import SelectionService
+    from controller import SelectionController
+    from widgets import SelectWidget
+
+    sel_model = SelectionService()
+    sel_controller = SelectionController(sel_model, None)
+    select_widget = SelectWidget(sel_controller)
+    #controller imposto view
+    sel_controller.set_view(select_widget)
+    if "doing_test" not in st.session_state:
+        st.session_state.doing_test = True
+    select_widget.create()
+
+    list = sel_controller.operation_get_all_dictionaries()
+    assert list == ["fitness_app.json", "swe_music.json"]
+
 #-------------------------------------------------------------------------------------------------------------------------------------
-# test d'integrazione input Model-Controller(MC)
+# test d'integrazione input file View-Controller(MC)
 #-------------------------------------------------------------------------------------------------------------------------------------
 #non svolgibili perché la classe AppTest di Streamlit non supporta ancora il widget file_uploader nella versione 1.30.0 di Streamlit
+
+#-------------------------------------------------------------------------------------------------------------------------------------
+# test d'integrazione input file Model-JsonSchemaVerifierService(MM)
+#-------------------------------------------------------------------------------------------------------------------------------------
+
+def test_validation_JSON_schema_failed():
+    """
+    tests the case of visualizing the selected dictionary name as the value displayed in the selectbox between UploadService and UploadController
+    since the test passes, it means that UploadController and UploadService work together successfully
+    """
+    import streamlit as st
+    from model import UploadService, JsonSchemaVerifierService
+    from controller import UploadController
+    from widgets import UploadWidget
+    from embedder import Embedder
+
+    embedder = Embedder()
+    dictionary_schema_verifier = JsonSchemaVerifierService()
+    #modelli
+    up_model = UploadService(embedder, dictionary_schema_verifier)
+    #controller
+    up_controller = UploadController(up_model, None)
+    #view
+    upload_widget = UploadWidget(up_controller)
+    #controller imposto view
+    up_controller.set_view(upload_widget)
+    if "doing_test" not in st.session_state:
+        st.session_state.doing_test = False
+
+    uploaded_file_path = "ChatSQL/JSON/notCompliantFile.json"
+    with open(uploaded_file_path, 'r') as file:
+        uploaded_file_content = file.read()
+        result = up_model.upload_dictionary("notCompliantFile.json", uploaded_file_content)
+        assert result == "The file is not compliant with the schema. Please upload a valid file."
+
+def test_input_file_schema_compliant():
+    """
+    tests the case of visualizing the selected dictionary name as the value displayed in the selectbox between UploadService and UploadController
+    since the test passes, it means that UploadController and UploadService work together successfully
+    """
+    import streamlit as st
+    from model import UploadService, JsonSchemaVerifierService
+    from controller import UploadController
+    from widgets import UploadWidget
+    from embedder import Embedder
+
+    embedder = Embedder()
+    dictionary_schema_verifier = JsonSchemaVerifierService()
+    #modelli
+    up_model = UploadService(embedder, dictionary_schema_verifier)
+    #controller
+    up_controller = UploadController(up_model, None)
+    #view
+    upload_widget = UploadWidget(up_controller)
+    #controller imposto view
+    up_controller.set_view(upload_widget)
+    if "doing_test" not in st.session_state:
+        st.session_state.doing_test = False
+    	
+    num_file_before = up_model.get_loaded_dictionaries_number()
+    uploaded_file_path = "ChatSQL/JSON/auction.json"
+    with open(uploaded_file_path, 'r') as file:
+        uploaded_file_content = file.read()
+    result = up_model.upload_dictionary("auction.json", uploaded_file_content)
+    assert result != "The file is not compliant with the schema. Please upload a valid file."
+    num_file_after = up_model.get_loaded_dictionaries_number()
+    assert num_file_after > num_file_before

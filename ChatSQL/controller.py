@@ -98,7 +98,7 @@ class UploadController:
         self._model = model
         self._view = view
 
-    def __dictionary_check(self, uploaded_file) -> str:
+    def _dictionary_check(self, uploaded_file) -> str:
         """
         Checks if the uploaded file is None, it's format and if it respects the schema defined by us.
 
@@ -127,7 +127,7 @@ class UploadController:
         @return: None
         """
         uploaded_file = self._view.get_file_uploaded()
-        dictionary_check_result = self.__dictionary_check(uploaded_file)
+        dictionary_check_result = self._dictionary_check(uploaded_file)
         if dictionary_check_result == "successful_check":
             dictionary_content = uploaded_file.read()
             uploaded_file_content = dictionary_content.decode('utf-8')
